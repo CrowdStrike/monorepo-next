@@ -1,0 +1,7 @@
+{
+  "name": "@scope/package-b",
+  "version": "2.0.0",
+  "dependencies": {
+    "@scope/package-a": "^1.0.0"
+  }
+}

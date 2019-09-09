@@ -1,0 +1,9 @@
+{
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@scope/package-a": "^1.0.0",
+    "@scope/package-b": "^1.0.0"
+  }
+}

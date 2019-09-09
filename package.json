@@ -1,0 +1,79 @@
+{
+  "name": "monorepo-next",
+  "version": "0.0.23",
+  "description": "Detach monorepo packages from normal linking",
+  "bin": {
+    "next": "bin/index.js"
+  },
+  "main": "src",
+  "files": [
+    "bin",
+    "src"
+  ],
+  "keywords": [
+    "attach",
+    "changed",
+    "conventional-changelog",
+    "conventional-commits",
+    "dag",
+    "detach",
+    "graph",
+    "link",
+    "npm",
+    "publish",
+    "release",
+    "run",
+    "standard-version",
+    "tag",
+    "version",
+    "workspaces",
+    "yarn"
+  ],
+  "scripts": {
+    "lint:git": "commitlint",
+    "lint:js": "eslint . --ext js,json",
+    "lint:md": "remark -f README.md",
+    "start": "./bin/index.js",
+    "test": "mocha --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/CrowdStrike/monorepo-next.git"
+  },
+  "author": "Kelly Selden",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CrowdStrike/monorepo-next/issues"
+  },
+  "homepage": "https://github.com/CrowdStrike/monorepo-next#readme",
+  "engines": {
+    "node": ">=8.10"
+  },
+  "dependencies": {
+    "conventional-recommended-bump": "6.0.0",
+    "execa": "^2.0.4",
+    "glob": "^7.1.4",
+    "inquirer": "^7.0.0",
+    "semver": "^6.3.0",
+    "standard-version": "7.0.0",
+    "yargs": "^14.0.0"
+  },
+  "devDependencies": {
+    "@crowdstrike/commitlint": "^1.0.0",
+    "chai": "^4.2.0",
+    "eslint": "^6.1.0",
+    "eslint-config-crowdstrike": "^1.0.0",
+    "eslint-config-crowdstrike-node": "^1.0.0",
+    "eslint-plugin-json-files": "0.7.0",
+    "eslint-plugin-mocha": "^6.0.0",
+    "eslint-plugin-node": "^9.1.0",
+    "fixturify": "^1.2.0",
+    "mocha": "^6.2.0",
+    "mocha-helpers": "^4.0.0",
+    "remark-cli": "^7.0.0",
+    "remark-preset-lint-crowdstrike": "^1.0.0",
+    "sinon": "^7.4.1",
+    "sinon-chai": "^3.3.0",
+    "tmp": "0.1.0"
+  }
+}
