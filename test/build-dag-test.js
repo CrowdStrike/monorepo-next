@@ -79,7 +79,7 @@ describe(buildDAG, function() {
         {
           isPackage: false,
           cwd: matchPath('/workspace'),
-          packageName: undefined,
+          packageName: 'Workspace Root',
           version: undefined,
           dependencyType: 'devDependencies',
           branch: [
@@ -143,7 +143,7 @@ describe(buildDAG, function() {
             {
               isPackage: false,
               cwd: matchPath('/workspace'),
-              packageName: undefined,
+              packageName: 'Workspace Root',
               version: undefined,
               dependencyType: 'devDependencies',
               branch: [
