@@ -34,6 +34,7 @@
     "lint:js": "eslint . --ext js,json",
     "lint:md": "remark -f README.md",
     "start": "./bin/index.js",
+    "release": "standard-version && git push --follow-tags && npm publish",
     "test": "mocha --recursive"
   },
   "repository": {
