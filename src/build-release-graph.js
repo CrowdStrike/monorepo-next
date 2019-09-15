@@ -206,15 +206,15 @@ async function fourthPass({
         current[type] = [];
 
         for (let name in deps) {
-          let {
-            oldVersion,
-            releaseType,
-          } = releaseTrees[name];
+          let releaseTree = releaseTrees[name];
+          if (!releaseTree) {
+            continue;
+          }
 
           let oldRange = deps[name];
           let newRange = oldRange.replace(/ +\|\| +[\d.]*-detached.*/, '');
 
-          let newVersion = semver.inc(oldVersion, releaseType);
+          let newVersion = semver.inc(releaseTree.oldVersion, releaseTree.releaseType);
 
           if (shouldBumpInRangeDependencies || !semver.satisfies(newVersion, newRange)) {
             newRange = trackNewVersion({
