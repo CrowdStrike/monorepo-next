@@ -10,7 +10,6 @@ const {
 const buildDepGraph = require('./build-dep-graph');
 const buildChangeGraph = require('./build-change-graph');
 const buildReleaseGraph = require('./build-release-graph');
-const { trackNewVersion } = require('./version');
 
 const { builder } = require('../bin/commands/release');
 
@@ -21,8 +20,10 @@ async function getCurrentBranch(cwd) {
 async function release({
   cwd,
   silent,
-  shouldPush = builder.push.default,
-  shouldPublish = builder.publish.default,
+  shouldPush = builder['push'].default,
+  shouldPublish = builder['publish'].default,
+  shouldBumpInRangeDependencies = builder['bump-in-range-dependencies'].default,
+  shouldInheritGreaterReleaseType = builder['inherit-greater-release-type'].default,
   versionOverride,
   preCommitCallback = () => {},
   prePushCallback = () => {},
@@ -41,93 +42,91 @@ async function release({
 
   let packagesWithChanges = await buildChangeGraph(workspaceMeta);
 
-  let {
-    releaseTypes,
-    releaseTrees,
-  } = await buildReleaseGraph(packagesWithChanges);
+  packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
+    return dag.packageName && dag.version;
+  });
 
-  if (!releaseTrees.length) {
+  if (!packagesWithChanges.length) {
     console.log('no releasable code');
     return;
   }
 
-  for (let dag of releaseTrees) {
-    let name = dag.packageName;
+  let releaseTrees = await buildReleaseGraph({
+    workspaceMeta,
+    packagesWithChanges,
+    shouldBumpInRangeDependencies,
+    shouldInheritGreaterReleaseType,
+  });
 
-    let packageJsonPath = path.join(dag.cwd, 'package.json');
+  for (let releaseTree of releaseTrees) {
+    let name = releaseTree.name;
+    let cwd = releaseTree.cwd;
+
+    let packageJsonPath = path.join(cwd, 'package.json');
     let packageJson = await readJson(packageJsonPath);
 
-    let matches = packageJson.version.match(/(.*)-detached.*/);
-
-    if (matches) {
-      packageJson.version = matches[1];
-
-      await writeJson(packageJsonPath, packageJson);
+    if (releaseTree.oldVersion) {
+      packageJson.version = releaseTree.oldVersion;
     }
+
+    for (let type of [
+      'dependencies',
+      'devDependencies',
+    ]) {
+      let deps = releaseTree[type];
+
+      for (let { name, newRange } of deps) {
+        packageJson[type][name] = newRange;
+      }
+    }
+
+    await writeJson(packageJsonPath, packageJson);
 
     // eslint-disable-next-line no-inner-declarations
     async function originalVersion(options) {
       await require('standard-version')({
-        path: dag.cwd,
+        path: cwd,
         skip: {
           commit: true,
           tag: true,
         },
         silent,
         tagPrefix: `${name}@`,
-        releaseAs: releaseTypes[name],
+        releaseAs: releaseTree.releaseType,
         ...options,
       });
     }
 
-    let originalCwd = process.cwd();
+    if (releaseTree.canBumpVersion) {
+      let originalCwd = process.cwd();
 
-    try {
-      process.chdir(dag.cwd);
+      try {
+        process.chdir(cwd);
 
-      if (versionOverride) {
-        await versionOverride({
-          cwd: dag.cwd,
-          originalVersion,
-        });
-      } else {
-        await originalVersion();
-      }
-    } finally {
-      process.chdir(originalCwd);
-    }
-
-    let { version } = await readJson(packageJsonPath);
-
-    for (let dependent of dag.dependents) {
-      let packageJsonPath = path.join(dependent.cwd, 'package.json');
-      let packageJson = await readJson(packageJsonPath);
-
-      for (let type of [
-        'dependencies',
-        'devDependencies',
-      ]) {
-        let deps = packageJson[type];
-
-        for (let _name in deps) {
-          if (_name !== name) {
-            continue;
-          }
-
-          deps[name] = trackNewVersion(name, deps[name], version);
-
-          break;
+        if (versionOverride) {
+          await versionOverride({
+            cwd,
+            originalVersion,
+          });
+        } else {
+          await originalVersion();
         }
+      } finally {
+        process.chdir(originalCwd);
       }
 
-      await writeJson(packageJsonPath, packageJson);
-    }
+      let { version } = await readJson(packageJsonPath);
 
-    // eslint-disable-next-line require-atomic-updates
-    dag.version = version;
+      // eslint-disable-next-line require-atomic-updates
+      releaseTree.newVersion = version;
+    }
   }
 
-  let commitMessage = `Version ${releaseTrees.map(dag => `${dag.packageName}@${dag.version}`).join()}`;
+  let tags = releaseTrees
+    .filter(({ canBumpVersion }) => canBumpVersion)
+    .map(({ name, newVersion }) => `${name}@${newVersion}`);
+
+  let commitMessage = `Version ${tags.join()}`;
 
   await exec('git add .', { cwd: workspaceCwd });
 
@@ -135,8 +134,8 @@ async function release({
 
   await exec(`git commit -m "${commitMessage}"`, { cwd: workspaceCwd });
 
-  for (let dag of releaseTrees) {
-    await exec(`git tag ${dag.packageName}@${dag.version}`, { cwd: workspaceCwd });
+  for (let tag of tags) {
+    await exec(`git tag ${tag}`, { cwd: workspaceCwd });
   }
 
   async function originalPush() {
@@ -161,16 +160,16 @@ async function release({
   }
 
   // eslint-disable-next-line require-atomic-updates
-  for (let dag of releaseTrees) {
-    if (shouldPublish && dag.isPackage) {
+  for (let { canPublish, cwd } of releaseTrees) {
+    if (shouldPublish && canPublish) {
       // eslint-disable-next-line no-inner-declarations
       async function originalPublish() {
-        await publish({ cwd: dag.cwd });
+        await publish({ cwd });
       }
 
       if (publishOverride) {
         await publishOverride({
-          cwd: dag.cwd,
+          cwd,
           originalPublish,
         });
       } else {

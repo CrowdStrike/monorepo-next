@@ -31,12 +31,13 @@ describe(_release, function() {
     await exec('git commit --allow-empty -m "first"', { cwd: tmpPath });
   });
 
-  async function release() {
+  async function release(options) {
     await _release({
       cwd: tmpPath,
       silent: true,
       shouldPush: false,
       shouldPublish: false,
+      ...options,
     });
   }
 
@@ -111,7 +112,9 @@ describe(_release, function() {
     await exec('git add .', { cwd: tmpPath });
     await exec('git commit -m "fix: foo"', { cwd: tmpPath });
 
-    await release();
+    await release({
+      shouldInheritGreaterReleaseType: true,
+    });
 
     let workspace = fixturify.readSync(tmpPath, {
       exclude: [
@@ -160,7 +163,7 @@ describe(_release, function() {
             'devDependencies': {
               '@scope/package-a': '^2.0.0',
               '@scope/package-b': '^2.0.0',
-              '@scope/package-c': '^3.0.0',
+              '@scope/package-c': '^3.0.1',
             },
           }),
         },
@@ -267,7 +270,9 @@ describe(_release, function() {
     await exec('git add .', { cwd: tmpPath });
     await exec('git commit -m "fix: foo"', { cwd: tmpPath });
 
-    await release();
+    await release({
+      shouldInheritGreaterReleaseType: true,
+    });
 
     let workspace = fixturify.readSync(tmpPath, {
       exclude: [
@@ -317,7 +322,7 @@ describe(_release, function() {
             'devDependencies': {
               '@scope/package-a': '^2.0.0',
               '@scope/package-b': '^2.0.0',
-              '@scope/package-c': '^3.0.0',
+              '@scope/package-c': '^3.0.1',
             },
           }),
         },
@@ -443,6 +448,458 @@ describe(_release, function() {
       '@scope/package-a@1.0.0',
       'my-app@0.0.0',
       'root@0.0.0',
+    ]);
+  });
+
+  it('bumps in-range versions', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+            'dependencies': {
+              '@scope/package-a': '^1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+
+    await release({
+      shouldBumpInRangeDependencies: true,
+      shouldInheritGreaterReleaseType: false,
+    });
+
+    let workspace = fixturify.readSync(tmpPath, {
+      exclude: [
+        '.git',
+        '**/CHANGELOG.md',
+      ],
+    });
+
+    expect(workspace).to.deep.equal({
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.1.0',
+          }),
+        },
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.1',
+            'dependencies': {
+              '@scope/package-a': '^1.1.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    let lastCommitMessage = await getLastCommitMessage(tmpPath);
+
+    expect(lastCommitMessage).to.equal('Version @scope/package-a@1.1.0,@scope/package-b@1.0.1');
+
+    let tags = await getTagsOnLastCommit(tmpPath);
+
+    expect(tags).to.deep.equal([
+      '@scope/package-a@1.1.0',
+      '@scope/package-b@1.0.1',
+    ]);
+  });
+
+  it('ignores in-range versions', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+            'dependencies': {
+              '@scope/package-a': '^1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+
+    await release({
+      shouldBumpInRangeDependencies: false,
+      shouldInheritGreaterReleaseType: false,
+    });
+
+    let workspace = fixturify.readSync(tmpPath, {
+      exclude: [
+        '.git',
+        '**/CHANGELOG.md',
+      ],
+    });
+
+    expect(workspace).to.deep.equal({
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.1.0',
+          }),
+        },
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+            'dependencies': {
+              '@scope/package-a': '^1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    let lastCommitMessage = await getLastCommitMessage(tmpPath);
+
+    expect(lastCommitMessage).to.equal('Version @scope/package-a@1.1.0');
+
+    let tags = await getTagsOnLastCommit(tmpPath);
+
+    expect(tags).to.deep.equal([
+      '@scope/package-a@1.1.0',
+    ]);
+  });
+
+  it('inherits greater release type', async function() {
+    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+            'dependencies': {
+              '@scope/package-a': '^1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+
+    await release({
+      shouldBumpInRangeDependencies: false,
+      shouldInheritGreaterReleaseType: true,
+    });
+
+    let workspace = fixturify.readSync(tmpPath, {
+      exclude: [
+        '.git',
+        '**/CHANGELOG.md',
+      ],
+    });
+
+    expect(workspace).to.deep.equal({
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.1.0',
+          }),
+        },
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.1.0',
+            'dependencies': {
+              '@scope/package-a': '^1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    let lastCommitMessage = await getLastCommitMessage(tmpPath);
+
+    expect(lastCommitMessage).to.equal('Version @scope/package-a@1.1.0,@scope/package-b@1.1.0');
+
+    let tags = await getTagsOnLastCommit(tmpPath);
+
+    expect(tags).to.deep.equal([
+      '@scope/package-a@1.1.0',
+      '@scope/package-b@1.1.0',
+    ]);
+  });
+
+  it('ignores greater release type', async function() {
+    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+            'dependencies': {
+              '@scope/package-a': '^1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+
+    await release({
+      shouldBumpInRangeDependencies: false,
+      shouldInheritGreaterReleaseType: false,
+    });
+
+    let workspace = fixturify.readSync(tmpPath, {
+      exclude: [
+        '.git',
+        '**/CHANGELOG.md',
+      ],
+    });
+
+    expect(workspace).to.deep.equal({
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.1.0',
+          }),
+        },
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.1',
+            'dependencies': {
+              '@scope/package-a': '^1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    let lastCommitMessage = await getLastCommitMessage(tmpPath);
+
+    expect(lastCommitMessage).to.equal('Version @scope/package-a@1.1.0,@scope/package-b@1.0.1');
+
+    let tags = await getTagsOnLastCommit(tmpPath);
+
+    expect(tags).to.deep.equal([
+      '@scope/package-a@1.1.0',
+      '@scope/package-b@1.0.1',
+    ]);
+  });
+
+  it('inherits greater and bumps in-range', async function() {
+    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+            'dependencies': {
+              '@scope/package-a': '^1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+
+    await release({
+      shouldBumpInRangeDependencies: true,
+      shouldInheritGreaterReleaseType: true,
+    });
+
+    let workspace = fixturify.readSync(tmpPath, {
+      exclude: [
+        '.git',
+        '**/CHANGELOG.md',
+      ],
+    });
+
+    expect(workspace).to.deep.equal({
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.1.0',
+          }),
+        },
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.1.0',
+            'dependencies': {
+              '@scope/package-a': '^1.1.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    let lastCommitMessage = await getLastCommitMessage(tmpPath);
+
+    expect(lastCommitMessage).to.equal('Version @scope/package-a@1.1.0,@scope/package-b@1.1.0');
+
+    let tags = await getTagsOnLastCommit(tmpPath);
+
+    expect(tags).to.deep.equal([
+      '@scope/package-a@1.1.0',
+      '@scope/package-b@1.1.0',
     ]);
   });
 });
