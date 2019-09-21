@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.3](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.2...v0.2.3) (2019-09-21)
+
+
+### Bug Fixes
+
+* create annotated tag ([ed5f970](https://github.com/CrowdStrike/monorepo-next/commit/ed5f970))
+
 ### [0.2.2](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.1...v0.2.2) (2019-09-15)
 
 
