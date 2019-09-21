@@ -6,7 +6,7 @@ const readFile = promisify(require('fs').readFile);
 const writeFile = promisify(require('fs').writeFile);
 
 function stringify(json) {
-  return JSON.stringify(json, null, 2) + EOL;
+  return JSON.stringify(json, null, 2).replace(/\n/g, EOL) + EOL;
 }
 
 async function read(path) {
