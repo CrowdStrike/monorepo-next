@@ -135,7 +135,7 @@ async function release({
   await exec(`git commit -m "${commitMessage}"`, { cwd: workspaceCwd });
 
   for (let tag of tags) {
-    await exec(`git tag ${tag}`, { cwd: workspaceCwd });
+    await exec(`git tag -a ${tag} -m "${tag}"`, { cwd: workspaceCwd });
   }
 
   async function originalPush() {
