@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.4](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.3...v0.2.4) (2019-09-21)
+
+
+### Bug Fixes
+
+* fix json formatting on Windows ([317c412](https://github.com/CrowdStrike/monorepo-next/commit/317c412))
+
 ### [0.2.3](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.2...v0.2.3) (2019-09-21)
 
 
