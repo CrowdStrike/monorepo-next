@@ -10,3 +10,11 @@ before_script:
 - yarn lint:git
 - yarn lint:md
 - yarn lint:js
+deploy:
+  provider: npm
+  email: kellyselden@gmail.com
+  api_key:
+    secure: d8RYc4kYrFr92LvZsEZHyvl+h9ktN1bXjkbjUWZrUF6C3VIp7mIgMmN7vc9ZwOe0qU62NJPHESN3cYNUtU13SBzmBVFnG1DbycZGnw6CZPd9o99pBWBc+ONzVdjWO41R0fi/qkgSO2f7yXl2+iJkKm5sdPeftfgP7Durab2KUv22Lu9MhVjltXeIh6aiInWDw3Q6/onOXhzllmihKkuz63dx/AhEH7nA7JPbxrWlpBLjQxcPn4kA+oFzYutTJOtAHAQo1oZAL7TPB0MAWRMfDTUyUvp1GqrjZ2eqZEZmoMJvDBR44e91TS1EU/ccN0xlrFeCTNIFhfYax1tb2EF5s6lM+sz6RzXhAP77T5sRceN+fe8AtAjJKVNLpeHAuKwMAz4F6u388AkmLahL9tG91nrbs+/dKgwtBCaTB4P5nsoICQUbS6H0tzbFaoGEYs1ZqqSIKgwQ1v22KQBtuBsthcqx0z1Yxvp0m/iaVDvF6ix1cTiTS6m7ebwS9mZNIYbbCzj3P8jmINkTJgVClglvnww1f8SCW+cK0IIlMEZS7oKKYVI9kKb7iMPqDgdjtcnAEBXRv+ytCu6Ucjygaa0eeIuFuso1iNazig78+Lel+vwnxHvgg/2XUix9R3BKPectXVEA/MVJs+M1Pp6jwJFULZvPxtSTD83u3rGIl8qQ2bI=
+  on:
+    tags: true
+    repo: CrowdStrike/monorepo-next
