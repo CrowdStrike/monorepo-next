@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.6](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.5...v0.2.6) (2019-09-27)
+
+
+### Features
+
+* pass through scripts option ([38fb781](https://github.com/CrowdStrike/monorepo-next/commit/38fb781))
+
 ### [0.2.5](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.4...v0.2.5) (2019-09-24)
 
 ### [0.2.4](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.3...v0.2.4) (2019-09-21)
