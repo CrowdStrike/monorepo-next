@@ -24,6 +24,7 @@ async function release({
   shouldPublish = builder['publish'].default,
   shouldBumpInRangeDependencies = builder['bump-in-range-dependencies'].default,
   shouldInheritGreaterReleaseType = builder['inherit-greater-release-type'].default,
+  scripts = builder['scripts'].default,
   versionOverride,
   preCommitCallback = () => {},
   prePushCallback = () => {},
@@ -93,6 +94,7 @@ async function release({
         silent,
         tagPrefix: `${name}@`,
         releaseAs: releaseTree.releaseType,
+        scripts,
         ...options,
       });
     }
