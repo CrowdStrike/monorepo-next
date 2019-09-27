@@ -35,6 +35,10 @@ module.exports = {
       type: 'boolean',
       default: false,
     },
+    'scripts': {
+      describe: 'Provide scripts to execute for lifecycle events (prebump, precommit, etc.,)',
+      default: defaults.scripts,
+    },
   },
   async handler(argv) {
     try {
@@ -44,6 +48,7 @@ module.exports = {
         shouldPublish: argv['publish'],
         shouldBumpInRangeDependencies: argv['bump-in-range-dependencies'],
         shouldInheritGreaterReleaseType: argv['inherit-greater-release-type'],
+        scripts: argv['scripts'],
         cwd: process.cwd(),
       });
 
