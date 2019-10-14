@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "conventional-recommended-bump": "6.0.0",
-    "execa": "^2.0.4",
+    "execa": "^3.0.0",
     "glob": "^7.1.4",
     "inquirer": "^7.0.0",
     "semver": "^6.3.0",
