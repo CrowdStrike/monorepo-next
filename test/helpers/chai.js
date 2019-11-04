@@ -18,7 +18,7 @@ chai.use((_chai, utils) => {
       error.name = 'MatchAssertionError';
       error.message = error.message.replace(
         /^expected spy to be called with match/,
-        `expected ${utils.objDisplay(subject)} to match`
+        `expected ${utils.objDisplay(subject)} to match`,
       );
       throw error;
     }
