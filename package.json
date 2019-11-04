@@ -51,7 +51,7 @@
     "node": ">=8.10"
   },
   "dependencies": {
-    "conventional-recommended-bump": "6.0.0",
+    "conventional-recommended-bump": "6.0.2",
     "execa": "^3.0.0",
     "glob": "^7.1.4",
     "inquirer": "^7.0.0",
