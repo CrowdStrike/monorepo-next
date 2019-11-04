@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.7](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.6...v0.2.7) (2019-11-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency execa to v3 ([e725fab](https://github.com/CrowdStrike/monorepo-next/commit/e725fab))
+
 ### [0.2.6](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.5...v0.2.6) (2019-09-27)
 
 
