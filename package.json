@@ -57,7 +57,7 @@
     "inquirer": "^7.0.0",
     "semver": "^6.3.0",
     "standard-version": "7.0.0",
-    "yargs": "^14.0.0"
+    "yargs": "^15.0.0"
   },
   "devDependencies": {
     "@crowdstrike/commitlint": "^1.0.4",
