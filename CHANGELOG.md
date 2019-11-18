@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.10](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.9...v0.2.10) (2019-11-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency yargs to v15 ([cc8fc4d](https://github.com/CrowdStrike/monorepo-next/commit/cc8fc4d3408156c708c58a53f543eba2df3b58e5))
+
 ### [0.2.9](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.8...v0.2.9) (2019-11-11)
 
 
