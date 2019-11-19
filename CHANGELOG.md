@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.12](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.11...v0.2.12) (2019-11-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency standard-version to v7.0.1 ([d700319](https://github.com/CrowdStrike/monorepo-next/commit/d7003197fb91baed6e5fe202360f16b0ddfe5977))
+
 ### [0.2.11](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.10...v0.2.11) (2019-11-18)
 
 
