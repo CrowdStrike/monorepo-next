@@ -97,15 +97,51 @@ async function secondPass({
       dag,
       parent,
     }) {
-      let current = releaseTrees[dag.packageName];
-
-      // no changes
-      if (!current) {
-        if (shouldInheritGreaterReleaseType && dag.dependencyType === 'dependencies' && shouldBumpInRangeDependencies) {
-          current = await init(dag, releaseTrees, parent.releaseType);
+      let doesPackageHaveChanges = !!releaseTrees[dag.packageName];
+      if (!doesPackageHaveChanges) {
+        if (dag.isPackage && shouldInheritGreaterReleaseType && dag.dependencyType === 'dependencies' && shouldBumpInRangeDependencies) {
+          await init(dag, releaseTrees, parent.releaseType);
+        } else if (shouldBumpInRangeDependencies) {
+          await init(dag, releaseTrees);
         } else {
           return;
         }
+      }
+
+      for (let node of dag.dependents) {
+        if (node.isCycle) {
+          continue;
+        }
+
+        await crawlDag({
+          dag: node,
+          parent: releaseTrees[dag.packageName],
+        });
+      }
+    })({
+      dag,
+    });
+  }
+}
+
+async function thirdPass({
+  releaseTrees,
+  packagesWithChanges,
+  shouldInheritGreaterReleaseType,
+}) {
+  for (let { dag, changedFiles } of packagesWithChanges) {
+    if (!changedFiles.length) {
+      continue;
+    }
+
+    await (async function crawlDag({
+      dag,
+      parent,
+    }) {
+      let current = releaseTrees[dag.packageName];
+
+      if (!current) {
+        return;
       }
 
       let currentReleaseType = current.releaseType;
@@ -134,44 +170,6 @@ async function secondPass({
   }
 }
 
-// async function thirdPass({
-//   releaseTrees,
-//   packagesWithChanges,
-// }) {
-//   for (let { dag, changedFiles } of packagesWithChanges) {
-//     if (!changedFiles.length) {
-//       continue;
-//     }
-
-//     await (async function crawlDag({
-//       dag,
-//     }) {
-//       let current = releaseTrees[dag.packageName];
-
-//       // no changes
-//       if (!current) {
-//         return;
-//       }
-
-//       current.newVersion = semver.inc(current.oldVersion, current.releaseType);
-
-//       delete current.oldVersion;
-
-//       for (let node of dag.dependents) {
-//         if (!node.isPackage || node.isCycle) {
-//           continue;
-//         }
-
-//         await crawlDag({
-//           dag: node,
-//         });
-//       }
-//     })({
-//       dag,
-//     });
-//   }
-// }
-
 async function fourthPass({
   workspaceMeta,
   releaseTrees,
@@ -188,13 +186,8 @@ async function fourthPass({
     }) {
       let current = releaseTrees[dag.packageName];
 
-      // no changes
       if (!current) {
-        if (shouldBumpInRangeDependencies) {
-          current = await init(dag, releaseTrees);
-        } else {
-          return;
-        }
+        return;
       }
 
       let myPackage = workspaceMeta.packages[dag.packageName] || workspaceMeta;
@@ -248,42 +241,6 @@ async function fourthPass({
   }
 }
 
-// async function fifthPass({
-//   releaseTrees,
-//   packagesWithChanges,
-// }) {
-//   for (let { dag, changedFiles } of packagesWithChanges) {
-//     if (!changedFiles.length) {
-//       continue;
-//     }
-
-//     await (async function crawlDag({
-//       dag,
-//     }) {
-//       let current = releaseTrees[dag.packageName];
-
-//       // no changes
-//       if (!current) {
-//         return;
-//       }
-
-//       delete current.oldVersion;
-
-//       for (let node of dag.dependents) {
-//         if (!node.isPackage || node.isCycle) {
-//           continue;
-//         }
-
-//         await crawlDag({
-//           dag: node,
-//         });
-//       }
-//     })({
-//       dag,
-//     });
-//   }
-// }
-
 async function buildReleaseGraph({
   workspaceMeta,
   packagesWithChanges,
@@ -306,14 +263,15 @@ async function buildReleaseGraph({
     shouldInheritGreaterReleaseType,
   });
 
+  // packages without changes, but need to be analyzed because of options
+
+  await thirdPass({
+    releaseTrees,
+    packagesWithChanges,
+    shouldInheritGreaterReleaseType,
+  });
+
   // dependents have now inherited release type
-
-  // await thirdPass({
-  //   releaseTrees,
-  //   packagesWithChanges,
-  // });
-
-  // packages are now bumped
 
   await fourthPass({
     workspaceMeta,
@@ -323,13 +281,6 @@ async function buildReleaseGraph({
   });
 
   // dependencies are now bumped if needed
-
-  // await fifthPass({
-  //   releaseTrees,
-  //   packagesWithChanges,
-  // });
-
-  // all versions have been removed
 
   return Object.values(releaseTrees);
 }
