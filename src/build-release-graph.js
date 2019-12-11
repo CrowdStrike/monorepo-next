@@ -85,6 +85,7 @@ async function firstPass({
 async function secondPass({
   releaseTrees,
   packagesWithChanges,
+  shouldBumpInRangeDependencies,
   shouldInheritGreaterReleaseType,
 }) {
   for (let { dag, changedFiles } of packagesWithChanges) {
@@ -100,8 +101,8 @@ async function secondPass({
 
       // no changes
       if (!current) {
-        if (shouldInheritGreaterReleaseType && dag.dependencyType === 'dependencies') {
-          current = await init(dag, releaseTrees, incomingReleaseType);
+        if (shouldInheritGreaterReleaseType && dag.dependencyType === 'dependencies' && shouldBumpInRangeDependencies) {
+          current = await init(dag, releaseTrees, parent.releaseType);
         } else {
           return;
         }
@@ -301,6 +302,7 @@ async function buildReleaseGraph({
   await secondPass({
     releaseTrees,
     packagesWithChanges,
+    shouldBumpInRangeDependencies,
     shouldInheritGreaterReleaseType,
   });
 
