@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.13](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.12...v0.2.13) (2019-12-11)
+
+
+### Bug Fixes
+
+* fix `shouldInheritGreaterReleaseType` when no changes ([6d598eb](https://github.com/CrowdStrike/monorepo-next/commit/6d598ebd73cc3a916397a6a1e0c7e827b2ae992c))
+
 ### [0.2.12](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.11...v0.2.12) (2019-11-19)
 
 
