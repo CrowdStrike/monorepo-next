@@ -684,4 +684,91 @@ describe(buildReleaseGraph, function() {
       },
     ]));
   });
+
+  it('tracks newly out-of-range', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+            'devDependencies': {
+              '@scope/package-a': '^1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "foo"', { cwd: tmpPath });
+    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "feat: foo\n\nBREAKING CHANGE: foo"', { cwd: tmpPath });
+
+    let workspaceMeta = await buildDepGraph(tmpPath);
+
+    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+
+    packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
+      return dag.packageName && dag.version;
+    });
+
+    let shouldBumpInRangeDependencies = false;
+    let shouldInheritGreaterReleaseType = false;
+
+    let releaseTrees = await buildReleaseGraph({
+      workspaceMeta,
+      packagesWithChanges,
+      shouldBumpInRangeDependencies,
+      shouldInheritGreaterReleaseType,
+    });
+
+    expect(releaseTrees).to.match(sinon.match([
+      {
+        name: '@scope/package-a',
+        cwd: matchPath('/packages/package-a'),
+        oldVersion: '1.0.0',
+        releaseType: 'major',
+        canBumpVersion: true,
+        canPublish: true,
+        dependencies: [],
+        devDependencies: [],
+      },
+      {
+        name: '@scope/package-b',
+        cwd: matchPath('/packages/package-b'),
+        oldVersion: '1.0.0',
+        releaseType: 'patch',
+        canBumpVersion: true,
+        canPublish: true,
+        dependencies: [],
+        devDependencies: [
+          {
+            name: '@scope/package-a',
+            newRange: '^2.0.0',
+          },
+        ],
+      },
+    ]));
+  });
 });

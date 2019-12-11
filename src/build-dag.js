@@ -8,7 +8,10 @@ const dependencyTypes = [
 function doesDependOnPackage(_package, packageName) {
   for (let dependencyType of dependencyTypes) {
     if (Object.keys(_package[dependencyType]).includes(packageName)) {
-      return dependencyType;
+      return {
+        dependencyType,
+        dependencyRange: _package[dependencyType][packageName],
+      };
     }
   }
 }
@@ -21,13 +24,17 @@ function thirdPass(workspaceMeta, dag) {
       continue;
     }
 
-    let dependencyType = doesDependOnPackage(_package, currentPackageName);
+    let {
+      dependencyType,
+      dependencyRange,
+    } = doesDependOnPackage(_package, currentPackageName) || {};
 
     if (dependencyType) {
       let node = createPackageNode({
         workspaceMeta,
         packageName: _package.packageName,
         dependencyType,
+        dependencyRange,
         dag,
       });
       dag.dependents.push(node);
@@ -42,6 +49,7 @@ function createPackageNode({
   workspaceMeta,
   packageName,
   dependencyType,
+  dependencyRange,
   dag,
 }) {
   let _package = workspaceMeta.packages[packageName];
@@ -51,6 +59,7 @@ function createPackageNode({
     packageName,
     version: _package ? _package.version : workspaceMeta.version,
     ...dependencyType ? { dependencyType } : {},
+    ...dependencyRange ? { dependencyRange } : {},
     branch: [...dag.branch, dag.packageName].filter(Boolean),
     ..._package ? { isCycle: dag.branch.includes(packageName) } : {},
   };
