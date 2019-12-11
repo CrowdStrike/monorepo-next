@@ -10,6 +10,7 @@ const {
 const buildDepGraph = require('./build-dep-graph');
 const buildChangeGraph = require('./build-change-graph');
 const buildReleaseGraph = require('./build-release-graph');
+const dependencyTypes = require('./dependency-types');
 
 const { builder } = require('../bin/commands/release');
 
@@ -69,10 +70,7 @@ async function release({
       packageJson.version = releaseTree.oldVersion;
     }
 
-    for (let type of [
-      'dependencies',
-      'devDependencies',
-    ]) {
+    for (let type of dependencyTypes) {
       let deps = releaseTree[type];
 
       for (let { name, newRange } of deps) {

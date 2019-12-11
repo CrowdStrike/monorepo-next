@@ -1,9 +1,6 @@
 'use strict';
 
-const dependencyTypes = [
-  'dependencies',
-  'devDependencies',
-];
+const dependencyTypes = require('./dependency-types');
 
 function doesDependOnPackage(_package, packageName) {
   for (let dependencyType of dependencyTypes) {

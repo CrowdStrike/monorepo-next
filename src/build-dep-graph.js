@@ -4,11 +4,7 @@ const path = require('path');
 const { promisify } = require('util');
 const glob = promisify(require('glob'));
 const semver = require('semver');
-
-const dependencyTypes = [
-  'dependencies',
-  'devDependencies',
-];
+const dependencyTypes = require('./dependency-types');
 
 function copyDeps(left, right) {
   for (let dependencyType of dependencyTypes) {

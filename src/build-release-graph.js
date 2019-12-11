@@ -8,6 +8,7 @@ const {
 } = require('./json');
 const { trackNewVersion } = require('./version');
 const semver = require('semver');
+const dependencyTypes = require('./dependency-types');
 
 async function getReleaseType(packageName, cwd) {
   let tagPrefix = `${packageName}@`;
@@ -196,10 +197,7 @@ async function fourthPass({
         return;
       }
 
-      for (let type of [
-        'dependencies',
-        'devDependencies',
-      ]) {
+      for (let type of dependencyTypes) {
         if (!current[type]) {
           current[type] = [];
         }

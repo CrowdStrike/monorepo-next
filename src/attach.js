@@ -6,12 +6,10 @@ const exec = promisify(require('child_process').exec);
 const writeJson = require('./json').write;
 const buildDepGraph = require('./build-dep-graph');
 const buildDAG = require('./build-dag');
+const dependencyTypes = require('./dependency-types');
 
 function updateDependencyVersion(packageJson, name, version) {
-  for (let type of [
-    'dependencies',
-    'devDependencies',
-  ]) {
+  for (let type of dependencyTypes) {
     let deps = packageJson[type];
 
     for (let _name in deps) {
