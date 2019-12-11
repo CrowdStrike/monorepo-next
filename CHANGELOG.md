@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.16](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.15...v0.2.16) (2019-12-11)
+
+
+### Bug Fixes
+
+* private projects should track out of range too ([af5afce](https://github.com/CrowdStrike/monorepo-next/commit/af5afcef2505b19e2c6acaf4fc1d5ab3ebe05c49))
+
 ### [0.2.15](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.14...v0.2.15) (2019-12-11)
 
 ### [0.2.14](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.13...v0.2.14) (2019-12-11)
