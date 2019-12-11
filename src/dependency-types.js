@@ -3,6 +3,7 @@
 const dependencyTypes = [
   'dependencies',
   'devDependencies',
+  'optionalDependencies',
 ];
 
 module.exports = dependencyTypes;

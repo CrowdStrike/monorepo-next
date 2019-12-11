@@ -72,7 +72,7 @@ describe(buildDAG, function() {
           cwd: matchPath('/workspace/packages/package-c'),
           packageName: '@scope/package-c',
           version: '3.0.0',
-          dependencyType: 'devDependencies',
+          dependencyType: 'optionalDependencies',
           dependencyRange: '^1.0.0',
           branch: [
             '@scope/package-a',
@@ -139,7 +139,7 @@ describe(buildDAG, function() {
               cwd: matchPath('/workspace/packages/package-c'),
               packageName: '@scope/package-c',
               version: '3.0.0',
-              dependencyType: 'devDependencies',
+              dependencyType: 'optionalDependencies',
               dependencyRange: '^1.0.0',
               branch: [
                 '@scope/package-b',
