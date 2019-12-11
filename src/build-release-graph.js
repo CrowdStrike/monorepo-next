@@ -167,7 +167,7 @@ async function thirdPass({
 
         await crawlDag({
           dag: node,
-          parent: releaseTrees[dag.packageName],
+          parent: current,
         });
       }
     })({
@@ -177,7 +177,6 @@ async function thirdPass({
 }
 
 async function fourthPass({
-  workspaceMeta,
   releaseTrees,
   packagesWithChanges,
   shouldBumpInRangeDependencies,
@@ -189,6 +188,7 @@ async function fourthPass({
 
     await (async function crawlDag({
       dag,
+      parent,
     }) {
       let current = releaseTrees[dag.packageName];
 
@@ -196,40 +196,36 @@ async function fourthPass({
         return;
       }
 
-      let myPackage = workspaceMeta.packages[dag.packageName] || workspaceMeta;
-
       for (let type of [
         'dependencies',
         'devDependencies',
       ]) {
-        let deps = myPackage[type];
-        current[type] = [];
+        if (!current[type]) {
+          current[type] = [];
+        }
+      }
 
-        for (let name in deps) {
-          let releaseTree = releaseTrees[name];
-          if (!releaseTree) {
-            continue;
-          }
+      if (parent) {
+        let { name } = parent;
 
-          let oldRange = deps[name];
-          let newRange = oldRange.replace(/ +\|\| +[\d.]*-detached.*/, '');
+        let oldRange = dag.dependencyRange;
+        let newRange = oldRange.replace(/ +\|\| +[\d.]*-detached.*/, '');
 
-          let newVersion = semver.inc(releaseTree.oldVersion, releaseTree.releaseType);
+        let newVersion = semver.inc(parent.oldVersion, parent.releaseType);
 
-          if (shouldBumpInRangeDependencies || !semver.satisfies(newVersion, newRange)) {
-            newRange = trackNewVersion({
-              name,
-              oldRange,
-              newRange,
-              newVersion,
-            });
-          }
-
-          current[type].push({
+        if (shouldBumpInRangeDependencies || !semver.satisfies(newVersion, newRange)) {
+          newRange = trackNewVersion({
             name,
+            oldRange,
             newRange,
+            newVersion,
           });
         }
+
+        current[dag.dependencyType].push({
+          name,
+          newRange,
+        });
       }
 
       for (let node of dag.dependents) {
@@ -239,6 +235,7 @@ async function fourthPass({
 
         await crawlDag({
           dag: node,
+          parent: current,
         });
       }
     })({
@@ -248,7 +245,6 @@ async function fourthPass({
 }
 
 async function buildReleaseGraph({
-  workspaceMeta,
   packagesWithChanges,
   shouldBumpInRangeDependencies,
   shouldInheritGreaterReleaseType,
@@ -280,7 +276,6 @@ async function buildReleaseGraph({
   // dependents have now inherited release type
 
   await fourthPass({
-    workspaceMeta,
     releaseTrees,
     packagesWithChanges,
     shouldBumpInRangeDependencies,
