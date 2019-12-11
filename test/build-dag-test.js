@@ -32,6 +32,7 @@ describe(buildDAG, function() {
           packageName: '@scope/package-b',
           version: '2.0.0',
           dependencyType: 'dependencies',
+          dependencyRange: '^1.0.0',
           branch: [
             '@scope/package-a',
           ],
@@ -43,6 +44,7 @@ describe(buildDAG, function() {
               packageName: '@scope/package-a',
               version: '1.0.0',
               dependencyType: 'devDependencies',
+              dependencyRange: '^2.0.0',
               branch: [
                 '@scope/package-a',
                 '@scope/package-b',
@@ -55,6 +57,7 @@ describe(buildDAG, function() {
               packageName: '@scope/package-c',
               version: '3.0.0',
               dependencyType: 'dependencies',
+              dependencyRange: '^2.0.0',
               branch: [
                 '@scope/package-a',
                 '@scope/package-b',
@@ -70,6 +73,7 @@ describe(buildDAG, function() {
           packageName: '@scope/package-c',
           version: '3.0.0',
           dependencyType: 'devDependencies',
+          dependencyRange: '^1.0.0',
           branch: [
             '@scope/package-a',
           ],
@@ -82,6 +86,7 @@ describe(buildDAG, function() {
           packageName: 'Workspace Root',
           version: undefined,
           dependencyType: 'devDependencies',
+          dependencyRange: '^1.0.0',
           branch: [
             '@scope/package-a',
           ],
@@ -110,6 +115,7 @@ describe(buildDAG, function() {
           packageName: '@scope/package-a',
           version: '1.0.0',
           dependencyType: 'devDependencies',
+          dependencyRange: '^2.0.0',
           branch: [
             '@scope/package-b',
           ],
@@ -121,6 +127,7 @@ describe(buildDAG, function() {
               packageName: '@scope/package-b',
               version: '2.0.0',
               dependencyType: 'dependencies',
+              dependencyRange: '^1.0.0',
               branch: [
                 '@scope/package-b',
                 '@scope/package-a',
@@ -133,6 +140,7 @@ describe(buildDAG, function() {
               packageName: '@scope/package-c',
               version: '3.0.0',
               dependencyType: 'devDependencies',
+              dependencyRange: '^1.0.0',
               branch: [
                 '@scope/package-b',
                 '@scope/package-a',
@@ -146,6 +154,7 @@ describe(buildDAG, function() {
               packageName: 'Workspace Root',
               version: undefined,
               dependencyType: 'devDependencies',
+              dependencyRange: '^1.0.0',
               branch: [
                 '@scope/package-b',
                 '@scope/package-a',
@@ -160,6 +169,7 @@ describe(buildDAG, function() {
           packageName: '@scope/package-c',
           version: '3.0.0',
           dependencyType: 'dependencies',
+          dependencyRange: '^2.0.0',
           branch: [
             '@scope/package-b',
           ],
