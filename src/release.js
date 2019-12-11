@@ -53,7 +53,6 @@ async function release({
   }
 
   let releaseTrees = await buildReleaseGraph({
-    workspaceMeta,
     packagesWithChanges,
     shouldBumpInRangeDependencies,
     shouldInheritGreaterReleaseType,

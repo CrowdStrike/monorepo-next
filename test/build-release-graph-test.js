@@ -83,7 +83,6 @@ describe(buildReleaseGraph, function() {
     let shouldInheritGreaterReleaseType = false;
 
     let releaseTrees = await buildReleaseGraph({
-      workspaceMeta,
       packagesWithChanges,
       shouldBumpInRangeDependencies,
       shouldInheritGreaterReleaseType,
@@ -170,7 +169,6 @@ describe(buildReleaseGraph, function() {
     let shouldInheritGreaterReleaseType = false;
 
     let releaseTrees = await buildReleaseGraph({
-      workspaceMeta,
       packagesWithChanges,
       shouldBumpInRangeDependencies,
       shouldInheritGreaterReleaseType,
@@ -243,7 +241,6 @@ describe(buildReleaseGraph, function() {
     let shouldInheritGreaterReleaseType = true;
 
     let releaseTrees = await buildReleaseGraph({
-      workspaceMeta,
       packagesWithChanges,
       shouldBumpInRangeDependencies,
       shouldInheritGreaterReleaseType,
@@ -330,7 +327,6 @@ describe(buildReleaseGraph, function() {
     let shouldInheritGreaterReleaseType = true;
 
     let releaseTrees = await buildReleaseGraph({
-      workspaceMeta,
       packagesWithChanges,
       shouldBumpInRangeDependencies,
       shouldInheritGreaterReleaseType,
@@ -417,7 +413,6 @@ describe(buildReleaseGraph, function() {
     let shouldInheritGreaterReleaseType = true;
 
     let releaseTrees = await buildReleaseGraph({
-      workspaceMeta,
       packagesWithChanges,
       shouldBumpInRangeDependencies,
       shouldInheritGreaterReleaseType,
@@ -490,7 +485,6 @@ describe(buildReleaseGraph, function() {
     let shouldInheritGreaterReleaseType = false;
 
     let releaseTrees = await buildReleaseGraph({
-      workspaceMeta,
       packagesWithChanges,
       shouldBumpInRangeDependencies,
       shouldInheritGreaterReleaseType,
@@ -578,7 +572,6 @@ describe(buildReleaseGraph, function() {
     let shouldInheritGreaterReleaseType = true;
 
     let releaseTrees = await buildReleaseGraph({
-      workspaceMeta,
       packagesWithChanges,
       shouldBumpInRangeDependencies,
       shouldInheritGreaterReleaseType,
@@ -665,7 +658,6 @@ describe(buildReleaseGraph, function() {
     let shouldInheritGreaterReleaseType = true;
 
     let releaseTrees = await buildReleaseGraph({
-      workspaceMeta,
       packagesWithChanges,
       shouldBumpInRangeDependencies,
       shouldInheritGreaterReleaseType,
@@ -737,7 +729,6 @@ describe(buildReleaseGraph, function() {
     let shouldInheritGreaterReleaseType = false;
 
     let releaseTrees = await buildReleaseGraph({
-      workspaceMeta,
       packagesWithChanges,
       shouldBumpInRangeDependencies,
       shouldInheritGreaterReleaseType,
