@@ -8,12 +8,10 @@ const semver = require('semver');
 const inquirer = require('inquirer');
 const buildDepGraph = require('./build-dep-graph');
 const buildDAG = require('./build-dag');
+const dependencyTypes = require('./dependency-types');
 
 function updateDependencyVersion(packageJson, name) {
-  for (let type of [
-    'dependencies',
-    'devDependencies',
-  ]) {
+  for (let type of dependencyTypes) {
     let deps = packageJson[type];
 
     for (let _name in deps) {
