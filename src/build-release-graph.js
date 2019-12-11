@@ -105,7 +105,7 @@ async function secondPass({
       if (!doesPackageHaveChanges) {
         if (dag.isPackage && shouldInheritGreaterReleaseType && dag.dependencyType === 'dependencies' && shouldBumpInRangeDependencies) {
           await init(dag, releaseTrees, parent.releaseType);
-        } else if (dag.isPackage && !isReleaseTypeInRange(parent.oldVersion, parent.releaseType, dag.dependencyRange)) {
+        } else if (!isReleaseTypeInRange(parent.oldVersion, parent.releaseType, dag.dependencyRange)) {
           await init(dag, releaseTrees);
         } else if (shouldBumpInRangeDependencies) {
           await init(dag, releaseTrees);
