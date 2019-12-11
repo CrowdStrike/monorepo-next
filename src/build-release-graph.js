@@ -104,7 +104,7 @@ async function secondPass({
     }) {
       let doesPackageHaveChanges = !!releaseTrees[dag.packageName];
       if (!doesPackageHaveChanges) {
-        if (dag.isPackage && shouldInheritGreaterReleaseType && dag.dependencyType === 'dependencies' && shouldBumpInRangeDependencies) {
+        if (dag.isPackage && shouldInheritGreaterReleaseType && dag.dependencyType !== 'devDependencies' && shouldBumpInRangeDependencies) {
           await init(dag, releaseTrees, parent.releaseType);
         } else if (!isReleaseTypeInRange(parent.oldVersion, parent.releaseType, dag.dependencyRange)) {
           await init(dag, releaseTrees);
@@ -155,7 +155,7 @@ async function thirdPass({
 
       let incomingReleaseType = parent ? parent.releaseType : currentReleaseType;
 
-      if (shouldInheritGreaterReleaseType && dag.dependencyType === 'dependencies' && isReleaseTypeLessThan(currentReleaseType, incomingReleaseType)) {
+      if (shouldInheritGreaterReleaseType && dag.dependencyType !== 'devDependencies' && isReleaseTypeLessThan(currentReleaseType, incomingReleaseType)) {
         currentReleaseType = incomingReleaseType;
       }
 

@@ -4,7 +4,7 @@
   "dependencies": {
     "@scope/package-b": "^2.0.0"
   },
-  "devDependencies": {
+  "optionalDependencies": {
     "@scope/package-a": "^1.0.0"
   }
 }
