@@ -190,7 +190,7 @@ describe(buildReleaseGraph, function() {
     ]));
   });
 
-  it('inherits greater release type', async function() {
+  it('inherits greater release type when lesser', async function() {
     await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
@@ -273,6 +273,165 @@ describe(buildReleaseGraph, function() {
             newRange: '^1.0.0',
           },
         ],
+        devDependencies: [],
+      },
+    ]));
+  });
+
+  it('inherits greater release type when no changes and bump in-range versions', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+            'dependencies': {
+              '@scope/package-a': '^1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "foo"', { cwd: tmpPath });
+    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+
+    let workspaceMeta = await buildDepGraph(tmpPath);
+
+    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+
+    packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
+      return dag.packageName && dag.version;
+    });
+
+    let shouldBumpInRangeDependencies = true;
+    let shouldInheritGreaterReleaseType = true;
+
+    let releaseTrees = await buildReleaseGraph({
+      workspaceMeta,
+      packagesWithChanges,
+      shouldBumpInRangeDependencies,
+      shouldInheritGreaterReleaseType,
+    });
+
+    expect(releaseTrees).to.match(sinon.match([
+      {
+        name: '@scope/package-a',
+        cwd: matchPath('/packages/package-a'),
+        oldVersion: '1.0.0',
+        releaseType: 'minor',
+        canBumpVersion: true,
+        canPublish: true,
+        dependencies: [],
+        devDependencies: [],
+      },
+      {
+        name: '@scope/package-b',
+        cwd: matchPath('/packages/package-b'),
+        oldVersion: '1.0.0',
+        releaseType: 'minor',
+        canBumpVersion: true,
+        canPublish: true,
+        dependencies: [
+          {
+            name: '@scope/package-a',
+            newRange: '^1.1.0',
+          },
+        ],
+        devDependencies: [],
+      },
+    ]));
+  });
+
+  it('ignores greater release type when no changes and ignore in-range versions', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+            'dependencies': {
+              '@scope/package-a': '^1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "foo"', { cwd: tmpPath });
+    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+
+    let workspaceMeta = await buildDepGraph(tmpPath);
+
+    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+
+    packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
+      return dag.packageName && dag.version;
+    });
+
+    let shouldBumpInRangeDependencies = false;
+    let shouldInheritGreaterReleaseType = true;
+
+    let releaseTrees = await buildReleaseGraph({
+      workspaceMeta,
+      packagesWithChanges,
+      shouldBumpInRangeDependencies,
+      shouldInheritGreaterReleaseType,
+    });
+
+    expect(releaseTrees).to.match(sinon.match([
+      {
+        name: '@scope/package-a',
+        cwd: matchPath('/packages/package-a'),
+        oldVersion: '1.0.0',
+        releaseType: 'minor',
+        canBumpVersion: true,
+        canPublish: true,
+        dependencies: [],
         devDependencies: [],
       },
     ]));
