@@ -682,6 +682,7 @@ describe(buildReleaseGraph, function() {
       'packages': {
         'package-b': {
           'package.json': stringifyJson({
+            'private': true,
             'name': '@scope/package-b',
             'version': '1.0.0',
             'devDependencies': {
@@ -751,7 +752,7 @@ describe(buildReleaseGraph, function() {
         oldVersion: '1.0.0',
         releaseType: 'patch',
         canBumpVersion: true,
-        canPublish: true,
+        canPublish: false,
         dependencies: [],
         devDependencies: [
           {
