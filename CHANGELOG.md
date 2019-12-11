@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.17](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.16...v0.2.17) (2019-12-11)
+
+
+### Bug Fixes
+
+* treat `optionalDependencies` like other dependency types ([ce79937](https://github.com/CrowdStrike/monorepo-next/commit/ce799378fcf38d2fd74cedc5d11fd4fc4d2e40ce))
+
 ### [0.2.16](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.15...v0.2.16) (2019-12-11)
 
 
