@@ -12,7 +12,7 @@ before_script:
 - yarn lint:js
 deploy:
   provider: npm
-  email: kellyselden@gmail.com
+  email: kelly.selden@crowdstrike.com
   api_key: $NPM_TOKEN
   on:
     tags: true
