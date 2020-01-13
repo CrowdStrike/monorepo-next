@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.20](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.19...v0.2.20) (2020-01-13)
+
+
+### Bug Fixes
+
+* pave the way for other monorepo support (pnpm, lerna) ([a8c9a54](https://github.com/CrowdStrike/monorepo-next/commit/a8c9a5450f146bf7cb16ca341e8745ab3e203cc3))
+
 ### [0.2.19](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.18...v0.2.19) (2020-01-06)
 
 ### [0.2.18](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.17...v0.2.18) (2020-01-06)
