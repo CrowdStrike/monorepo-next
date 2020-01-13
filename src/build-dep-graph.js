@@ -5,6 +5,7 @@ const { promisify } = require('util');
 const glob = promisify(require('glob'));
 const semver = require('semver');
 const dependencyTypes = require('./dependency-types');
+const exec = promisify(require('child_process').exec);
 
 function copyDeps(left, right) {
   for (let dependencyType of dependencyTypes) {
@@ -72,15 +73,23 @@ async function buildDepGraph(workspaceCwd) {
 
   let { workspaces } = workspacePackageJson;
 
-  let packages = workspaces.packages || workspaces;
+  let _1dFilesArray;
+  if (!workspaces) {
+    _1dFilesArray = (await exec('npx -q pnpm recursive exec -- node -e "console.log(process.cwd())"', { cwd: workspaceCwd })).stdout
+      .split(/\r?\n/)
+      .map(workspace => path.relative(workspaceCwd, workspace))
+      .filter(Boolean);
+  } else {
+    let packages = workspaces.packages || workspaces;
 
-  let _2dFilesArray = await Promise.all(packages.map(packagesGlob => {
-    return glob(packagesGlob, {
-      cwd: workspaceCwd,
-    });
-  }));
+    let _2dFilesArray = await Promise.all(packages.map(packagesGlob => {
+      return glob(packagesGlob, {
+        cwd: workspaceCwd,
+      });
+    }));
 
-  let _1dFilesArray = Array.prototype.concat.apply([], _2dFilesArray);
+    _1dFilesArray = Array.prototype.concat.apply([], _2dFilesArray);
+  }
 
   let uniqueFiles = [...new Set(_1dFilesArray)];
 
