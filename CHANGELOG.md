@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.23](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.22...v0.2.23) (2020-01-13)
+
+
+### Bug Fixes
+
+* remove npx call ([67167e5](https://github.com/CrowdStrike/monorepo-next/commit/67167e5f935a7998ca73f1d56cc42160ac388259))
+
 ### [0.2.22](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.21...v0.2.22) (2020-01-13)
 
 
