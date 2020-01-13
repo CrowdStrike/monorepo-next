@@ -43,7 +43,7 @@ module.exports = {
       type: 'array',
     },
     'bump-files': {
-      default: defaults.packageFiles,
+      default: defaults.bumpFiles,
       type: 'array',
     },
   },
