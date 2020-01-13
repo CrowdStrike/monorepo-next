@@ -26,6 +26,8 @@ async function release({
   shouldBumpInRangeDependencies = builder['bump-in-range-dependencies'].default,
   shouldInheritGreaterReleaseType = builder['inherit-greater-release-type'].default,
   scripts = builder['scripts'].default,
+  packageFiles = builder['package-files'].default,
+  bumpFiles = builder['bump-files'].default,
   versionOverride,
   preCommitCallback = () => {},
   prePushCallback = () => {},
@@ -92,6 +94,8 @@ async function release({
         tagPrefix: `${name}@`,
         releaseAs: releaseTree.releaseType,
         scripts,
+        packageFiles,
+        bumpFiles,
         ...options,
       });
     }
