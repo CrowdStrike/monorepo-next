@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.22](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.21...v0.2.22) (2020-01-13)
+
+
+### Features
+
+* forward `packageFiles` and `bumpFiles` options ([6d2c604](https://github.com/CrowdStrike/monorepo-next/commit/6d2c6040ad02e75b1b0995b6a4a6290e4cf42cee))
+
 ### [0.2.21](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.20...v0.2.21) (2020-01-13)
 
 
