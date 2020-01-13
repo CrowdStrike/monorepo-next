@@ -1,8 +1,7 @@
 'use strict';
 
-const { promisify } = require('util');
-const exec = promisify(require('child_process').exec);
 const release = require('../../src/release');
+const postRun = require('../../src/post-run');
 
 const defaults = require('standard-version/defaults');
 
@@ -41,6 +40,8 @@ module.exports = {
     },
   },
   async handler(argv) {
+    let cwd = process.cwd();
+
     try {
       await release({
         ...argv,
@@ -49,10 +50,12 @@ module.exports = {
         shouldBumpInRangeDependencies: argv['bump-in-range-dependencies'],
         shouldInheritGreaterReleaseType: argv['inherit-greater-release-type'],
         scripts: argv['scripts'],
-        cwd: process.cwd(),
+        cwd,
       });
 
-      await exec('yarn');
+      await postRun({
+        cwd,
+      });
     } catch (err) {
       console.error(err);
     }
