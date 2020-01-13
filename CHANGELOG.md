@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.21](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.20...v0.2.21) (2020-01-13)
+
+
+### Features
+
+* support pnpm workspaces ([2ab8bfe](https://github.com/CrowdStrike/monorepo-next/commit/2ab8bfe9f8d62c09bf9f28c7ed8d7885248e1965))
+
 ### [0.2.20](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.19...v0.2.20) (2020-01-13)
 
 
