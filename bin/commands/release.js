@@ -38,6 +38,14 @@ module.exports = {
       describe: 'Provide scripts to execute for lifecycle events (prebump, precommit, etc.,)',
       default: defaults.scripts,
     },
+    'package-files': {
+      default: defaults.packageFiles,
+      type: 'array',
+    },
+    'bump-files': {
+      default: defaults.packageFiles,
+      type: 'array',
+    },
   },
   async handler(argv) {
     let cwd = process.cwd();
@@ -50,6 +58,8 @@ module.exports = {
         shouldBumpInRangeDependencies: argv['bump-in-range-dependencies'],
         shouldInheritGreaterReleaseType: argv['inherit-greater-release-type'],
         scripts: argv['scripts'],
+        packageFiles: argv['package-files'],
+        bumpFiles: argv['bump-files'],
         cwd,
       });
 
