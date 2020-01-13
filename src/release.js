@@ -84,6 +84,13 @@ async function release({
 
     // eslint-disable-next-line no-inner-declarations
     async function originalVersion(options) {
+      const Bump = require('standard-version/lib/lifecycles/bump');
+
+      // `packageFiles` and `bumpFiles` seem to be unimplemented.
+      // https://github.com/conventional-changelog/standard-version/blob/v7.1.0/command.js#L7-L14
+      Bump.pkgFiles = packageFiles;
+      Bump.lockFiles = bumpFiles.filter(file => !packageFiles.includes(file));
+
       await require('standard-version')({
         path: cwd,
         skip: {
@@ -94,8 +101,8 @@ async function release({
         tagPrefix: `${name}@`,
         releaseAs: releaseTree.releaseType,
         scripts,
-        packageFiles,
-        bumpFiles,
+        // packageFiles,
+        // bumpFiles,
         ...options,
       });
     }
