@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.24](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.23...v0.2.24) (2020-01-13)
+
+
+### Bug Fixes
+
+* `bumpFiles` ([0e82614](https://github.com/CrowdStrike/monorepo-next/commit/0e826146535e6b742f96265822dab4d3f4ff3a52))
+* update standard-version ([ac3c005](https://github.com/CrowdStrike/monorepo-next/commit/ac3c0051d86390ed7db9f160a3802d5440e487df))
+
 ### [0.2.23](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.22...v0.2.23) (2020-01-13)
 
 
