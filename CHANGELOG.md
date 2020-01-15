@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.27](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.26...v0.2.27) (2020-01-15)
+
+
+### Bug Fixes
+
+* `non-fast-forward` error message ([6dbf7f4](https://github.com/CrowdStrike/monorepo-next/commit/6dbf7f42174c43df2348cd4f3e90a1c005ffc62b))
+
 ### [0.2.26](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.25...v0.2.26) (2020-01-15)
 
 
