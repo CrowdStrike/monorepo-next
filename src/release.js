@@ -183,8 +183,21 @@ async function release({
 }
 
 async function push({ cwd }) {
+  let remoteUrl = (await exec('git config --get remote.origin.url', { cwd })).stdout.trim();
+
+  // https://stackoverflow.com/a/55586434
+  let doesntSupportAtomic = remoteUrl.includes('https://');
+
+  let success;
+
   try {
-    await exec('git push --follow-tags --atomic', { cwd });
+    if (doesntSupportAtomic) {
+      await exec('git push', { cwd });
+    } else {
+      await exec('git push --follow-tags --atomic', { cwd });
+    }
+
+    success = true;
   } catch (err) {
     if (!err.message.includes('EPUBLISHCONFLICT')) {
       throw err;
@@ -192,6 +205,12 @@ async function push({ cwd }) {
 
     // CI could have already released, or a user released locally
     console.warn('version already published');
+  }
+
+  if (doesntSupportAtomic && success) {
+    // only push tags after the commit
+    // and hard error if there is a tag collision
+    await exec('git push --follow-tags', { cwd });
   }
 }
 
