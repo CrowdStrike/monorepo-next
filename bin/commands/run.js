@@ -15,14 +15,10 @@ module.exports = {
     },
   },
   async handler(argv) {
-    try {
-      await run({
-        ...argv,
-        cwd: process.cwd(),
-        args: process.argv.slice(3),
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    await run({
+      ...argv,
+      cwd: process.cwd(),
+      args: process.argv.slice(3),
+    });
   },
 };
