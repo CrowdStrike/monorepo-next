@@ -13,13 +13,9 @@ module.exports = {
     },
   },
   async handler(argv) {
-    try {
-      await changedFiles({
-        ...argv,
-        cwd: process.cwd(),
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    await changedFiles({
+      ...argv,
+      cwd: process.cwd(),
+    });
   },
 };

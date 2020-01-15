@@ -50,24 +50,20 @@ module.exports = {
   async handler(argv) {
     let cwd = process.cwd();
 
-    try {
-      await release({
-        ...argv,
-        shouldPush: argv['push'],
-        shouldPublish: argv['publish'],
-        shouldBumpInRangeDependencies: argv['bump-in-range-dependencies'],
-        shouldInheritGreaterReleaseType: argv['inherit-greater-release-type'],
-        scripts: argv['scripts'],
-        packageFiles: argv['package-files'],
-        bumpFiles: argv['bump-files'],
-        cwd,
-      });
+    await release({
+      ...argv,
+      shouldPush: argv['push'],
+      shouldPublish: argv['publish'],
+      shouldBumpInRangeDependencies: argv['bump-in-range-dependencies'],
+      shouldInheritGreaterReleaseType: argv['inherit-greater-release-type'],
+      scripts: argv['scripts'],
+      packageFiles: argv['package-files'],
+      bumpFiles: argv['bump-files'],
+      cwd,
+    });
 
-      await postRun({
-        cwd,
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    await postRun({
+      cwd,
+    });
   },
 };

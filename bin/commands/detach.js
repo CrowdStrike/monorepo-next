@@ -10,17 +10,13 @@ module.exports = {
   async handler(argv) {
     let cwd = process.cwd();
 
-    try {
-      await detach({
-        ...argv,
-        cwd,
-      });
+    await detach({
+      ...argv,
+      cwd,
+    });
 
-      await postRun({
-        cwd,
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    await postRun({
+      cwd,
+    });
   },
 };
