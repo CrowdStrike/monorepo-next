@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.25](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.24...v0.2.25) (2020-01-15)
+
+
+### Bug Fixes
+
+* support non-atomic remotes ([440c03c](https://github.com/CrowdStrike/monorepo-next/commit/440c03cd74a446e5e0a9cd9ab21d397567b5ffd1))
+
 ### [0.2.24](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.23...v0.2.24) (2020-01-13)
 
 
