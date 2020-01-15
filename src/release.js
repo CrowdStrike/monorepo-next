@@ -199,7 +199,7 @@ async function push({ cwd }) {
 
     success = true;
   } catch (err) {
-    if (!err.message.includes('EPUBLISHCONFLICT')) {
+    if (!err.message.includes('non-fast-forward')) {
       throw err;
     }
 
