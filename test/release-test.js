@@ -183,7 +183,7 @@ describe(_release, function() {
 
     let lastCommitMessage = await getLastCommitMessage(tmpPath);
 
-    expect(lastCommitMessage).to.equal('Version @scope/package-a@2.0.0,@scope/package-b@3.0.0,@scope/package-c@3.0.1');
+    expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@2.0.0,@scope/package-b@3.0.0,@scope/package-c@3.0.1');
 
     let tags = await getTagsOnLastCommit(tmpPath);
 
@@ -344,7 +344,7 @@ describe(_release, function() {
 
     let lastCommitMessage = await getLastCommitMessage(tmpPath);
 
-    expect(lastCommitMessage).to.equal('Version my-app@0.0.1,@scope/package-a@2.0.0,@scope/package-b@3.0.0,@scope/package-c@3.0.1,root@1.0.0');
+    expect(lastCommitMessage).to.equal('chore(release): my-app@0.0.1,@scope/package-a@2.0.0,@scope/package-b@3.0.0,@scope/package-c@3.0.1,root@1.0.0');
 
     let tags = await getTagsOnLastCommit(tmpPath);
 
@@ -531,7 +531,7 @@ describe(_release, function() {
 
     let lastCommitMessage = await getLastCommitMessage(tmpPath);
 
-    expect(lastCommitMessage).to.equal('Version @scope/package-a@1.1.0,@scope/package-b@1.0.1');
+    expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0,@scope/package-b@1.0.1');
 
     let tags = await getTagsOnLastCommit(tmpPath);
 
@@ -621,7 +621,7 @@ describe(_release, function() {
 
     let lastCommitMessage = await getLastCommitMessage(tmpPath);
 
-    expect(lastCommitMessage).to.equal('Version @scope/package-a@1.1.0');
+    expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0');
 
     let tags = await getTagsOnLastCommit(tmpPath);
 
@@ -711,7 +711,7 @@ describe(_release, function() {
 
     let lastCommitMessage = await getLastCommitMessage(tmpPath);
 
-    expect(lastCommitMessage).to.equal('Version @scope/package-a@1.1.0,@scope/package-b@1.1.0');
+    expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0,@scope/package-b@1.1.0');
 
     let tags = await getTagsOnLastCommit(tmpPath);
 
@@ -802,7 +802,7 @@ describe(_release, function() {
 
     let lastCommitMessage = await getLastCommitMessage(tmpPath);
 
-    expect(lastCommitMessage).to.equal('Version @scope/package-a@1.1.0,@scope/package-b@1.0.1');
+    expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0,@scope/package-b@1.0.1');
 
     let tags = await getTagsOnLastCommit(tmpPath);
 
@@ -893,7 +893,7 @@ describe(_release, function() {
 
     let lastCommitMessage = await getLastCommitMessage(tmpPath);
 
-    expect(lastCommitMessage).to.equal('Version @scope/package-a@1.1.0,@scope/package-b@1.1.0');
+    expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0,@scope/package-b@1.1.0');
 
     let tags = await getTagsOnLastCommit(tmpPath);
 
