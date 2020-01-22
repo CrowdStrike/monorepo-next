@@ -8,7 +8,7 @@ const { promisify } = require('util');
 const tmpDir = promisify(require('tmp').dir);
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const exec = promisify(require('child_process').exec);
+const { gitInit } = require('git-fixtures');
 
 const defaultWorkspace = {
   'packages': {
@@ -61,7 +61,7 @@ describe(attach, function() {
   beforeEach(async function() {
     tmpPath = await tmpDir();
 
-    await exec('git init', { cwd: tmpPath });
+    await gitInit({ cwd: tmpPath });
   });
 
   it('package-a', async function() {
