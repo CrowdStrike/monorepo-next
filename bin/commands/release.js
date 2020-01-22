@@ -54,9 +54,6 @@ module.exports = {
       shouldPublish: argv['publish'],
       shouldBumpInRangeDependencies: argv['bump-in-range-dependencies'],
       shouldInheritGreaterReleaseType: argv['inherit-greater-release-type'],
-      scripts: argv['scripts'],
-      packageFiles: argv['package-files'],
-      bumpFiles: argv['bump-files'],
     });
 
     await postRun();
