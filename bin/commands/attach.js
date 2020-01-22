@@ -8,15 +8,8 @@ module.exports = {
   aliases: ['a'],
   describe: 'attach a package to a detached package to resume normal linking',
   async handler(argv) {
-    let cwd = process.cwd();
+    await attach(argv);
 
-    await attach({
-      ...argv,
-      cwd,
-    });
-
-    await postRun({
-      cwd,
-    });
+    await postRun();
   },
 };

@@ -45,7 +45,7 @@ async function detachDependents(dag) {
 
 async function attach({
   package: _package,
-  cwd,
+  cwd = process.cwd(),
   dag,
 }) {
   let myPackageJsonPath = path.join(cwd, 'package.json');

@@ -8,15 +8,8 @@ module.exports = {
   aliases: ['d'],
   describe: 'detach a package from normal linking',
   async handler(argv) {
-    let cwd = process.cwd();
+    await detach(argv);
 
-    await detach({
-      ...argv,
-      cwd,
-    });
-
-    await postRun({
-      cwd,
-    });
+    await postRun();
   },
 };

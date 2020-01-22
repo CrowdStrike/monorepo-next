@@ -13,7 +13,7 @@ async function arePathsTheSame(path1, path2) {
 }
 
 async function changed({
-  cwd,
+  cwd = process.cwd(),
   silent,
 }) {
   let workspaceCwd = (await exec('git rev-parse --show-toplevel', { cwd })).stdout.trim();

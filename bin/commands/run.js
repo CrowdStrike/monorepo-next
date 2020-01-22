@@ -17,7 +17,6 @@ module.exports = {
   async handler(argv) {
     await run({
       ...argv,
-      cwd: process.cwd(),
       args: process.argv.slice(3),
     });
   },

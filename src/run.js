@@ -7,7 +7,7 @@ const buildDepGraph = require('./build-dep-graph');
 const buildChangeGraph = require('./build-change-graph');
 
 async function run({
-  cwd,
+  cwd = process.cwd(),
   silent,
   args,
 }) {
