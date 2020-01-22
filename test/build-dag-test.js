@@ -6,12 +6,9 @@ const path = require('path');
 const sinon = require('sinon');
 const buildDepGraph = require('../src/build-dep-graph');
 const buildDAG = require('../src/build-dag');
+const { matchPath } = require('./helpers/matchers');
 
 let cwd = path.resolve(__dirname, './fixtures/workspace');
-
-function matchPath(p) {
-  return sinon.match(path.normalize(p));
-}
 
 describe(buildDAG, function() {
   it('package-a', async function() {
