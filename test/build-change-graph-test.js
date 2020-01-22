@@ -23,7 +23,7 @@ describe(buildChangeGraph, function() {
     await exec('git commit --allow-empty -m "first"', { cwd: tmpPath });
   });
 
-  it('bumps in-range versions', async function() {
+  it('works', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-b': {
