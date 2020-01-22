@@ -34,7 +34,7 @@ async function release({
   pushOverride,
   prePublishCallback = () => {},
   publishOverride,
-}) {
+} = {}) {
   let currentBranch = await getCurrentBranch(cwd);
   if (currentBranch !== 'master') {
     return;
