@@ -11,11 +11,7 @@ const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const exec = promisify(require('child_process').exec);
 const sinon = require('sinon');
-const path = require('path');
-
-function matchPath(p) {
-  return sinon.match(path.normalize(p));
-}
+const { matchPath } = require('./helpers/matchers');
 
 describe(buildReleaseGraph, function() {
   let tmpPath;
