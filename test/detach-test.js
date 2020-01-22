@@ -59,15 +59,12 @@ const defaultWorkspace = {
 
 describe(detach, function() {
   let tmpPath;
-  let sandbox;
   let prompt;
 
   beforeEach(async function() {
     tmpPath = await tmpDir();
 
-    sandbox = sinon.createSandbox();
-
-    prompt = sandbox.stub(inquirer, 'prompt');
+    prompt = sinon.stub(inquirer, 'prompt');
 
     await exec('git init', { cwd: tmpPath });
 
@@ -75,7 +72,7 @@ describe(detach, function() {
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   it('package-a', async function() {

@@ -8,17 +8,14 @@ const sinon = require('sinon');
 const name = 'test-package';
 
 describe(function() {
-  let sandbox;
   let warn;
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
-
-    warn = sandbox.stub(console, 'warn');
+    warn = sinon.stub(console, 'warn');
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe(trackNewVersion, function() {
