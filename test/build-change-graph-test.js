@@ -26,6 +26,12 @@ describe(buildChangeGraph, function() {
   it('works', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
         'package-b': {
           'package.json': stringifyJson({
             'name': '@scope/package-b',
@@ -37,7 +43,6 @@ describe(buildChangeGraph, function() {
         },
       },
       'package.json': stringifyJson({
-        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -52,10 +57,7 @@ describe(buildChangeGraph, function() {
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
-          'package.json': stringifyJson({
-            'name': '@scope/package-a',
-            'version': '1.0.0',
-          }),
+          'index.js': 'console.log()',
         },
       },
     });
@@ -70,7 +72,7 @@ describe(buildChangeGraph, function() {
     expect(packagesWithChanges).to.match(sinon.match([
       {
         changedFiles: [
-          'packages/package-a/package.json',
+          'packages/package-a/index.js',
         ],
         dag: {
           branch: [],
