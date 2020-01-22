@@ -15,7 +15,7 @@ async function arePathsTheSame(path1, path2) {
 async function changed({
   cwd = process.cwd(),
   silent,
-}) {
+} = {}) {
   let workspaceCwd = (await exec('git rev-parse --show-toplevel', { cwd })).stdout.trim();
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);

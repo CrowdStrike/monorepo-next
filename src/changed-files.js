@@ -17,7 +17,7 @@ async function changedFiles({
   silent,
   packages = [],
   ext,
-}) {
+} = {}) {
   let workspaceCwd = (await exec('git rev-parse --show-toplevel', { cwd })).stdout.trim();
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);
