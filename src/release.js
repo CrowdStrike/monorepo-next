@@ -19,7 +19,7 @@ async function getCurrentBranch(cwd) {
 }
 
 async function release({
-  cwd,
+  cwd = process.cwd(),
   silent,
   shouldPush = builder['push'].default,
   shouldPublish = builder['publish'].default,

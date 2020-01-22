@@ -6,7 +6,7 @@ const fs = require('fs');
 const access = promisify(fs.access);
 
 async function postRun({
-  cwd,
+  cwd = process.cwd(),
 }) {
   let exists;
   try {

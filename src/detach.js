@@ -28,7 +28,7 @@ function updateDependencyVersion(packageJson, name) {
 
 async function detach({
   package: _package,
-  cwd,
+  cwd = process.cwd(),
 }) {
   let myPackageJsonPath = path.join(cwd, 'package.json');
   let myPackageJson = require(myPackageJsonPath);

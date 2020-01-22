@@ -13,9 +13,6 @@ module.exports = {
     },
   },
   async handler(argv) {
-    await changedFiles({
-      ...argv,
-      cwd: process.cwd(),
-    });
+    await changedFiles(argv);
   },
 };

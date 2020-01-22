@@ -7,8 +7,6 @@ module.exports = {
   alias: ['c'],
   describe: 'list changed packages',
   async handler() {
-    await changed({
-      cwd: process.cwd(),
-    });
+    await changed();
   },
 };

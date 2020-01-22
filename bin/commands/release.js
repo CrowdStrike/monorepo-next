@@ -48,8 +48,6 @@ module.exports = {
     },
   },
   async handler(argv) {
-    let cwd = process.cwd();
-
     await release({
       ...argv,
       shouldPush: argv['push'],
@@ -59,11 +57,8 @@ module.exports = {
       scripts: argv['scripts'],
       packageFiles: argv['package-files'],
       bumpFiles: argv['bump-files'],
-      cwd,
     });
 
-    await postRun({
-      cwd,
-    });
+    await postRun();
   },
 };

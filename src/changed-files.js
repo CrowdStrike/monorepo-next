@@ -13,7 +13,7 @@ async function arePathsTheSame(path1, path2) {
 }
 
 async function changedFiles({
-  cwd,
+  cwd = process.cwd(),
   silent,
   packages = [],
   ext,
