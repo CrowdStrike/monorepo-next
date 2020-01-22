@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.30](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.29...v0.2.30) (2020-01-22)
+
+
+### Features
+
+* match `standard-version` release commit message ([2f4ba64](https://github.com/CrowdStrike/monorepo-next/commit/2f4ba64a2b4d501e351fa81f32d088ff3057a8ac))
+
 ### [0.2.29](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.28...v0.2.29) (2020-01-22)
 
 
