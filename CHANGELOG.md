@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.28](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.27...v0.2.28) (2020-01-22)
+
+
+### Features
+
+* use sensible default for cwd ([7655f09](https://github.com/CrowdStrike/monorepo-next/commit/7655f098e1de7af30012e44617f5db7418656509))
+
 ### [0.2.27](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.26...v0.2.27) (2020-01-15)
 
 
