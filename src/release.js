@@ -129,7 +129,7 @@ async function release({
     .filter(({ canBumpVersion }) => canBumpVersion)
     .map(({ name, newVersion }) => `${name}@${newVersion}`);
 
-  let commitMessage = `Version ${tags.join()}`;
+  let commitMessage = `chore(release): ${tags.join()}`;
 
   await exec('git add .', { cwd: workspaceCwd });
 
