@@ -8,6 +8,7 @@ const tmpDir = promisify(require('tmp').dir);
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const exec = promisify(require('child_process').exec);
+const { gitInit } = require('git-fixtures');
 
 describe(run, function() {
   let tmpPath;
@@ -15,11 +16,7 @@ describe(run, function() {
   beforeEach(async function() {
     tmpPath = await tmpDir();
 
-    await exec('git init', { cwd: tmpPath });
-    await exec('git config user.email "you@example.com"', { cwd: tmpPath });
-    await exec('git config user.name "Your Name"', { cwd: tmpPath });
-    // ignore any global .gitignore that will mess with us
-    await exec('git config --local core.excludesfile false', { cwd: tmpPath });
+    await gitInit({ cwd: tmpPath });
     await exec('git commit --allow-empty -m "first"', { cwd: tmpPath });
   });
 

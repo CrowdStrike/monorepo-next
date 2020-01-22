@@ -10,7 +10,7 @@ const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const inquirer = require('inquirer');
 const sinon = require('sinon');
-const exec = promisify(require('child_process').exec);
+const { gitInit } = require('git-fixtures');
 
 const defaultWorkspace = {
   'packages': {
@@ -66,7 +66,7 @@ describe(detach, function() {
 
     prompt = sinon.stub(inquirer, 'prompt');
 
-    await exec('git init', { cwd: tmpPath });
+    await gitInit({ cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, defaultWorkspace);
   });
