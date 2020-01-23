@@ -24,7 +24,7 @@ async function getCommitSinceLastRelease(_package) {
 }
 
 async function getPackageChangedFiles(tagCommit, currentCommit, _package) {
-  let lines = (await execa.command(`git diff --name-only ${tagCommit}...${currentCommit} ${_package.cwd}`, { cwd: _package.cwd })).stdout;
+  let lines = (await execa('git', ['diff', '--name-only', `${tagCommit}...${currentCommit}`, _package.cwd], { cwd: _package.cwd })).stdout;
   return lines.split(/\r?\n/).filter(Boolean);
 }
 
