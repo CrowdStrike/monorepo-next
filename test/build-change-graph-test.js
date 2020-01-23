@@ -100,6 +100,51 @@ describe(buildChangeGraph, function() {
     expect(packagesWithChanges).to.deep.equal([]);
   });
 
+  it('tracks dirty package changes', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'index.js': 'console.log()',
+        },
+      },
+    });
+
+    let workspaceMeta = await buildDepGraph(tmpPath);
+
+    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+
+    expect(packagesWithChanges).to.match(sinon.match([
+      {
+        changedFiles: [
+          'packages/package-a/index.js',
+        ],
+        dag: sinon.match({
+          packageName: '@scope/package-a',
+        }),
+      },
+    ]));
+  });
+
   it('tracks workspace with a version', async function() {
     fixturify.writeSync(tmpPath, {
       'package.json': stringifyJson({

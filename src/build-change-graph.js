@@ -9,6 +9,14 @@ async function getCurrentCommit(cwd) {
   return (await exec('git rev-parse HEAD', { cwd })).stdout.trim();
 }
 
+function getLinesFromOutput(output) {
+  return output.split(/\r?\n/).filter(Boolean);
+}
+
+function union(a, b) {
+  return [...new Set([...a, ...b])];
+}
+
 async function getCommitSinceLastRelease(_package) {
   let version = _package.version;
 
@@ -24,8 +32,11 @@ async function getCommitSinceLastRelease(_package) {
 }
 
 async function getPackageChangedFiles(tagCommit, currentCommit, _package) {
-  let lines = (await execa('git', ['diff', '--name-only', `${tagCommit}...${currentCommit}`, _package.cwd], { cwd: _package.cwd })).stdout;
-  return lines.split(/\r?\n/).filter(Boolean);
+  let committedChanges = (await execa('git', ['diff', '--name-only', `${tagCommit}...${currentCommit}`, _package.cwd], { cwd: _package.cwd })).stdout;
+  committedChanges = getLinesFromOutput(committedChanges);
+  let dirtyChanges = (await execa('git', ['status', '--porcelain', _package.cwd], { cwd: _package.cwd })).stdout;
+  dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
+  return union(committedChanges, dirtyChanges);
 }
 
 function crawlDag(dag, packagesWithChanges) {
