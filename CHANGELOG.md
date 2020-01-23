@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.32](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.31...v0.2.32) (2020-01-23)
+
+
+### Bug Fixes
+
+* convert to spawn to allow strings in path ([43260ab](https://github.com/CrowdStrike/monorepo-next/commit/43260ab3dc5a97e8b0604a0c30821acfe7dee345))
+
 ### [0.2.31](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.30...v0.2.31) (2020-01-22)
 
 
