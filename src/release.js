@@ -125,6 +125,13 @@ async function release({
     }
   }
 
+  async function handleLifecycleScript(lifecycle) {
+    let script = scripts[lifecycle];
+    if (script) {
+      await exec(script);
+    }
+  }
+
   let tags = releaseTrees
     .filter(({ canBumpVersion }) => canBumpVersion)
     .map(({ name, newVersion }) => `${name}@${newVersion}`);
@@ -135,11 +142,19 @@ async function release({
 
   await preCommitCallback();
 
+  await handleLifecycleScript('precommit');
+
   await exec(`git commit -m "${commitMessage}"`, { cwd: workspaceCwd });
+
+  await handleLifecycleScript('postcommit');
+
+  await handleLifecycleScript('pretag');
 
   for (let tag of tags) {
     await exec(`git tag -a ${tag} -m "${tag}"`, { cwd: workspaceCwd });
   }
+
+  await handleLifecycleScript('posttag');
 
   async function originalPush() {
     await push({ cwd: workspaceCwd });
