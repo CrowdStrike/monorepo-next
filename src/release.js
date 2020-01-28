@@ -138,7 +138,7 @@ async function release({
 
   let commitMessage = `chore(release): ${tags.join()}`;
 
-  await exec('git add .', { cwd: workspaceCwd });
+  await exec('git add -A', { cwd: workspaceCwd });
 
   await preCommitCallback();
 
