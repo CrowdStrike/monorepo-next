@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.36](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.35...v0.2.36) (2020-02-21)
+
+
+### Features
+
+* add `getChangelog` ([3b7cda9](https://github.com/CrowdStrike/monorepo-next/commit/3b7cda9f3f91c44107a62ffc60446d5216aa704d))
+
+
+### Bug Fixes
+
+* prevent circular requires ([fa8378c](https://github.com/CrowdStrike/monorepo-next/commit/fa8378c16b360babb76fc8be8d3e92095f0ba2fb))
+
 ### [0.2.35](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.34...v0.2.35) (2020-01-28)
 
 
