@@ -1,7 +1,5 @@
 'use strict';
 
-const run = require('../../src/run');
-
 const defaults = require('standard-version/defaults');
 
 module.exports = {
@@ -15,6 +13,8 @@ module.exports = {
     },
   },
   async handler(argv) {
+    const run = require('../../src/run');
+
     await run({
       ...argv,
       args: process.argv.slice(3),
