@@ -1,7 +1,5 @@
 'use strict';
 
-const changedFiles = require('../../src/changed-files');
-
 module.exports = {
   command: 'changed-files [packages..]',
   alias: ['cf'],
@@ -13,6 +11,8 @@ module.exports = {
     },
   },
   async handler(argv) {
+    const changedFiles = require('../../src/changed-files');
+
     await changedFiles(argv);
   },
 };

@@ -1,6 +1,5 @@
 'use strict';
 
-const release = require('../../src/release');
 const postRun = require('../../src/post-run');
 
 const defaults = require('standard-version/defaults');
@@ -48,6 +47,8 @@ module.exports = {
     },
   },
   async handler(argv) {
+    const release = require('../../src/release');
+
     await release({
       ...argv,
       shouldPush: argv['push'],
