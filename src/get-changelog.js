@@ -28,7 +28,7 @@ async function getChangelog({
   let packagesWithChanges = await buildChangeGraph(workspaceMeta);
 
   packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-    return dag.packageName && dag.version;
+    return dag.packageName === name && dag.version;
   });
 
   if (!packagesWithChanges.length) {

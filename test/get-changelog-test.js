@@ -130,4 +130,65 @@ describe(getChangelog, function() {
     expect(changelog).to.include('* foo');
     expect(changelog).to.not.include('[1.0.0]');
   });
+
+  it('no package changes when pre tag', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'package.json': stringifyJson({
+            'name': '@scope/my-app',
+            'version': '1.0.0',
+          }),
+        },
+        'my-app-2': {
+          'package.json': stringifyJson({
+            'name': '@scope/my-app-2',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "chore: release"', { cwd: tmpPath });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
+
+    await standardVersion({
+      path: path.join(tmpPath, 'packages/my-app'),
+      tagPrefix: '@scope/my-app@',
+      firstRelease: true,
+    });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app-2'));
+
+    await standardVersion({
+      path: path.join(tmpPath, 'packages/my-app-2'),
+      tagPrefix: '@scope/my-app-2@',
+      firstRelease: true,
+    });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app-2': {
+          'index.js': 'foo',
+        },
+      },
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+
+    let changelog = await getChangelog({
+      cwd: path.join(tmpPath, 'packages/my-app'),
+    });
+
+    expect(changelog).to.include('[1.0.0]');
+  });
 });
