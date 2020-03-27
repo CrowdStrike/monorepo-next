@@ -12,8 +12,6 @@ const { gitInit } = require('git-fixtures');
 const path = require('path');
 const standardVersion = require('standard-version');
 
-const originalCwd = process.cwd();
-
 describe(getChangelog, function() {
   let tmpPath;
 
@@ -22,10 +20,6 @@ describe(getChangelog, function() {
 
     await gitInit({ cwd: tmpPath });
     await exec('git commit --allow-empty -m "first"', { cwd: tmpPath });
-  });
-
-  afterEach(function() {
-    process.chdir(originalCwd);
   });
 
   it('works pre tag', async function() {
@@ -48,8 +42,6 @@ describe(getChangelog, function() {
 
     await exec('git add .', { cwd: tmpPath });
     await exec('git commit -m "chore: release"', { cwd: tmpPath });
-
-    process.chdir(path.join(tmpPath, 'packages/my-app'));
 
     await standardVersion({
       path: path.join(tmpPath, 'packages/my-app'),
@@ -97,8 +89,6 @@ describe(getChangelog, function() {
 
     await exec('git add .', { cwd: tmpPath });
     await exec('git commit -m "chore: release"', { cwd: tmpPath });
-
-    process.chdir(path.join(tmpPath, 'packages/my-app'));
 
     await standardVersion({
       path: path.join(tmpPath, 'packages/my-app'),

@@ -51,13 +51,13 @@
     "node": ">=8.10"
   },
   "dependencies": {
-    "conventional-changelog": "3.1.18",
-    "conventional-recommended-bump": "6.0.5",
+    "conventional-changelog": "kellyselden/conventional-changelog#conventional-changelog",
+    "conventional-recommended-bump": "kellyselden/conventional-changelog#conventional-recommended-bump",
     "execa": "^3.0.0",
     "glob": "^7.1.4",
     "inquirer": "^7.0.0",
     "semver": "^6.3.0",
-    "standard-version": "7.1.0",
+    "standard-version": "kellyselden/standard-version#gitRawExecOpts",
     "yargs": "^15.0.0"
   },
   "devDependencies": {
@@ -79,5 +79,10 @@
     "sinon": "^8.0.0",
     "sinon-chai": "^3.3.0",
     "tmp": "0.1.0"
+  },
+  "resolutions": {
+    "conventional-changelog": "kellyselden/conventional-changelog#conventional-changelog",
+    "conventional-changelog-core": "kellyselden/conventional-changelog#conventional-changelog-core",
+    "conventional-recommended-bump": "kellyselden/conventional-changelog#conventional-recommended-bump"
   }
 }

@@ -672,25 +672,22 @@ conventional-changelog-angular@^1.3.3:
     compare-func "^1.3.1"
     q "^1.5.1"
 
-conventional-changelog-angular@^5.0.6:
+"conventional-changelog-angular@git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-angular":
   version "5.0.6"
-  resolved "https://registry.npmjs.org/conventional-changelog-angular/-/conventional-changelog-angular-5.0.6.tgz#269540c624553aded809c29a3508fdc2b544c059"
-  integrity sha512-QDEmLa+7qdhVIv8sFZfVxU1VSyVvnXPsxq8Vam49mKUcO1Z8VTLEJk9uI21uiJUsnmm0I4Hrsdc9TgkOQo9WSA==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#440afc082098a0e5529ba4f53c113cefd3104375"
   dependencies:
     compare-func "^1.3.1"
     q "^1.5.1"
 
-conventional-changelog-atom@^2.0.3:
+"conventional-changelog-atom@git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-atom":
   version "2.0.3"
-  resolved "https://registry.npmjs.org/conventional-changelog-atom/-/conventional-changelog-atom-2.0.3.tgz#3bd14280aa09fe3ec49a0e8fe97b5002db02aad4"
-  integrity sha512-szZe2ut97qNO6vCCMkm1I/tWu6ol4Rr8a9Lx0y/VlpDnpY0PNp+oGpFgU55lplhx+I3Lro9Iv4/gRj0knfgjzg==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#f27819c2e3442021437ddf0247674898a25219f8"
   dependencies:
     q "^1.5.1"
 
-conventional-changelog-codemirror@^2.0.3:
+"conventional-changelog-codemirror@git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-codemirror":
   version "2.0.3"
-  resolved "https://registry.npmjs.org/conventional-changelog-codemirror/-/conventional-changelog-codemirror-2.0.3.tgz#ebc088154684f8f5171446b8d546ba6b460d46f2"
-  integrity sha512-t2afackdgFV2yBdHhWPqrKbpaQeVnz2hSJKdWqjasPo5EpIB6TBL0er3cOP1mnGQmuzk9JSvimNSuqjWGDtU5Q==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#2ea22b9f975a095c827a3da540e3bb6b4322b07c"
   dependencies:
     q "^1.5.1"
 
@@ -708,83 +705,75 @@ conventional-changelog-conventionalcommits@4.2.1:
     lodash "^4.2.1"
     q "^1.5.1"
 
-conventional-changelog-conventionalcommits@4.2.3, conventional-changelog-conventionalcommits@^4.2.3:
+conventional-changelog-conventionalcommits@4.2.3, "conventional-changelog-conventionalcommits@git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-conventionalcommits":
   version "4.2.3"
-  resolved "https://registry.npmjs.org/conventional-changelog-conventionalcommits/-/conventional-changelog-conventionalcommits-4.2.3.tgz#22855b32d57d0328951c1c2dc01b172a5f24ea37"
-  integrity sha512-atGa+R4vvEhb8N/8v3IoW59gCBJeeFiX6uIbPu876ENAmkMwsenyn0R21kdDHJFLQdy6zW4J6b4xN8KI3b9oww==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#b172d799c007aadda769fcaef0c8681bf298c269"
   dependencies:
     compare-func "^1.3.1"
     lodash "^4.17.15"
     q "^1.5.1"
 
-conventional-changelog-core@^4.1.1, conventional-changelog-core@^4.1.4:
-  version "4.1.4"
-  resolved "https://registry.npmjs.org/conventional-changelog-core/-/conventional-changelog-core-4.1.4.tgz#39be27fca6ef20a0f998d7a3a1e97cfa8a055cb6"
-  integrity sha512-LO58ZbEpp1Ul+y/vOI8rJRsWkovsYkCFbOCVgi6UnVfU8WC0F8K8VQQwaBZWWUpb6JvEiN4GBR5baRP2txZ+Vg==
+"conventional-changelog-core@git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-core", conventional-changelog-core@kellyselden/conventional-changelog#conventional-changelog-core:
+  version "4.1.2"
+  resolved "https://codeload.github.com/kellyselden/conventional-changelog/tar.gz/014d668bdb859d1b3f2648136e3933352b3caa50"
   dependencies:
     add-stream "^1.0.0"
-    conventional-changelog-writer "^4.0.11"
-    conventional-commits-parser "^3.0.8"
+    conventional-changelog-writer "git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-writer"
+    conventional-commits-parser "git+https://github.com/kellyselden/conventional-changelog.git#conventional-commits-parser"
     dateformat "^3.0.0"
     get-pkg-repo "^1.0.0"
-    git-raw-commits "2.0.0"
+    git-raw-commits "git+https://github.com/kellyselden/conventional-changelog.git#git-raw-commits"
     git-remote-origin-url "^2.0.0"
-    git-semver-tags "^3.0.1"
+    git-semver-tags "git+https://github.com/kellyselden/conventional-changelog.git#git-semver-tags"
     lodash "^4.17.15"
     normalize-package-data "^2.3.5"
     q "^1.5.1"
     read-pkg "^3.0.0"
     read-pkg-up "^3.0.0"
+    shelljs "^0.8.3"
     through2 "^3.0.0"
 
-conventional-changelog-ember@^2.0.4:
+"conventional-changelog-ember@git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-ember":
   version "2.0.4"
-  resolved "https://registry.npmjs.org/conventional-changelog-ember/-/conventional-changelog-ember-2.0.4.tgz#c29b78e4af7825cbecb6c3fd6086ca5c09471ac1"
-  integrity sha512-q1u73sO9uCnxN4TSw8xu6MRU8Y1h9kpwtcdJuNRwu/LSKI1IE/iuNSH5eQ6aLlQ3HTyrIpTfUuVybW4W0F17rA==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#1e68082ead1dfa79c3f5d23c28926bd92dad2242"
   dependencies:
     q "^1.5.1"
 
-conventional-changelog-eslint@^3.0.4:
+"conventional-changelog-eslint@git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-eslint":
   version "3.0.4"
-  resolved "https://registry.npmjs.org/conventional-changelog-eslint/-/conventional-changelog-eslint-3.0.4.tgz#8f4736a23e0cd97e890e76fccc287db2f205f2ff"
-  integrity sha512-CPwTUENzhLGl3auunrJxiIEWncAGaby7gOFCdj2gslIuOFJ0KPJVOUhRz4Da/I53sdo/7UncUJkiLg94jEsjxg==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#78f1b5620f6ddd8164d70b7c9051ce1aa4e4f63a"
   dependencies:
     q "^1.5.1"
 
-conventional-changelog-express@^2.0.1:
+"conventional-changelog-express@git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-express":
   version "2.0.1"
-  resolved "https://registry.npmjs.org/conventional-changelog-express/-/conventional-changelog-express-2.0.1.tgz#fea2231d99a5381b4e6badb0c1c40a41fcacb755"
-  integrity sha512-G6uCuCaQhLxdb4eEfAIHpcfcJ2+ao3hJkbLrw/jSK/eROeNfnxCJasaWdDAfFkxsbpzvQT4W01iSynU3OoPLIw==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#d7c69390aa3039ee5c3b624d7a3594ee346641cd"
   dependencies:
     q "^1.5.1"
 
-conventional-changelog-jquery@^3.0.6:
+"conventional-changelog-jquery@git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-jquery":
   version "3.0.6"
-  resolved "https://registry.npmjs.org/conventional-changelog-jquery/-/conventional-changelog-jquery-3.0.6.tgz#460236ad8fb1d29ff932a14fe4e3a45379b63c5e"
-  integrity sha512-gHAABCXUNA/HjnZEm+vxAfFPJkgtrZvCDIlCKfdPVXtCIo/Q0lN5VKpx8aR5p8KdVRQFF3OuTlvv5kv6iPuRqA==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#c5d2744e820184d698f268798826de42e2aaf4e7"
   dependencies:
     q "^1.5.1"
 
-conventional-changelog-jshint@^2.0.3:
+"conventional-changelog-jshint@git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-jshint":
   version "2.0.3"
-  resolved "https://registry.npmjs.org/conventional-changelog-jshint/-/conventional-changelog-jshint-2.0.3.tgz#ef6e2caf2ee6ffdfda78fcdf7ce87cf6c512d728"
-  integrity sha512-Pc2PnMPcez634ckzr4EOWviwRSpZcURaK7bjyD9oK6N5fsC/a+3G7LW5m/JpcHPhA9ZxsfIbm7uqZ3ZDGsQ/sw==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#27179500b318232adec4b442dd36a3a229c78805"
   dependencies:
     compare-func "^1.3.1"
     q "^1.5.1"
 
-conventional-changelog-preset-loader@^2.3.0:
+"conventional-changelog-preset-loader@git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-preset-loader":
   version "2.3.0"
-  resolved "https://registry.npmjs.org/conventional-changelog-preset-loader/-/conventional-changelog-preset-loader-2.3.0.tgz#580fa8ab02cef22c24294d25e52d7ccd247a9a6a"
-  integrity sha512-/rHb32J2EJnEXeK4NpDgMaAVTFZS3o1ExmjKMtYVgIC4MQn0vkNSbYpdGRotkfGGRWiqk3Ri3FBkiZGbAfIfOQ==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#6d0e5266af7f490f44745091e5fb1c4e23485f7f"
 
-conventional-changelog-writer@^4.0.11:
+"conventional-changelog-writer@git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-writer":
   version "4.0.11"
-  resolved "https://registry.npmjs.org/conventional-changelog-writer/-/conventional-changelog-writer-4.0.11.tgz#9f56d2122d20c96eb48baae0bf1deffaed1edba4"
-  integrity sha512-g81GQOR392I+57Cw3IyP1f+f42ME6aEkbR+L7v1FBBWolB0xkjKTeCWVguzRrp6UiT1O6gBpJbEy2eq7AnV1rw==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#0eff4d4e4cac714f2fc61e0130e579a8d3d0d9de"
   dependencies:
     compare-func "^1.3.1"
-    conventional-commits-filter "^2.0.2"
+    conventional-commits-filter "git+https://github.com/kellyselden/conventional-changelog.git#conventional-commits-filter"
     dateformat "^3.0.0"
     handlebars "^4.4.0"
     json-stringify-safe "^5.0.1"
@@ -794,52 +783,32 @@ conventional-changelog-writer@^4.0.11:
     split "^1.0.0"
     through2 "^3.0.0"
 
-conventional-changelog@3.1.15:
-  version "3.1.15"
-  resolved "https://registry.npmjs.org/conventional-changelog/-/conventional-changelog-3.1.15.tgz#103d0b550436cf83e8a59ba88be82ece2613cd9f"
-  integrity sha512-CoWM+Z9bYyF00QzNpTnxkCLiuLAeRocJz3C/foFjvhsdltdtkJgMChp7GytQNjm4pT7JFBVJTpqLHTpxNtOzaA==
+conventional-changelog@3.1.18, conventional-changelog@kellyselden/conventional-changelog#conventional-changelog:
+  version "3.1.16"
+  resolved "https://codeload.github.com/kellyselden/conventional-changelog/tar.gz/761a3eeccee4c289ac0e29128dfa4b2ab30c3c58"
   dependencies:
-    conventional-changelog-angular "^5.0.6"
-    conventional-changelog-atom "^2.0.3"
-    conventional-changelog-codemirror "^2.0.3"
-    conventional-changelog-conventionalcommits "^4.2.3"
-    conventional-changelog-core "^4.1.1"
-    conventional-changelog-ember "^2.0.4"
-    conventional-changelog-eslint "^3.0.4"
-    conventional-changelog-express "^2.0.1"
-    conventional-changelog-jquery "^3.0.6"
-    conventional-changelog-jshint "^2.0.3"
-    conventional-changelog-preset-loader "^2.3.0"
+    conventional-changelog-angular "git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-angular"
+    conventional-changelog-atom "git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-atom"
+    conventional-changelog-codemirror "git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-codemirror"
+    conventional-changelog-conventionalcommits "git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-conventionalcommits"
+    conventional-changelog-core "git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-core"
+    conventional-changelog-ember "git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-ember"
+    conventional-changelog-eslint "git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-eslint"
+    conventional-changelog-express "git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-express"
+    conventional-changelog-jquery "git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-jquery"
+    conventional-changelog-jshint "git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-jshint"
+    conventional-changelog-preset-loader "git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-preset-loader"
 
-conventional-changelog@3.1.18:
-  version "3.1.18"
-  resolved "https://registry.npmjs.org/conventional-changelog/-/conventional-changelog-3.1.18.tgz#7da0a5ab34a604b920b8bf71c6cf5d952f0e805e"
-  integrity sha512-aN6a3rjgV8qwAJj3sC/Lme2kvswWO7fFSGQc32gREcwIOsaiqBaO6f2p0NomFaPDnTqZ+mMZFLL3hlzvEnZ0mQ==
-  dependencies:
-    conventional-changelog-angular "^5.0.6"
-    conventional-changelog-atom "^2.0.3"
-    conventional-changelog-codemirror "^2.0.3"
-    conventional-changelog-conventionalcommits "^4.2.3"
-    conventional-changelog-core "^4.1.4"
-    conventional-changelog-ember "^2.0.4"
-    conventional-changelog-eslint "^3.0.4"
-    conventional-changelog-express "^2.0.1"
-    conventional-changelog-jquery "^3.0.6"
-    conventional-changelog-jshint "^2.0.3"
-    conventional-changelog-preset-loader "^2.3.0"
-
-conventional-commits-filter@^2.0.2:
+"conventional-commits-filter@git+https://github.com/kellyselden/conventional-changelog.git#conventional-commits-filter":
   version "2.0.2"
-  resolved "https://registry.npmjs.org/conventional-commits-filter/-/conventional-commits-filter-2.0.2.tgz#f122f89fbcd5bb81e2af2fcac0254d062d1039c1"
-  integrity sha512-WpGKsMeXfs21m1zIw4s9H5sys2+9JccTzpN6toXtxhpw2VNF2JUXwIakthKBy+LN4DvJm+TzWhxOMWOs1OFCFQ==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#bdae5f8416b76d8bc0ce724d1816f029b402eaa5"
   dependencies:
     lodash.ismatch "^4.4.0"
     modify-values "^1.0.0"
 
-conventional-commits-parser@^3.0.0, conventional-commits-parser@^3.0.8:
+conventional-commits-parser@^3.0.0, "conventional-commits-parser@git+https://github.com/kellyselden/conventional-changelog.git#conventional-commits-parser":
   version "3.0.8"
-  resolved "https://registry.npmjs.org/conventional-commits-parser/-/conventional-commits-parser-3.0.8.tgz#23310a9bda6c93c874224375e72b09fb275fe710"
-  integrity sha512-YcBSGkZbYp7d+Cr3NWUeXbPDFUN6g3SaSIzOybi8bjHL5IJ5225OSCxJJ4LgziyEJ7AaJtE9L2/EU6H7Nt/DDQ==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#484dce07d937510bfec02a67dab29a9497cb6c14"
   dependencies:
     JSONStream "^1.0.4"
     is-text-path "^1.0.1"
@@ -849,17 +818,16 @@ conventional-commits-parser@^3.0.0, conventional-commits-parser@^3.0.8:
     through2 "^3.0.0"
     trim-off-newlines "^1.0.0"
 
-conventional-recommended-bump@6.0.5:
+conventional-recommended-bump@6.0.5, conventional-recommended-bump@kellyselden/conventional-changelog#conventional-recommended-bump:
   version "6.0.5"
-  resolved "https://registry.npmjs.org/conventional-recommended-bump/-/conventional-recommended-bump-6.0.5.tgz#be7ec24b43bef57108042ea1d49758b58beabc03"
-  integrity sha512-srkferrB4kACPEbKYltZwX1CQZAEqbQkabKN444mavLRVMetzwJFJf23/+pwvtMsWbd+cc4HaleV1nHke0f8Rw==
+  resolved "https://codeload.github.com/kellyselden/conventional-changelog/tar.gz/0bf4d3068d8f6b549f84fd02dbab8fef85487330"
   dependencies:
     concat-stream "^2.0.0"
-    conventional-changelog-preset-loader "^2.3.0"
-    conventional-commits-filter "^2.0.2"
-    conventional-commits-parser "^3.0.8"
-    git-raw-commits "2.0.0"
-    git-semver-tags "^3.0.1"
+    conventional-changelog-preset-loader "git+https://github.com/kellyselden/conventional-changelog.git#conventional-changelog-preset-loader"
+    conventional-commits-filter "git+https://github.com/kellyselden/conventional-changelog.git#conventional-commits-filter"
+    conventional-commits-parser "git+https://github.com/kellyselden/conventional-changelog.git#conventional-commits-parser"
+    git-raw-commits "git+https://github.com/kellyselden/conventional-changelog.git#git-raw-commits"
+    git-semver-tags "git+https://github.com/kellyselden/conventional-changelog.git#git-semver-tags"
     meow "^5.0.0"
     q "^1.5.1"
 
@@ -910,12 +878,10 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
-dargs@^4.0.1:
-  version "4.1.0"
-  resolved "https://registry.npmjs.org/dargs/-/dargs-4.1.0.tgz#03a9dbb4b5c2f139bf14ae53f0b8a2a6a86f4e17"
-  integrity sha1-A6nbtLXC8Tm/FK5T8LiipqhvThc=
-  dependencies:
-    number-is-nan "^1.0.0"
+dargs@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.npmjs.org/dargs/-/dargs-7.0.0.tgz#04015c41de0bcb69ec84050f3d9be0caf8d6d5cc"
+  integrity sha512-2iy1EkLdlBzQGvbweYRFxmFath8+K7+AKB0TlhHWkNuH+TmovaMH/Wp7V7R4u7f4SnX3OgLsU9t1NI9ioDnUpg==
 
 dateformat@^3.0.0:
   version "3.0.3"
@@ -1514,23 +1480,11 @@ git-hooks-list@1.0.2:
   resolved "https://registry.npmjs.org/git-hooks-list/-/git-hooks-list-1.0.2.tgz#b023b76872f00d81b353efd1458fb4a165035575"
   integrity sha512-C3c/FG6Pgh053+yK/CnNNYJo5mgCa3OeI+cPxPIl0tyMLm1mGfiV0NX0LrhnjVoX7dfkR78WyW2kvFVHvAlneg==
 
-git-raw-commits@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/git-raw-commits/-/git-raw-commits-2.0.0.tgz#d92addf74440c14bcc5c83ecce3fb7f8a79118b5"
-  integrity sha512-w4jFEJFgKXMQJ0H0ikBk2S+4KP2VEjhCvLCNqbNRQC8BgGWgLKNCO7a9K9LI+TVT7Gfoloje502sEnctibffgg==
-  dependencies:
-    dargs "^4.0.1"
-    lodash.template "^4.0.2"
-    meow "^4.0.0"
-    split2 "^2.0.0"
-    through2 "^2.0.0"
-
-git-raw-commits@^2.0.0:
+git-raw-commits@^2.0.0, "git-raw-commits@git+https://github.com/kellyselden/conventional-changelog.git#git-raw-commits":
   version "2.0.3"
-  resolved "https://registry.npmjs.org/git-raw-commits/-/git-raw-commits-2.0.3.tgz#f040e67b8445962d4d168903a9e84c4240c17655"
-  integrity sha512-SoSsFL5lnixVzctGEi2uykjA7B5I0AhO9x6kdzvGRHbxsa6JSEgrgy1esRKsfOKE1cgyOJ/KDR2Trxu157sb8w==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#7f6cdecf9ecf81fa288cc4eaaf7d77b22a1b6561"
   dependencies:
-    dargs "^4.0.1"
+    dargs "^7.0.0"
     lodash.template "^4.0.2"
     meow "^5.0.0"
     split2 "^2.0.0"
@@ -1544,10 +1498,9 @@ git-remote-origin-url@^2.0.0:
     gitconfiglocal "^1.0.0"
     pify "^2.3.0"
 
-git-semver-tags@3.0.1, git-semver-tags@^3.0.1:
+git-semver-tags@3.0.1, "git-semver-tags@git+https://github.com/kellyselden/conventional-changelog.git#git-semver-tags":
   version "3.0.1"
-  resolved "https://registry.npmjs.org/git-semver-tags/-/git-semver-tags-3.0.1.tgz#9cb9e4974437de1f71f32da3bfe74f4d35afb1b9"
-  integrity sha512-Hzd1MOHXouITfCasrpVJbRDg9uvW7LfABk3GQmXYZByerBDrfrEMP9HXpNT7RxAbieiocP6u+xq20DkvjwxnCA==
+  resolved "git+https://github.com/kellyselden/conventional-changelog.git#b0ab612979fd7f09d155dcc3e992fd1c757972c7"
   dependencies:
     meow "^5.0.0"
     semver "^6.0.0"
@@ -1585,7 +1538,7 @@ glob@7.1.3:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-glob@^7.0.3, glob@^7.1.3, glob@^7.1.4:
+glob@^7.0.0, glob@^7.0.3, glob@^7.1.3, glob@^7.1.4:
   version "7.1.6"
   resolved "https://registry.npmjs.org/glob/-/glob-7.1.6.tgz#141f33b81a7c2492e125594307480c46679278a6"
   integrity sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==
@@ -1769,6 +1722,11 @@ inquirer@^7.0.0:
     string-width "^4.1.0"
     strip-ansi "^5.1.0"
     through "^2.3.6"
+
+interpret@^1.0.0:
+  version "1.2.0"
+  resolved "https://registry.npmjs.org/interpret/-/interpret-1.2.0.tgz#d5061a6224be58e8083985f5014d844359576296"
+  integrity sha512-mT34yGKMNceBQUoVn7iCDKDntA7SC6gycMAWzGx1z/CMCTV7b2AAtXlo3nRyHZ1FelRkQbQjprHSYGwzLtkVbw==
 
 irregular-plurals@^2.0.0:
   version "2.0.0"
@@ -2213,21 +2171,6 @@ meow@^3.3.0:
     redent "^1.0.0"
     trim-newlines "^1.0.0"
 
-meow@^4.0.0:
-  version "4.0.1"
-  resolved "https://registry.npmjs.org/meow/-/meow-4.0.1.tgz#d48598f6f4b1472f35bf6317a95945ace347f975"
-  integrity sha512-xcSBHD5Z86zaOc+781KrupuHAzeGXSLtiAOmBsiLDiPSaYSB6hdew2ng9EBAnZ62jagG9MHAOdxpDi/lWBFJ/A==
-  dependencies:
-    camelcase-keys "^4.0.0"
-    decamelize-keys "^1.0.0"
-    loud-rejection "^1.0.0"
-    minimist "^1.1.3"
-    minimist-options "^3.0.1"
-    normalize-package-data "^2.3.4"
-    read-pkg-up "^3.0.0"
-    redent "^2.0.0"
-    trim-newlines "^2.0.0"
-
 meow@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/meow/-/meow-5.0.0.tgz#dfc73d63a9afc714a5e371760eb5c88b91078aa4"
@@ -2432,11 +2375,6 @@ null-check@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/null-check/-/null-check-1.0.0.tgz#977dffd7176012b9ec30d2a39db5cf72a0439edd"
   integrity sha1-l33/1xdgErnsMNKjnbXPcqBDnt0=
-
-number-is-nan@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
-  integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
 object-assign@^4.0.1:
   version "4.1.1"
@@ -2837,6 +2775,13 @@ readdirp@~3.3.0:
   integrity sha512-zz0pAkSPOXXm1viEwygWIPSPkcBYjW1xU5j/JBh5t9bGCJwa6f9+BJa6VaB2g+b55yVrmXzqkyLf4xaWYM0IkQ==
   dependencies:
     picomatch "^2.0.7"
+
+rechoir@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.npmjs.org/rechoir/-/rechoir-0.6.2.tgz#85204b54dba82d5742e28c96756ef43af50e3384"
+  integrity sha1-hSBLVNuoLVdC4oyWdW70OvUOM4Q=
+  dependencies:
+    resolve "^1.1.6"
 
 redent@^1.0.0:
   version "1.0.0"
@@ -3353,7 +3298,7 @@ resolve-global@^1.0.0:
   dependencies:
     global-dirs "^0.1.1"
 
-resolve@^1.10.0, resolve@^1.10.1:
+resolve@^1.1.6, resolve@^1.10.0, resolve@^1.10.1:
   version "1.15.1"
   resolved "https://registry.npmjs.org/resolve/-/resolve-1.15.1.tgz#27bdcdeffeaf2d6244b95bb0f9f4b4653451f3e8"
   integrity sha512-84oo6ZTtoTUpjgNEr5SJyzQhzL72gaRodsSfyxC/AXRvwu0Yse9H8eF9IpGo7b8YetZhlI6v7ZQ6bKBFV/6S7w==
@@ -3459,6 +3404,15 @@ shebang-regex@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz#ae16f1644d873ecad843b0307b143362d4c42172"
   integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
+
+shelljs@^0.8.3:
+  version "0.8.3"
+  resolved "https://registry.npmjs.org/shelljs/-/shelljs-0.8.3.tgz#a7f3319520ebf09ee81275b2368adb286659b097"
+  integrity sha512-fc0BKlAWiLpwZljmOvAOTE/gXawtCoNrP5oaY7KIaQbbyHeQVg01pSEuEGvGh3HEdBU4baCD7wQBwADmM/7f7A==
+  dependencies:
+    glob "^7.0.0"
+    interpret "^1.0.0"
+    rechoir "^0.6.2"
 
 shellsubstitute@^1.1.0:
   version "1.2.0"
@@ -3574,13 +3528,12 @@ sprintf-js@~1.0.2:
   resolved "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
-standard-version@7.1.0:
+standard-version@kellyselden/standard-version#gitRawExecOpts:
   version "7.1.0"
-  resolved "https://registry.npmjs.org/standard-version/-/standard-version-7.1.0.tgz#021dd79eac749548677c876d5a94791df50f1f36"
-  integrity sha512-bHY2E/1tYGeVl+0XSXFivb+54h2fA4pWJocXAd6FGbtSFUvGsnfmMbIXYDxrYErpq7oEqoKreV8xTAp78WoATA==
+  resolved "https://codeload.github.com/kellyselden/standard-version/tar.gz/4924181e505f9a34215028000045be57a4e6a1b8"
   dependencies:
     chalk "2.4.2"
-    conventional-changelog "3.1.15"
+    conventional-changelog "3.1.18"
     conventional-changelog-config-spec "2.1.0"
     conventional-changelog-conventionalcommits "4.2.3"
     conventional-recommended-bump "6.0.5"
@@ -3593,7 +3546,7 @@ standard-version@7.1.0:
     git-semver-tags "3.0.1"
     semver "6.3.0"
     stringify-package "1.0.1"
-    yargs "15.0.2"
+    yargs "15.1.0"
 
 state-toggle@^1.0.0:
   version "1.0.3"
@@ -4249,24 +4202,7 @@ yargs@13.3.0, yargs@^13.3.0:
     y18n "^4.0.0"
     yargs-parser "^13.1.1"
 
-yargs@15.0.2:
-  version "15.0.2"
-  resolved "https://registry.npmjs.org/yargs/-/yargs-15.0.2.tgz#4248bf218ef050385c4f7e14ebdf425653d13bd3"
-  integrity sha512-GH/X/hYt+x5hOat4LMnCqMd8r5Cv78heOMIJn1hr7QPPBqfeC6p89Y78+WB9yGDvfpCvgasfmWLzNzEioOUD9Q==
-  dependencies:
-    cliui "^6.0.0"
-    decamelize "^1.2.0"
-    find-up "^4.1.0"
-    get-caller-file "^2.0.1"
-    require-directory "^2.1.1"
-    require-main-filename "^2.0.0"
-    set-blocking "^2.0.0"
-    string-width "^4.2.0"
-    which-module "^2.0.0"
-    y18n "^4.0.0"
-    yargs-parser "^16.1.0"
-
-yargs@^15.0.0:
+yargs@15.1.0, yargs@^15.0.0:
   version "15.1.0"
   resolved "https://registry.npmjs.org/yargs/-/yargs-15.1.0.tgz#e111381f5830e863a89550bd4b136bb6a5f37219"
   integrity sha512-T39FNN1b6hCW4SOIk1XyTOWxtXdcen0t+XYrysQmChzSipvhBO8Bj0nK1ozAasdk24dNWuMZvr4k24nz+8HHLg==
