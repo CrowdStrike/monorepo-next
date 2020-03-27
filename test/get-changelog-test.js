@@ -191,4 +191,61 @@ describe(getChangelog, function() {
 
     expect(changelog).to.include('[1.0.0]');
   });
+
+  it('can generate more than one release', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'package.json': stringifyJson({
+            'name': '@scope/my-app',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "fix: old-release"', { cwd: tmpPath });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
+
+    await standardVersion({
+      path: path.join(tmpPath, 'packages/my-app'),
+      tagPrefix: '@scope/my-app@',
+      firstRelease: true,
+    });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'index.js': 'foo',
+        },
+      },
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+
+    await standardVersion({
+      path: path.join(tmpPath, 'packages/my-app'),
+      tagPrefix: '@scope/my-app@',
+    });
+
+    let changelog = await getChangelog({
+      cwd: path.join(tmpPath, 'packages/my-app'),
+      tagFormat: 'foo/bar-*',
+      releaseCount: 2,
+    });
+
+    expect(changelog).to.include('[1.0.1]');
+    expect(changelog).to.include('* foo');
+    expect(changelog).to.include('[1.0.0]');
+    expect(changelog).to.include('* old-release');
+  });
 });
