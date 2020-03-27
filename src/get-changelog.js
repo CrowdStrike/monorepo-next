@@ -16,6 +16,7 @@ async function getChangelog({
   cwd = process.cwd(),
   shouldBumpInRangeDependencies = builder['bump-in-range-dependencies'].default,
   shouldInheritGreaterReleaseType = builder['inherit-greater-release-type'].default,
+  releaseCount = 1,
 }) {
   let { name, version } = require(path.join(cwd, 'package'));
 
@@ -36,7 +37,7 @@ async function getChangelog({
       cwd,
       tagPrefix,
       version,
-      releaseCount: 2,
+      releaseCount: releaseCount + 1,
     });
 
     return changelog;
@@ -56,6 +57,7 @@ async function getChangelog({
     cwd,
     tagPrefix,
     version: newVersion,
+    releaseCount,
   });
 
   return changelog;
