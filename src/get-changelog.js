@@ -29,10 +29,18 @@ async function getChangelog({
   let packagesWithChanges = await buildChangeGraph(workspaceMeta);
 
   packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-    return dag.packageName === name && dag.version;
+    return dag.packageName && dag.version;
   });
 
-  if (!packagesWithChanges.length) {
+  let releaseTrees = await buildReleaseGraph({
+    packagesWithChanges,
+    shouldBumpInRangeDependencies,
+    shouldInheritGreaterReleaseType,
+  });
+
+  let releaseTree = releaseTrees.find(releaseTree => releaseTree.name === name);
+
+  if (!releaseTree) {
     let changelog = await _getChangelog({
       cwd,
       tagPrefix,
@@ -42,14 +50,6 @@ async function getChangelog({
 
     return changelog;
   }
-
-  let releaseTrees = await buildReleaseGraph({
-    packagesWithChanges,
-    shouldBumpInRangeDependencies,
-    shouldInheritGreaterReleaseType,
-  });
-
-  let releaseTree = releaseTrees.find(releaseTree => releaseTree.name === name);
 
   let newVersion = semver.inc(version, releaseTree.releaseType);
 
