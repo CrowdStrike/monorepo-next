@@ -69,7 +69,7 @@
     "eslint-plugin-json-files": "0.8.0",
     "eslint-plugin-mocha": "^6.0.0",
     "eslint-plugin-node": "^11.0.0",
-    "fixturify": "^1.2.0",
+    "fixturify": "^2.0.0",
     "git-fixtures": "^2.3.2",
     "mocha": "^7.0.0",
     "mocha-helpers": "^4.0.0",
