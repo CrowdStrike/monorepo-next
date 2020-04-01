@@ -312,4 +312,80 @@ describe(getChangelog, function() {
     expect(changelog).to.include('[1.0.1]');
     expect(changelog).to.not.include('[1.0.0]');
   });
+
+  it('includes dep changes into parent changelog', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'package.json': stringifyJson({
+            'name': '@scope/my-app',
+            'version': '1.0.0',
+            'dependencies': {
+              '@scope/my-dep': '1.0.0',
+            },
+          }),
+        },
+        'my-dep': {
+          'package.json': stringifyJson({
+            'name': '@scope/my-dep',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "chore: release"', { cwd: tmpPath });
+
+    process.chdir(path.join(tmpPath, 'packages/my-dep'));
+
+    await standardVersion({
+      path: path.join(tmpPath, 'packages/my-dep'),
+      tagPrefix: '@scope/my-dep@',
+      firstRelease: true,
+    });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
+
+    await standardVersion({
+      path: path.join(tmpPath, 'packages/my-app'),
+      tagPrefix: '@scope/my-app@',
+      firstRelease: true,
+    });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-dep': {
+          'index.js': 'foo',
+        },
+      },
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "fix: child change"', { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'index.js': 'foo',
+        },
+      },
+    });
+
+    await exec('git add .', { cwd: tmpPath });
+    await exec('git commit -m "fix: parent change"', { cwd: tmpPath });
+
+    let changelog = await getChangelog({
+      cwd: path.join(tmpPath, 'packages/my-app'),
+    });
+
+    expect(changelog).to.include('* parent change');
+    expect(changelog).to.include('* child change');
+  });
 });
