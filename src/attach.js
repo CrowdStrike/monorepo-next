@@ -1,11 +1,13 @@
 'use strict';
 
 const path = require('path');
-const execa = require('execa');
 const writeJson = require('./json').write;
 const buildDepGraph = require('./build-dep-graph');
 const buildDAG = require('./build-dag');
 const dependencyTypes = require('./dependency-types');
+const {
+  getWorkspaceCwd,
+} = require('./git');
 
 function updateDependencyVersion(packageJson, name, version) {
   for (let type of dependencyTypes) {
@@ -51,7 +53,7 @@ async function attach({
   let myPackageJson = require(myPackageJsonPath);
 
   if (_package) {
-    let workspaceCwd = (await execa('git', ['rev-parse', '--show-toplevel'], { cwd })).stdout;
+    let workspaceCwd = await getWorkspaceCwd(cwd);
 
     let workspaceMeta = await buildDepGraph(workspaceCwd);
 
@@ -71,7 +73,7 @@ async function attach({
     }
 
     if (!dag) {
-      let workspaceCwd = (await execa('git', ['rev-parse', '--show-toplevel'], { cwd })).stdout;
+      let workspaceCwd = await getWorkspaceCwd(cwd);
 
       let workspaceMeta = await buildDepGraph(workspaceCwd);
 

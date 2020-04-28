@@ -1,11 +1,13 @@
 'use strict';
 
 const path = require('path');
-const execa = require('execa');
 const buildDepGraph = require('./build-dep-graph');
 const buildChangeGraph = require('./build-change-graph');
 const buildReleaseGraph = require('./build-release-graph');
 const semver = require('semver');
+const {
+  getWorkspaceCwd,
+} = require('./git');
 
 const defaults = require('standard-version/defaults');
 
@@ -21,7 +23,7 @@ async function getChangelog({
 
   let tagPrefix = `${name}@`;
 
-  let workspaceCwd = (await execa('git', ['rev-parse', '--show-toplevel'], { cwd })).stdout;
+  let workspaceCwd = await getWorkspaceCwd(cwd);
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);
 

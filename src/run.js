@@ -3,13 +3,16 @@
 const execa = require('execa');
 const buildDepGraph = require('./build-dep-graph');
 const buildChangeGraph = require('./build-change-graph');
+const {
+  getWorkspaceCwd,
+} = require('./git');
 
 async function run({
   cwd = process.cwd(),
   silent,
   args,
 }) {
-  let workspaceCwd = (await execa('git', ['rev-parse', '--show-toplevel'], { cwd })).stdout;
+  let workspaceCwd = await getWorkspaceCwd(cwd);
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);
 

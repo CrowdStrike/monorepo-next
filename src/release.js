@@ -10,12 +10,12 @@ const buildDepGraph = require('./build-dep-graph');
 const buildChangeGraph = require('./build-change-graph');
 const buildReleaseGraph = require('./build-release-graph');
 const dependencyTypes = require('./dependency-types');
+const {
+  getCurrentBranch,
+  getWorkspaceCwd,
+} = require('./git');
 
 const { builder } = require('../bin/commands/release');
-
-async function getCurrentBranch(cwd) {
-  return (await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd })).stdout;
-}
 
 async function release({
   cwd = process.cwd(),
@@ -39,7 +39,7 @@ async function release({
     return;
   }
 
-  let workspaceCwd = (await execa('git', ['rev-parse', '--show-toplevel'], { cwd })).stdout;
+  let workspaceCwd = await getWorkspaceCwd(cwd);
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);
 
