@@ -10,7 +10,7 @@ async function getCurrentCommit(cwd) {
   return (await execa('git', ['rev-parse', 'HEAD'], { cwd })).stdout;
 }
 
-async function getCurrentAtTag(tag, cwd) {
+async function getCommitAtTag(tag, cwd) {
   return (await execa('git', ['rev-list', '-1', tag], { cwd })).stdout;
 }
 
@@ -21,6 +21,6 @@ async function getWorkspaceCwd(cwd) {
 module.exports = {
   getCurrentBranch,
   getCurrentCommit,
-  getCurrentAtTag,
+  getCommitAtTag,
   getWorkspaceCwd,
 };
