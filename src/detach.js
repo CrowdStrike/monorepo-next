@@ -1,8 +1,7 @@
 'use strict';
 
 const path = require('path');
-const { promisify } = require('util');
-const exec = promisify(require('child_process').exec);
+const execa = require('execa');
 const writeJson = require('./json').write;
 const semver = require('semver');
 const inquirer = require('inquirer');
@@ -33,7 +32,7 @@ async function detach({
   let myPackageJsonPath = path.join(cwd, 'package.json');
   let myPackageJson = require(myPackageJsonPath);
 
-  let workspaceCwd = (await exec('git rev-parse --show-toplevel', { cwd })).stdout.trim();
+  let workspaceCwd = (await execa('git', ['rev-parse', '--show-toplevel'], { cwd })).stdout;
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);
 

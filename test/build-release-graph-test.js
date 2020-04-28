@@ -9,7 +9,7 @@ const { promisify } = require('util');
 const tmpDir = promisify(require('tmp').dir);
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const exec = promisify(require('child_process').exec);
+const execa = require('execa');
 const sinon = require('sinon');
 const { matchPath } = require('./helpers/matchers');
 const { gitInit } = require('git-fixtures');
@@ -21,7 +21,7 @@ describe(buildReleaseGraph, function() {
     tmpPath = await tmpDir();
 
     await gitInit({ cwd: tmpPath });
-    await exec('git commit --allow-empty -m "first"', { cwd: tmpPath });
+    await execa('git', ['commit', '--allow-empty', '-m', 'first'], { cwd: tmpPath });
   });
 
   it('bumps in-range versions', async function() {
@@ -45,10 +45,10 @@ describe(buildReleaseGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -61,8 +61,8 @@ describe(buildReleaseGraph, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
@@ -133,10 +133,10 @@ describe(buildReleaseGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -149,8 +149,8 @@ describe(buildReleaseGraph, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
@@ -185,7 +185,7 @@ describe(buildReleaseGraph, function() {
   });
 
   it('inherits greater release type when lesser', async function() {
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -207,9 +207,9 @@ describe(buildReleaseGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -222,8 +222,8 @@ describe(buildReleaseGraph, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
@@ -294,10 +294,10 @@ describe(buildReleaseGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -310,8 +310,8 @@ describe(buildReleaseGraph, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
@@ -382,10 +382,10 @@ describe(buildReleaseGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -398,8 +398,8 @@ describe(buildReleaseGraph, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
@@ -434,7 +434,7 @@ describe(buildReleaseGraph, function() {
   });
 
   it('ignores greater release type', async function() {
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -456,9 +456,9 @@ describe(buildReleaseGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -471,8 +471,8 @@ describe(buildReleaseGraph, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
@@ -523,7 +523,7 @@ describe(buildReleaseGraph, function() {
   });
 
   it('inherits greater and bumps in-range', async function() {
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -545,9 +545,9 @@ describe(buildReleaseGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -560,8 +560,8 @@ describe(buildReleaseGraph, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
@@ -629,10 +629,10 @@ describe(buildReleaseGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -648,8 +648,8 @@ describe(buildReleaseGraph, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
@@ -705,10 +705,10 @@ describe(buildReleaseGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -721,8 +721,8 @@ describe(buildReleaseGraph, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo\n\nBREAKING CHANGE: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo\n\nBREAKING CHANGE: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
@@ -773,7 +773,7 @@ describe(buildReleaseGraph, function() {
   });
 
   it('updates optional deps', async function() {
-    await exec('git tag @scope/package-c@1.0.0', { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-c@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -804,10 +804,10 @@ describe(buildReleaseGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -820,8 +820,8 @@ describe(buildReleaseGraph, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 

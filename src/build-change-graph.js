@@ -1,12 +1,10 @@
 'use strict';
 
-const { promisify } = require('util');
-const exec = promisify(require('child_process').exec);
 const buildDAG = require('./build-dag');
 const execa = require('execa');
 
 async function getCurrentCommit(cwd) {
-  return (await exec('git rev-parse HEAD', { cwd })).stdout.trim();
+  return (await execa('git', ['rev-parse', 'HEAD'], { cwd })).stdout;
 }
 
 function getLinesFromOutput(output) {
@@ -28,7 +26,7 @@ async function getCommitSinceLastRelease(_package) {
 
   let tag = `${_package.packageName}@${version}`;
 
-  return (await exec(`git rev-list -1 ${tag}`, { cwd: _package.cwd })).stdout.trim();
+  return (await execa('git', ['rev-list', '-1', tag], { cwd: _package.cwd })).stdout;
 }
 
 async function getPackageChangedFiles(tagCommit, currentCommit, _package) {

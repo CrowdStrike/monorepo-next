@@ -8,7 +8,7 @@ const { promisify } = require('util');
 const tmpDir = promisify(require('tmp').dir);
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const exec = promisify(require('child_process').exec);
+const execa = require('execa');
 const sinon = require('sinon');
 const { gitInit } = require('git-fixtures');
 
@@ -19,7 +19,7 @@ describe(buildChangeGraph, function() {
     tmpPath = await tmpDir();
 
     await gitInit({ cwd: tmpPath });
-    await exec('git commit --allow-empty -m "first"', { cwd: tmpPath });
+    await execa('git', ['commit', '--allow-empty', '-m', 'first'], { cwd: tmpPath });
   });
 
   it('tracks package changes', async function() {
@@ -39,9 +39,9 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -51,8 +51,8 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
@@ -87,11 +87,11 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
-    await exec('git commit --allow-empty -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['commit', '--allow-empty', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
@@ -117,9 +117,9 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -156,16 +156,16 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag workspace-root@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', 'workspace-root@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'index.js': 'console.log()',
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
@@ -194,8 +194,8 @@ describe(buildChangeGraph, function() {
       'index.js': 'console.log()',
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 

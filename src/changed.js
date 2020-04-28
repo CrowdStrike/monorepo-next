@@ -1,7 +1,7 @@
 'use strict';
 
 const { promisify } = require('util');
-const exec = promisify(require('child_process').exec);
+const execa = require('execa');
 const buildDepGraph = require('./build-dep-graph');
 const buildChangeGraph = require('./build-change-graph');
 const path = require('path');
@@ -16,7 +16,7 @@ async function changed({
   cwd = process.cwd(),
   silent,
 } = {}) {
-  let workspaceCwd = (await exec('git rev-parse --show-toplevel', { cwd })).stdout.trim();
+  let workspaceCwd = (await execa('git', ['rev-parse', '--show-toplevel'], { cwd })).stdout;
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);
 

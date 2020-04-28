@@ -7,7 +7,7 @@ const { promisify } = require('util');
 const tmpDir = promisify(require('tmp').dir);
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const exec = promisify(require('child_process').exec);
+const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 
 describe(changed, function() {
@@ -17,7 +17,7 @@ describe(changed, function() {
     tmpPath = await tmpDir();
 
     await gitInit({ cwd: tmpPath });
-    await exec('git commit --allow-empty -m "first"', { cwd: tmpPath });
+    await execa('git', ['commit', '--allow-empty', '-m', 'first'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -85,15 +85,15 @@ describe(changed, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-c@1.0.0', { cwd: tmpPath });
-    await exec('git tag my-app-1@0.0.0', { cwd: tmpPath });
-    await exec('git tag my-app-2@0.0.0', { cwd: tmpPath });
-    await exec('git tag root@0.0.0', { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-c@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', 'my-app-1@0.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', 'my-app-2@0.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', 'root@0.0.0'], { cwd: tmpPath });
   });
 
   it('works', async function() {
@@ -105,8 +105,8 @@ describe(changed, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     let _changed = await changed({
       cwd: tmpPath,
