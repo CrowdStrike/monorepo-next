@@ -1,7 +1,7 @@
 'use strict';
 
 const { promisify } = require('util');
-const exec = promisify(require('child_process').exec);
+const execa = require('execa');
 const fs = require('fs');
 const access = promisify(fs.access);
 
@@ -15,7 +15,7 @@ async function postRun({
   } catch (err) {}
 
   if (exists) {
-    await exec('yarn', { cwd });
+    await execa('yarn', { cwd });
   }
 }
 

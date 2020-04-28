@@ -1,8 +1,7 @@
 'use strict';
 
 const path = require('path');
-const { promisify } = require('util');
-const exec = promisify(require('child_process').exec);
+const execa = require('execa');
 const {
   read: readJson,
   write: writeJson,
@@ -15,7 +14,7 @@ const dependencyTypes = require('./dependency-types');
 const { builder } = require('../bin/commands/release');
 
 async function getCurrentBranch(cwd) {
-  return (await exec('git rev-parse --abbrev-ref HEAD', { cwd })).stdout.trim();
+  return (await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd })).stdout;
 }
 
 async function release({
@@ -40,7 +39,7 @@ async function release({
     return;
   }
 
-  let workspaceCwd = (await exec('git rev-parse --show-toplevel', { cwd })).stdout.trim();
+  let workspaceCwd = (await execa('git', ['rev-parse', '--show-toplevel'], { cwd })).stdout;
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);
 
@@ -128,7 +127,7 @@ async function release({
   async function handleLifecycleScript(lifecycle) {
     let script = scripts[lifecycle];
     if (script) {
-      await exec(script);
+      await execa.command(script);
     }
   }
 
@@ -138,20 +137,20 @@ async function release({
 
   let commitMessage = `chore(release): ${tags.join()}`;
 
-  await exec('git add -A', { cwd: workspaceCwd });
+  await execa('git', ['add', '-A'], { cwd: workspaceCwd });
 
   await preCommitCallback();
 
   await handleLifecycleScript('precommit');
 
-  await exec(`git commit -m "${commitMessage}"`, { cwd: workspaceCwd });
+  await execa('git', ['commit', '-m', commitMessage], { cwd: workspaceCwd });
 
   await handleLifecycleScript('postcommit');
 
   await handleLifecycleScript('pretag');
 
   for (let tag of tags) {
-    await exec(`git tag -a ${tag} -m "${tag}"`, { cwd: workspaceCwd });
+    await execa('git', ['tag', '-a', tag, '-m', tag], { cwd: workspaceCwd });
   }
 
   await handleLifecycleScript('posttag');
@@ -198,7 +197,7 @@ async function release({
 }
 
 async function push({ cwd }) {
-  let remoteUrl = (await exec('git config --get remote.origin.url', { cwd })).stdout.trim();
+  let remoteUrl = (await execa('git', ['config', '--get', 'remote.origin.url'], { cwd })).stdout;
 
   // https://stackoverflow.com/a/55586434
   let doesntSupportAtomic = remoteUrl.includes('https://');
@@ -207,9 +206,9 @@ async function push({ cwd }) {
 
   try {
     if (doesntSupportAtomic) {
-      await exec('git push', { cwd });
+      await execa('git', ['push'], { cwd });
     } else {
-      await exec('git push --follow-tags --atomic', { cwd });
+      await execa('git', ['push', '--follow-tags', '--atomic'], { cwd });
     }
 
     success = true;
@@ -225,12 +224,12 @@ async function push({ cwd }) {
   if (doesntSupportAtomic && success) {
     // only push tags after the commit
     // and hard error if there is a tag collision
-    await exec('git push --follow-tags', { cwd });
+    await execa('git', ['push', '--follow-tags'], { cwd });
   }
 }
 
 async function publish({ cwd }) {
-  await exec('npm publish', { cwd });
+  await execa('npm', ['publish'], { cwd });
 }
 
 module.exports = release;

@@ -7,15 +7,15 @@ const { promisify } = require('util');
 const tmpDir = promisify(require('tmp').dir);
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const exec = promisify(require('child_process').exec);
+const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 
 async function getLastCommitMessage(cwd) {
-  return (await exec('git log -1 --pretty=%B', { cwd })).stdout.trim();
+  return (await execa('git', ['log', '-1', '--pretty=%B'], { cwd })).stdout.trim();
 }
 
 async function getTagsOnLastCommit(cwd) {
-  return (await exec('git tag -l --points-at HEAD', { cwd })).stdout.trim().split(/\r?\n/).filter(Boolean);
+  return (await execa('git', ['tag', '-l', '--points-at', 'HEAD'], { cwd })).stdout.split(/\r?\n/);
 }
 
 describe(_release, function() {
@@ -25,7 +25,7 @@ describe(_release, function() {
     tmpPath = await tmpDir();
 
     await gitInit({ cwd: tmpPath });
-    await exec('git commit --allow-empty -m "first"', { cwd: tmpPath });
+    await execa('git', ['commit', '--allow-empty', '-m', 'first'], { cwd: tmpPath });
   });
 
   async function release(options) {
@@ -98,16 +98,16 @@ describe(_release, function() {
       }),
     });
 
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-b@2.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-c@3.0.0', { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@2.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-c@3.0.0'], { cwd: tmpPath });
 
-    await exec('git add packages/package-a', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo" -m "BREAKING CHANGE: bar"', { cwd: tmpPath });
-    await exec('git add packages/package-b', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await execa('git', ['add', 'packages/package-a'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo', '-m', 'BREAKING CHANGE: bar'], { cwd: tmpPath });
+    await execa('git', ['add', 'packages/package-b'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     await release({
       shouldInheritGreaterReleaseType: true,
@@ -254,18 +254,18 @@ describe(_release, function() {
       }),
     });
 
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-b@2.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-c@3.0.0', { cwd: tmpPath });
-    await exec('git tag my-app@0.0.0', { cwd: tmpPath });
-    await exec('git tag root@0.0.0', { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@2.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-c@3.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', 'my-app@0.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', 'root@0.0.0'], { cwd: tmpPath });
 
-    await exec('git add packages/package-a', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo" -m "BREAKING CHANGE: bar"', { cwd: tmpPath });
-    await exec('git add packages/package-b', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await execa('git', ['add', 'packages/package-a'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo', '-m', 'BREAKING CHANGE: bar'], { cwd: tmpPath });
+    await execa('git', ['add', 'packages/package-b'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     await release({
       shouldInheritGreaterReleaseType: true,
@@ -387,12 +387,12 @@ describe(_release, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
-    await exec('git tag my-app@0.0.0', { cwd: tmpPath });
-    await exec('git tag root@0.0.0', { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', 'my-app@0.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', 'root@0.0.0'], { cwd: tmpPath });
 
     await release();
 
@@ -469,10 +469,10 @@ describe(_release, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -485,8 +485,8 @@ describe(_release, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     await release({
       shouldBumpInRangeDependencies: true,
@@ -559,10 +559,10 @@ describe(_release, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -575,8 +575,8 @@ describe(_release, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     await release({
       shouldBumpInRangeDependencies: false,
@@ -628,7 +628,7 @@ describe(_release, function() {
   });
 
   it('inherits greater release type', async function() {
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -650,9 +650,9 @@ describe(_release, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -665,8 +665,8 @@ describe(_release, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     await release({
       shouldBumpInRangeDependencies: false,
@@ -719,7 +719,7 @@ describe(_release, function() {
   });
 
   it('ignores greater release type', async function() {
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -741,9 +741,9 @@ describe(_release, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -756,8 +756,8 @@ describe(_release, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     await release({
       shouldBumpInRangeDependencies: false,
@@ -810,7 +810,7 @@ describe(_release, function() {
   });
 
   it('inherits greater and bumps in-range', async function() {
-    await exec('git tag @scope/package-b@1.0.0', { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -832,9 +832,9 @@ describe(_release, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
-    await exec('git tag @scope/package-a@1.0.0', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -847,8 +847,8 @@ describe(_release, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "feat: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     await release({
       shouldBumpInRangeDependencies: true,

@@ -1,8 +1,7 @@
 'use strict';
 
 const path = require('path');
-const { promisify } = require('util');
-const exec = promisify(require('child_process').exec);
+const execa = require('execa');
 const writeJson = require('./json').write;
 const buildDepGraph = require('./build-dep-graph');
 const buildDAG = require('./build-dag');
@@ -52,7 +51,7 @@ async function attach({
   let myPackageJson = require(myPackageJsonPath);
 
   if (_package) {
-    let workspaceCwd = (await exec('git rev-parse --show-toplevel', { cwd })).stdout.trim();
+    let workspaceCwd = (await execa('git', ['rev-parse', '--show-toplevel'], { cwd })).stdout;
 
     let workspaceMeta = await buildDepGraph(workspaceCwd);
 
@@ -72,7 +71,7 @@ async function attach({
     }
 
     if (!dag) {
-      let workspaceCwd = (await exec('git rev-parse --show-toplevel', { cwd })).stdout.trim();
+      let workspaceCwd = (await execa('git', ['rev-parse', '--show-toplevel'], { cwd })).stdout;
 
       let workspaceMeta = await buildDepGraph(workspaceCwd);
 

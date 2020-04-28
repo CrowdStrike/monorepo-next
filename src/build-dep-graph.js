@@ -5,7 +5,7 @@ const { promisify } = require('util');
 const glob = promisify(require('glob'));
 const semver = require('semver');
 const dependencyTypes = require('./dependency-types');
-const exec = promisify(require('child_process').exec);
+const execa = require('execa');
 
 function copyDeps(left, right) {
   for (let dependencyType of dependencyTypes) {
@@ -75,10 +75,9 @@ async function buildDepGraph(workspaceCwd) {
 
   let _1dFilesArray;
   if (!workspaces) {
-    _1dFilesArray = (await exec('pnpm recursive exec -- node -e "console.log(process.cwd())"', { cwd: workspaceCwd })).stdout
+    _1dFilesArray = (await execa.command('pnpm recursive exec -- node -e "console.log(process.cwd())"', { cwd: workspaceCwd })).stdout
       .split(/\r?\n/)
-      .map(workspace => path.relative(workspaceCwd, workspace))
-      .filter(Boolean);
+      .map(workspace => path.relative(workspaceCwd, workspace));
   } else {
     let packages = workspaces.packages || workspaces;
 

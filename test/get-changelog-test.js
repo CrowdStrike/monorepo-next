@@ -7,7 +7,7 @@ const { promisify } = require('util');
 const tmpDir = promisify(require('tmp').dir);
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const exec = promisify(require('child_process').exec);
+const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 const path = require('path');
 const standardVersion = require('standard-version');
@@ -21,7 +21,7 @@ describe(getChangelog, function() {
     tmpPath = await tmpDir();
 
     await gitInit({ cwd: tmpPath });
-    await exec('git commit --allow-empty -m "first"', { cwd: tmpPath });
+    await execa('git', ['commit', '--allow-empty', '-m', 'first'], { cwd: tmpPath });
   });
 
   afterEach(function() {
@@ -46,8 +46,8 @@ describe(getChangelog, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "chore: release"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
 
     process.chdir(path.join(tmpPath, 'packages/my-app'));
 
@@ -65,8 +65,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     let changelog = await getChangelog({
       cwd: path.join(tmpPath, 'packages/my-app'),
@@ -95,8 +95,8 @@ describe(getChangelog, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "chore: release"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
 
     process.chdir(path.join(tmpPath, 'packages/my-app'));
 
@@ -114,8 +114,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     await standardVersion({
       path: path.join(tmpPath, 'packages/my-app'),
@@ -155,8 +155,8 @@ describe(getChangelog, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "chore: release"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
 
     process.chdir(path.join(tmpPath, 'packages/my-app'));
 
@@ -182,8 +182,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     let changelog = await getChangelog({
       cwd: path.join(tmpPath, 'packages/my-app'),
@@ -210,8 +210,8 @@ describe(getChangelog, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: old-release"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: old-release'], { cwd: tmpPath });
 
     process.chdir(path.join(tmpPath, 'packages/my-app'));
 
@@ -229,8 +229,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     await standardVersion({
       path: path.join(tmpPath, 'packages/my-app'),
@@ -276,8 +276,8 @@ describe(getChangelog, function() {
       }),
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "chore: release"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
 
     process.chdir(path.join(tmpPath, 'packages/my-dep'));
 
@@ -303,8 +303,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await exec('git add .', { cwd: tmpPath });
-    await exec('git commit -m "fix: foo"', { cwd: tmpPath });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     let changelog = await getChangelog({
       cwd: path.join(tmpPath, 'packages/my-app'),
