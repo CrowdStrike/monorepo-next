@@ -17,6 +17,15 @@ const {
 describe(_release, function() {
   let tmpPath;
 
+  function readWorkspaces() {
+    return fixturify.readSync(tmpPath, {
+      exclude: [
+        '.git',
+        '**/CHANGELOG.md',
+      ],
+    });
+  }
+
   beforeEach(async function() {
     tmpPath = await tmpDir();
 
@@ -109,12 +118,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: true,
     });
 
-    let workspace = fixturify.readSync(tmpPath, {
-      exclude: [
-        '.git',
-        '**/CHANGELOG.md',
-      ],
-    });
+    let workspace = readWorkspaces();
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -267,12 +271,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: true,
     });
 
-    let workspace = fixturify.readSync(tmpPath, {
-      exclude: [
-        '.git',
-        '**/CHANGELOG.md',
-      ],
-    });
+    let workspace = readWorkspaces();
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -392,12 +391,7 @@ describe(_release, function() {
 
     await release();
 
-    let workspace = fixturify.readSync(tmpPath, {
-      exclude: [
-        '.git',
-        '**/CHANGELOG.md',
-      ],
-    });
+    let workspace = readWorkspaces();
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -489,12 +483,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: false,
     });
 
-    let workspace = fixturify.readSync(tmpPath, {
-      exclude: [
-        '.git',
-        '**/CHANGELOG.md',
-      ],
-    });
+    let workspace = readWorkspaces();
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -579,12 +568,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: false,
     });
 
-    let workspace = fixturify.readSync(tmpPath, {
-      exclude: [
-        '.git',
-        '**/CHANGELOG.md',
-      ],
-    });
+    let workspace = readWorkspaces();
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -669,12 +653,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: true,
     });
 
-    let workspace = fixturify.readSync(tmpPath, {
-      exclude: [
-        '.git',
-        '**/CHANGELOG.md',
-      ],
-    });
+    let workspace = readWorkspaces();
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -760,12 +739,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: false,
     });
 
-    let workspace = fixturify.readSync(tmpPath, {
-      exclude: [
-        '.git',
-        '**/CHANGELOG.md',
-      ],
-    });
+    let workspace = readWorkspaces();
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -851,12 +825,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: true,
     });
 
-    let workspace = fixturify.readSync(tmpPath, {
-      exclude: [
-        '.git',
-        '**/CHANGELOG.md',
-      ],
-    });
+    let workspace = readWorkspaces();
 
     expect(workspace).to.deep.equal({
       'packages': {
