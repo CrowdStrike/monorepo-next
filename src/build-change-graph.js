@@ -2,10 +2,10 @@
 
 const buildDAG = require('./build-dag');
 const execa = require('execa');
-
-async function getCurrentCommit(cwd) {
-  return (await execa('git', ['rev-parse', 'HEAD'], { cwd })).stdout;
-}
+const {
+  getCurrentCommit,
+  getCurrentAtTag,
+} = require('./git');
 
 function getLinesFromOutput(output) {
   return output.split(/\r?\n/).filter(Boolean);
@@ -26,7 +26,7 @@ async function getCommitSinceLastRelease(_package) {
 
   let tag = `${_package.packageName}@${version}`;
 
-  return (await execa('git', ['rev-list', '-1', tag], { cwd: _package.cwd })).stdout;
+  return await getCurrentAtTag(tag, _package.cwd);
 }
 
 async function getPackageChangedFiles(tagCommit, currentCommit, _package) {

@@ -9,14 +9,10 @@ const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
 const { gitInit } = require('git-fixtures');
-
-async function getLastCommitMessage(cwd) {
-  return (await execa('git', ['log', '-1', '--pretty=%B'], { cwd })).stdout.trim();
-}
-
-async function getTagsOnLastCommit(cwd) {
-  return (await execa('git', ['tag', '-l', '--points-at', 'HEAD'], { cwd })).stdout.split(/\r?\n/);
-}
+const {
+  getLastCommitMessage,
+  getTagsOnLastCommit,
+} = require('./helpers/git');
 
 describe(_release, function() {
   let tmpPath;

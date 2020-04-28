@@ -1,11 +1,13 @@
 'use strict';
 
 const { promisify } = require('util');
-const execa = require('execa');
 const buildDepGraph = require('./build-dep-graph');
 const buildChangeGraph = require('./build-change-graph');
 const path = require('path');
 const realpath = promisify(require('fs').realpath);
+const {
+  getWorkspaceCwd,
+} = require('./git');
 
 // stupid Mac /private symlink means normal equality won't work
 async function arePathsTheSame(path1, path2) {
@@ -16,7 +18,7 @@ async function changed({
   cwd = process.cwd(),
   silent,
 } = {}) {
-  let workspaceCwd = (await execa('git', ['rev-parse', '--show-toplevel'], { cwd })).stdout;
+  let workspaceCwd = await getWorkspaceCwd(cwd);
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);
 
