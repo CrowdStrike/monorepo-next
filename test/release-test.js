@@ -864,4 +864,57 @@ describe(_release, function() {
       '@scope/package-b@1.1.0',
     ]);
   });
+
+  it('can release a package without an initial version', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '0.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+    await release();
+
+    let workspace = readWorkspaces();
+
+    expect(workspace).to.deep.equal({
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '0.1.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    let lastCommitMessage = await getLastCommitMessage(tmpPath);
+
+    expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@0.1.0');
+
+    let tags = await getTagsOnLastCommit(tmpPath);
+
+    expect(tags).to.deep.equal([
+      '@scope/package-a@0.1.0',
+    ]);
+  });
 });
