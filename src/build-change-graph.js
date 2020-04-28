@@ -5,6 +5,7 @@ const execa = require('execa');
 const {
   getCurrentCommit,
   getCommitAtTag,
+  getFirstCommit,
 } = require('./git');
 
 function getLinesFromOutput(output) {
@@ -26,7 +27,15 @@ async function getCommitSinceLastRelease(_package) {
 
   let tag = `${_package.packageName}@${version}`;
 
-  return await getCommitAtTag(tag, _package.cwd);
+  try {
+    return await getCommitAtTag(tag, _package.cwd);
+  } catch (err) {
+    if (err.stderr.includes(`fatal: ambiguous argument '${tag}': unknown revision or path not in the working tree.`)) {
+      return await getFirstCommit(_package.cwd);
+    } else {
+      throw err;
+    }
+  }
 }
 
 async function getPackageChangedFiles(tagCommit, currentCommit, _package) {
