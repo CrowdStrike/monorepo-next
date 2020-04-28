@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.41](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.40...v0.2.41) (2020-04-28)
+
+
+### Bug Fixes
+
+* `getCurrentAtTag` => `getCommitAtTag` typo ([9e59968](https://github.com/CrowdStrike/monorepo-next/commit/9e5996897b1197a9eb200e8ca12b49edcf4d48e8))
+* extract some git operations to reusable functions ([00c7809](https://github.com/CrowdStrike/monorepo-next/commit/00c7809098dee4c6b99633918e7bf635b1f33444))
+
 ### [0.2.40](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.39...v0.2.40) (2020-04-28)
 
 
