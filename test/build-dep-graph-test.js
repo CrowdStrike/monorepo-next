@@ -3,13 +3,22 @@
 const { describe, it } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
 const path = require('path');
-const sinon = require('sinon');
 const buildDepGraph = require('../src/build-dep-graph');
+const { createTmpDir } = require('./helpers/tmp');
+const fixturify = require('fixturify');
+const stringifyJson = require('../src/json').stringify;
+const sinon = require('sinon');
 const { matchPath } = require('./helpers/matchers');
 
 let cwd = path.resolve(__dirname, './fixtures/workspace');
 
 describe(buildDepGraph, function() {
+  let tmpPath;
+
+  beforeEach(async function() {
+    tmpPath = await createTmpDir();
+  });
+
   it('works', async function() {
     let workspaceMeta = await buildDepGraph(cwd);
 
@@ -61,5 +70,32 @@ describe(buildDepGraph, function() {
         },
       },
     }));
+  });
+
+  it('ignores empty folders', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {},
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    let workspaceMeta = await buildDepGraph(tmpPath);
+
+    expect(workspaceMeta).to.deep.equal({
+      cwd: tmpPath,
+      packageName: 'Workspace Root',
+      version: undefined,
+      isPrivate: true,
+      dependencies: {},
+      devDependencies: {},
+      optionalDependencies: {},
+      packages: {},
+    });
   });
 });

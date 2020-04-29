@@ -20,7 +20,13 @@ function firstPass(workspaceMeta, workspacePackageJson, packageDirs) {
   workspaceMeta.packages = {};
   copyDeps(workspaceMeta, workspacePackageJson);
   for (let packageDir of packageDirs) {
-    let packageJson = require(path.join(packageDir, 'package'));
+    let packageJson;
+    try {
+      packageJson = require(path.join(packageDir, 'package'));
+    } catch (err) {
+      // ignore empty folders
+      continue;
+    }
     let packageName = packageJson.name;
     workspaceMeta.packages[packageName] = {
       cwd: packageDir,
