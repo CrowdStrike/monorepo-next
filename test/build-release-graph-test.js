@@ -5,8 +5,7 @@ const { expect } = require('./helpers/chai');
 const buildDepGraph = require('../src/build-dep-graph');
 const buildChangeGraph = require('../src/build-change-graph');
 const buildReleaseGraph = require('../src/build-release-graph');
-const { promisify } = require('util');
-const tmpDir = promisify(require('tmp').dir);
+const { createTmpDir } = require('./helpers/tmp');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
@@ -18,7 +17,7 @@ describe(buildReleaseGraph, function() {
   let tmpPath;
 
   beforeEach(async function() {
-    tmpPath = await tmpDir();
+    tmpPath = await createTmpDir();
 
     await gitInit({ cwd: tmpPath });
     await execa('git', ['commit', '--allow-empty', '-m', 'first'], { cwd: tmpPath });
