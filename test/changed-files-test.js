@@ -3,8 +3,7 @@
 const { describe, it } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
 const changedFiles = require('../src/changed-files');
-const { promisify } = require('util');
-const tmpDir = promisify(require('tmp').dir);
+const { createTmpDir } = require('./helpers/tmp');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
@@ -15,7 +14,7 @@ describe(changedFiles, function() {
   let tmpPath;
 
   beforeEach(async function() {
-    tmpPath = await tmpDir();
+    tmpPath = await createTmpDir();
 
     await gitInit({ cwd: tmpPath });
     await execa('git', ['commit', '--allow-empty', '-m', 'first'], { cwd: tmpPath });
