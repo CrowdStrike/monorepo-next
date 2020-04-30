@@ -6,11 +6,8 @@ const {
   getCurrentCommit,
   getCommitAtTag,
   getFirstCommit,
+  getLinesFromOutput,
 } = require('./git');
-
-function getLinesFromOutput(output) {
-  return output.split(/\r?\n/).filter(Boolean);
-}
 
 function union(a, b) {
   return [...new Set([...a, ...b])];
