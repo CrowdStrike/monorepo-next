@@ -127,7 +127,9 @@ async function release({
   async function handleLifecycleScript(lifecycle) {
     let script = scripts[lifecycle];
     if (script) {
-      await execa.command(script);
+      await execa.command(script, {
+        shell: true,
+      });
     }
   }
 
