@@ -7,10 +7,19 @@ const sinon = require('sinon');
 const buildDepGraph = require('../src/build-dep-graph');
 const buildDAG = require('../src/build-dag');
 const { matchPath } = require('./helpers/matchers');
+const { createTmpDir } = require('./helpers/tmp');
+const fixturify = require('fixturify');
+const stringifyJson = require('../src/json').stringify;
 
 let cwd = path.resolve(__dirname, './fixtures/workspace');
 
 describe(buildDAG, function() {
+  let tmpPath;
+
+  beforeEach(async function() {
+    tmpPath = await createTmpDir();
+  });
+
   it('package-a', async function() {
     let _package = '@scope/package-a';
 
@@ -191,5 +200,54 @@ describe(buildDAG, function() {
       isCycle: false,
       dependents: [],
     }));
+  });
+
+  it('allows empty string version ranges', async function() {
+    let packageName = '@scope/package-a';
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': packageName,
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+        'devDependencies': {
+          [packageName]: '',
+        },
+      }),
+    });
+
+    let dag = buildDAG(await buildDepGraph(tmpPath), packageName);
+
+    expect(dag).to.deep.equal({
+      isPackage: true,
+      cwd: path.join(tmpPath, 'packages/package-a'),
+      packageName,
+      version: '1.0.0',
+      branch: [],
+      isCycle: false,
+      dependents: [
+        {
+          isPackage: false,
+          cwd: tmpPath,
+          packageName: 'Workspace Root',
+          version: undefined,
+          dependencyType: 'devDependencies',
+          dependencyRange: '',
+          branch: [
+            packageName,
+          ],
+          dependents: [],
+        },
+      ],
+    });
   });
 });
