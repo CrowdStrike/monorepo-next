@@ -14,6 +14,7 @@ deploy:
   provider: npm
   email: $NPM_EMAIL
   api_key: $NPM_TOKEN
+  edge: true # opt in to dpl v2
   on:
     tags: true
     repo: CrowdStrike/monorepo-next
