@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.46](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.45...v0.2.46) (2020-05-03)
+
+
+### Bug Fixes
+
+* fix regression with `&&` in lifecycle script ([17b06ea](https://github.com/CrowdStrike/monorepo-next/commit/17b06ea7daf846f32f1c7eba252a99b2f786e851))
+
 ### [0.2.45](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.44...v0.2.45) (2020-05-03)
 
 
