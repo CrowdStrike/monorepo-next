@@ -56,7 +56,7 @@ function createPackageNode({
     packageName,
     version: _package ? _package.version : workspaceMeta.version,
     ...dependencyType ? { dependencyType } : {},
-    ...dependencyRange ? { dependencyRange } : {},
+    ...typeof dependencyRange === 'string' ? { dependencyRange } : {},
     branch: [...dag.branch, dag.packageName].filter(Boolean),
     ..._package ? { isCycle: dag.branch.includes(packageName) } : {},
   };
