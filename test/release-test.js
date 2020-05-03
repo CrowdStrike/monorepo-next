@@ -12,6 +12,8 @@ const {
   getLastCommitMessage,
   getTagsOnLastCommit,
 } = require('./helpers/git');
+const sinon = require('sinon');
+const { EOL } = require('os');
 
 describe(_release, function() {
   let tmpPath;
@@ -915,5 +917,41 @@ describe(_release, function() {
     expect(tags).to.deep.equal([
       '@scope/package-a@0.1.0',
     ]);
+  });
+
+  it('can handle a lifecycle script with `&&`', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '0.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+    let spy = sinon.spy(execa, 'command');
+
+    let precommit = 'echo foo&& echo bar';
+
+    await release({
+      scripts: {
+        precommit,
+      },
+    });
+
+    let { stdout } = await spy.withArgs(precommit).firstCall.returnValue;
+
+    expect(stdout).to.equal(['foo', 'bar'].join(EOL));
   });
 });
