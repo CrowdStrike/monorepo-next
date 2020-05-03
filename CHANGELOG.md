@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.45](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.44...v0.2.45) (2020-05-03)
+
+
+### Bug Fixes
+
+* retain empty version strings in `buildDAG` ([554f02f](https://github.com/CrowdStrike/monorepo-next/commit/554f02ff21f95b3dd4c308ab10a320e3f7be8561))
+
 ### [0.2.44](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.43...v0.2.44) (2020-04-30)
 
 
