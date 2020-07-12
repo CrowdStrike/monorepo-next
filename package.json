@@ -57,7 +57,7 @@
     "glob": "^7.1.4",
     "inquirer": "^7.0.0",
     "semver": "^6.3.0",
-    "standard-version": "7.1.0",
+    "standard-version": "8.0.1",
     "yargs": "^15.0.0"
   },
   "devDependencies": {
