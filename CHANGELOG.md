@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.47](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.46...v0.2.47) (2020-07-20)
+
+
+### Features
+
+* **#114:** support wildcard versions ([#115](https://github.com/CrowdStrike/monorepo-next/issues/115)) ([86c5499](https://github.com/CrowdStrike/monorepo-next/commit/86c54993cf68c70301bf27b2964325abc77ef97f)), closes [#114](https://github.com/CrowdStrike/monorepo-next/issues/114) [#114](https://github.com/CrowdStrike/monorepo-next/issues/114)
+
 ### [0.2.46](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.45...v0.2.46) (2020-05-03)
 
 
