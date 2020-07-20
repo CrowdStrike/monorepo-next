@@ -8,7 +8,13 @@ function trackNewVersion({
   newRange,
   newVersion,
 }) {
+  // wildcards don't need to be changed
+  if (oldRange === '*') {
+    return '*';
+  }
+
   let range = new semver.Range(newRange);
+
   if (range.set.length > 1) {
     console.warn(`Current range has an OR (${name} ${oldRange}) and is too hard to increment, falling back to ^`);
     newRange = `^${newVersion}`;
@@ -17,6 +23,7 @@ function trackNewVersion({
   } else {
     let left = range.set[0][0].semver;
     let right = range.set[0][1].semver;
+
     if (left.major !== right.major) {
       newRange = `^${newVersion}`;
     } else {
