@@ -83,6 +83,36 @@ describe(function() {
       expect(newRange).to.equal('1.0.1');
     });
 
+    it('tracks wildcards with padding (by not doing anything)', function() {
+      let oldRange = ' * ';
+      let newRange = oldRange;
+      let newVersion = '1.0.1';
+
+      newRange = trackNewVersion({ name, oldRange, newRange, newVersion });
+
+      expect(newRange).to.equal(' * ');
+    });
+
+    it('tracks wildcards (by not doing anything)', function() {
+      let oldRange = '*';
+      let newRange = oldRange;
+      let newVersion = '1.0.1';
+
+      newRange = trackNewVersion({ name, oldRange, newRange, newVersion });
+
+      expect(newRange).to.equal('*');
+    });
+
+    it('tracks empty version (by not doing anything)', function() {
+      let oldRange = '';
+      let newRange = oldRange;
+      let newVersion = '1.0.1';
+
+      newRange = trackNewVersion({ name, oldRange, newRange, newVersion });
+
+      expect(newRange).to.equal('');
+    });
+
     it('uses ~ on major version zero with ^', function() {
       let oldRange = '^0.0.0';
       let newRange = oldRange;
