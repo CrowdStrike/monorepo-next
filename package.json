@@ -48,7 +48,7 @@
   },
   "homepage": "https://github.com/CrowdStrike/monorepo-next#readme",
   "engines": {
-    "node": ">=8.10"
+    "node": ">=10.12"
   },
   "dependencies": {
     "conventional-changelog": "3.1.18",
