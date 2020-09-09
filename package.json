@@ -63,7 +63,7 @@
   "devDependencies": {
     "@crowdstrike/commitlint": "^1.0.4",
     "chai": "^4.2.0",
-    "eslint": "^6.6.0",
+    "eslint": "^7.0.0",
     "eslint-config-crowdstrike": "^2.0.0",
     "eslint-config-crowdstrike-node": "^2.0.0",
     "eslint-plugin-json-files": "0.8.1",
