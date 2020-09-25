@@ -185,8 +185,8 @@ describe(changedFiles, function() {
 
     let _changedFiles = await changedFiles({
       cwd: tmpPath,
-      fromCommit: commit,
       silent: true,
+      fromCommit: commit,
     });
 
     expect(_changedFiles).to.deep.equal([

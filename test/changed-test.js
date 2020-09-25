@@ -148,8 +148,8 @@ describe(changed, function() {
 
     let _changed = await changed({
       cwd: tmpPath,
-      fromCommit: commit,
       silent: true,
+      fromCommit: commit,
     });
 
     expect(_changed).to.deep.equal([
