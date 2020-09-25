@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.47...v1.0.0) (2020-09-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* bump min node to 10
+
+### Features
+
+* accept `fromCommit` from `changed` and `changedFiles` ([f1f8bb4](https://github.com/CrowdStrike/monorepo-next/commit/f1f8bb49b543e51eee5e740ecfa9d3541eff155b))
+* allow `buildChangeGraph` to take a `fromCommit` ([2a6dc32](https://github.com/CrowdStrike/monorepo-next/commit/2a6dc321f7f5dbba8e85e13cad7540cecdc671e7))
+
+
+### Bug Fixes
+
+* **deps:** update dependency conventional-changelog to v3.1.23 ([05a7a5e](https://github.com/CrowdStrike/monorepo-next/commit/05a7a5e2ab844da7958b91c3715cc052598dfb86))
+* **deps:** update dependency conventional-recommended-bump to v6.0.10 ([a1c90dc](https://github.com/CrowdStrike/monorepo-next/commit/a1c90dce75c3bbd29e98871b161f7593a79d09b0))
+* **deps:** update dependency execa to v4 ([c144682](https://github.com/CrowdStrike/monorepo-next/commit/c144682f395d4d3e4958a04415d035062fae09e2))
+* **deps:** update dependency standard-version to v8 [security] ([14f9427](https://github.com/CrowdStrike/monorepo-next/commit/14f942788797f7952d44d1ccf199f69b9b1925ca))
+* **deps:** update dependency standard-version to v8.0.2 ([de4fd9e](https://github.com/CrowdStrike/monorepo-next/commit/de4fd9e2c2e824144b21497ee2707760a37b6527))
+* **deps:** update dependency standard-version to v9 ([14bf302](https://github.com/CrowdStrike/monorepo-next/commit/14bf30227353f8ff0dec6d0015268317b2814381))
+* **deps:** update dependency yargs to v16 ([bcaa60c](https://github.com/CrowdStrike/monorepo-next/commit/bcaa60c19c8a4d817b51d8abd183fa9a2346cd95))
+
+
+* track `standard-node-template` ([3c11090](https://github.com/CrowdStrike/monorepo-next/commit/3c110909fe3c7c5c131a3ef75a9f6ba4ffc4aa65))
+
 ### [0.2.47](https://github.com/CrowdStrike/monorepo-next/compare/v0.2.46...v0.2.47) (2020-07-20)
 
 
