@@ -65,7 +65,7 @@ describe(buildReleaseGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
       return dag.packageName && dag.version;
@@ -153,7 +153,7 @@ describe(buildReleaseGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
       return dag.packageName && dag.version;
@@ -226,7 +226,7 @@ describe(buildReleaseGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
       return dag.packageName && dag.version;
@@ -314,7 +314,7 @@ describe(buildReleaseGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
       return dag.packageName && dag.version;
@@ -402,7 +402,7 @@ describe(buildReleaseGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
       return dag.packageName && dag.version;
@@ -475,7 +475,7 @@ describe(buildReleaseGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
       return dag.packageName && dag.version;
@@ -564,7 +564,7 @@ describe(buildReleaseGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
       return dag.packageName && dag.version;
@@ -652,7 +652,7 @@ describe(buildReleaseGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
       return dag.packageName && dag.version;
@@ -725,7 +725,7 @@ describe(buildReleaseGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
       return dag.packageName && dag.version;
@@ -824,7 +824,7 @@ describe(buildReleaseGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
       return dag.packageName && dag.version;

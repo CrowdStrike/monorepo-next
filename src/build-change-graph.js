@@ -60,7 +60,7 @@ function crawlDag(dag, packagesWithChanges) {
   }
 }
 
-async function buildChangeGraph(workspaceMeta) {
+async function buildChangeGraph({ workspaceMeta }) {
   let packagesWithChanges = {};
 
   let currentCommit = await getCurrentCommit(workspaceMeta.cwd);

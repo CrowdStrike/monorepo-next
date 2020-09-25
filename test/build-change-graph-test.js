@@ -55,7 +55,7 @@ describe(buildChangeGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     expect(packagesWithChanges).to.match(sinon.match([
       {
@@ -94,7 +94,7 @@ describe(buildChangeGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     expect(packagesWithChanges).to.deep.equal([]);
   });
@@ -130,7 +130,7 @@ describe(buildChangeGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     expect(packagesWithChanges).to.match(sinon.match([
       {
@@ -168,7 +168,7 @@ describe(buildChangeGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     expect(packagesWithChanges).to.match(sinon.match([
       {
@@ -198,7 +198,7 @@ describe(buildChangeGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     expect(packagesWithChanges).to.deep.equal([]);
   });
@@ -236,7 +236,7 @@ describe(buildChangeGraph, function() {
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
-    let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     expect(packagesWithChanges).to.match(sinon.match([
       {
