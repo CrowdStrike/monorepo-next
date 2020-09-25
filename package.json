@@ -34,8 +34,13 @@
     "lint:js": "eslint . --ext js,json",
     "lint:md": "remark -f README.md",
     "start": "./bin/index.js",
-    "release": "standard-version && git push --follow-tags --atomic",
+    "release": "standard-version",
     "test": "mocha --recursive"
+  },
+  "standard-version": {
+    "scripts": {
+      "posttag": "git push --follow-tags --atomic"
+    }
   },
   "repository": {
     "type": "git",
