@@ -193,4 +193,106 @@ describe(changedFiles, function() {
       'packages/my-app-2/changed.txt',
     ]);
   });
+
+  it('can cache the results', async function() {
+    this.timeout(5e3);
+
+    let _changedFiles;
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'changed.txt': 'test',
+        },
+      },
+      'changed': 'test',
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    let cachedChangedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+      cached: true,
+      packages: [
+        'package-a',
+      ],
+      exts: ['txt'],
+    });
+
+    expect(cachedChangedFiles).to.deep.equal([
+      'packages/package-a/changed.txt',
+    ]);
+
+    let commit = await getCurrentCommit(tmpPath);
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app-1': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+      cached: true,
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'packages/package-a/changed.txt',
+      'changed',
+    ]);
+
+    _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+      cached: true,
+      exts: ['txt'],
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'packages/package-a/changed.txt',
+    ]);
+
+    _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+      cached: true,
+      packages: [
+        'package-a',
+      ],
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'packages/package-a/changed.txt',
+    ]);
+
+    _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+      fromCommit: commit,
+      cached: true,
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'packages/my-app-1/changed.txt',
+    ]);
+
+    _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'packages/my-app-1/changed.txt',
+      'packages/package-a/changed.txt',
+      'changed',
+    ]);
+  });
 });
