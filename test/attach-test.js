@@ -113,7 +113,7 @@ describe(attach, function() {
 
     await attach({ cwd });
 
-    let workspace = fixturify.readSync(tmpPath, { exclude: ['.git'] });
+    let workspace = fixturify.readSync(tmpPath, { ignore: ['.git'] });
 
     expect(workspace).to.deep.equal(defaultWorkspace);
   });
@@ -168,7 +168,7 @@ describe(attach, function() {
 
     await attach({ cwd });
 
-    let workspace = fixturify.readSync(tmpPath, { exclude: ['.git'] });
+    let workspace = fixturify.readSync(tmpPath, { ignore: ['.git'] });
 
     expect(workspace).to.deep.equal(defaultWorkspace);
   });
@@ -223,7 +223,7 @@ describe(attach, function() {
 
     await attach({ cwd });
 
-    let workspace = fixturify.readSync(tmpPath, { exclude: ['.git'] });
+    let workspace = fixturify.readSync(tmpPath, { ignore: ['.git'] });
 
     expect(workspace).to.deep.equal(defaultWorkspace);
   });

@@ -20,7 +20,7 @@ describe(_release, function() {
 
   function readWorkspaces() {
     return fixturify.readSync(tmpPath, {
-      exclude: [
+      ignore: [
         '.git',
         '**/CHANGELOG.md',
       ],
