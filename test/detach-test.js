@@ -92,7 +92,7 @@ describe(detach, function() {
 
     await detach({ cwd });
 
-    let workspace = fixturify.readSync(tmpPath, { exclude: ['.git'] });
+    let workspace = fixturify.readSync(tmpPath, { ignore: ['.git'] });
 
     expect(prompt).to.be.calledOnce;
 
@@ -159,7 +159,7 @@ describe(detach, function() {
 
     await detach({ cwd });
 
-    let workspace = fixturify.readSync(tmpPath, { exclude: ['.git'] });
+    let workspace = fixturify.readSync(tmpPath, { ignore: ['.git'] });
 
     expect(prompt).to.be.calledOnce;
 
@@ -214,7 +214,7 @@ describe(detach, function() {
 
     await detach({ cwd });
 
-    let workspace = fixturify.readSync(tmpPath, { exclude: ['.git'] });
+    let workspace = fixturify.readSync(tmpPath, { ignore: ['.git'] });
 
     expect(prompt).to.not.be.called;
 
