@@ -72,13 +72,26 @@ function crawlDag(dag, packagesWithChanges) {
   }
 }
 
+let cachedChangedFiles;
+
+function clearCache() {
+  cachedChangedFiles = {};
+}
+
+clearCache();
+
 async function buildChangeGraph({
   workspaceMeta,
   fromCommit,
+  cached,
 }) {
   let packagesWithChanges = {};
 
   let alreadyVisitedFiles = [];
+
+  if (!cached) {
+    clearCache();
+  }
 
   for (let _package of [...Object.values(workspaceMeta.packages), workspaceMeta]) {
     if (!_package.packageName || !_package.version) {
@@ -92,7 +105,15 @@ async function buildChangeGraph({
       tagCommit = await getCommitSinceLastRelease(_package);
     }
 
-    let changedFiles = await getPackageChangedFiles(tagCommit, 'HEAD', _package);
+    let changedFiles;
+    if (cachedChangedFiles[_package.cwd] && !fromCommit) {
+      changedFiles = cachedChangedFiles[_package.cwd];
+    } else {
+      changedFiles = await getPackageChangedFiles(tagCommit, 'HEAD', _package);
+    }
+    if (cached && !fromCommit) {
+      cachedChangedFiles[_package.cwd] = changedFiles;
+    }
 
     let newFiles = [];
 

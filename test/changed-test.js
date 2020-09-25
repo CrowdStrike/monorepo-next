@@ -156,4 +156,85 @@ describe(changed, function() {
       'my-app-2',
     ]);
   });
+
+  it('can cache the results', async function() {
+    this.timeout(5e3);
+
+    let _changed;
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'changed.txt': 'test',
+        },
+      },
+      'changed': 'test',
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    let cachedChanged = await changed({
+      cwd: tmpPath,
+      silent: true,
+      cached: true,
+    });
+
+    expect(cachedChanged).to.deep.equal([
+      'package-a',
+      'root',
+      'my-app-1',
+      'package-b',
+    ]);
+
+    let commit = await getCurrentCommit(tmpPath);
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app-2': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    _changed = await changed({
+      cwd: tmpPath,
+      silent: true,
+      cached: true,
+    });
+
+    expect(_changed).to.deep.equal([
+      'package-a',
+      'root',
+      'my-app-1',
+      'package-b',
+    ]);
+
+    _changed = await changed({
+      cwd: tmpPath,
+      silent: true,
+      fromCommit: commit,
+      cached: true,
+    });
+
+    expect(_changed).to.deep.equal([
+      'my-app-2',
+    ]);
+
+    _changed = await changed({
+      cwd: tmpPath,
+      silent: true,
+    });
+
+    expect(_changed).to.deep.equal([
+      'my-app-2',
+      'package-a',
+      'root',
+      'my-app-1',
+      'package-b',
+    ]);
+  });
 });

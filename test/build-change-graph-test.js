@@ -359,4 +359,133 @@ describe(buildChangeGraph, function() {
       },
     ]));
   });
+
+  it('can cache the results', async function() {
+    let packagesWithChanges;
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+        'my-app-1': {
+          'package.json': stringifyJson({
+            'name': 'my-app-1',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', 'my-app-1@1.0.0'], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    let workspaceMeta = await buildDepGraph(tmpPath);
+
+    let cachedPackagesWithChanges = await buildChangeGraph({
+      workspaceMeta,
+      cached: true,
+    });
+
+    expect(cachedPackagesWithChanges).to.match(sinon.match([
+      {
+        changedFiles: [
+          'packages/package-a/changed.txt',
+        ],
+        dag: sinon.match({
+          packageName: '@scope/package-a',
+        }),
+      },
+    ]));
+
+    let commit = await getCurrentCommit(tmpPath);
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app-1': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    packagesWithChanges = await buildChangeGraph({
+      workspaceMeta,
+      cached: true,
+    });
+
+    expect(packagesWithChanges).to.match(sinon.match([
+      {
+        changedFiles: [
+          'packages/package-a/changed.txt',
+        ],
+        dag: sinon.match({
+          packageName: '@scope/package-a',
+        }),
+      },
+    ]));
+
+    packagesWithChanges = await buildChangeGraph({
+      workspaceMeta,
+      fromCommit: commit,
+      cached: true,
+    });
+
+    expect(packagesWithChanges).to.match(sinon.match([
+      {
+        changedFiles: [
+          'packages/my-app-1/changed.txt',
+        ],
+        dag: sinon.match({
+          packageName: 'my-app-1',
+        }),
+      },
+    ]));
+
+    packagesWithChanges = await buildChangeGraph({
+      workspaceMeta,
+    });
+
+    expect(packagesWithChanges).to.match(sinon.match([
+      {
+        changedFiles: [
+          'packages/my-app-1/changed.txt',
+        ],
+        dag: sinon.match({
+          packageName: 'my-app-1',
+        }),
+      },
+      {
+        changedFiles: [
+          'packages/package-a/changed.txt',
+        ],
+        dag: sinon.match({
+          packageName: '@scope/package-a',
+        }),
+      },
+    ]));
+  });
 });

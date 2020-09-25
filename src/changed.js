@@ -18,6 +18,7 @@ async function changed({
   cwd = process.cwd(),
   silent,
   fromCommit,
+  cached,
 } = {}) {
   let workspaceCwd = await getWorkspaceCwd(cwd);
 
@@ -26,6 +27,7 @@ async function changed({
   let packagesWithChanges = await buildChangeGraph({
     workspaceMeta,
     fromCommit,
+    cached,
   });
 
   let _changed = [];
