@@ -10,6 +10,7 @@ const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
 const sinon = require('sinon');
 const { gitInit } = require('git-fixtures');
+const { getCurrentCommit } = require('../src/git');
 
 describe(buildChangeGraph, function() {
   let tmpPath;
@@ -243,6 +244,58 @@ describe(buildChangeGraph, function() {
         changedFiles: [
           'packages/package-a/index.js',
           'packages/package-a/package.json',
+        ],
+        dag: sinon.match({
+          packageName: '@scope/package-a',
+        }),
+      },
+    ]));
+  });
+
+  it('accepts an arbitrary commit to calculate difference', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    let commit = await getCurrentCommit(tmpPath);
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'index.js': 'console.log()',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+    let workspaceMeta = await buildDepGraph(tmpPath);
+
+    let packagesWithChanges = await buildChangeGraph({
+      workspaceMeta,
+      fromCommit: commit,
+    });
+
+    expect(packagesWithChanges).to.match(sinon.match([
+      {
+        changedFiles: [
+          'packages/package-a/index.js',
         ],
         dag: sinon.match({
           packageName: '@scope/package-a',
