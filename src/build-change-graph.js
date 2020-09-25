@@ -60,7 +60,10 @@ function crawlDag(dag, packagesWithChanges) {
   }
 }
 
-async function buildChangeGraph({ workspaceMeta }) {
+async function buildChangeGraph({
+  workspaceMeta,
+  fromCommit,
+}) {
   let packagesWithChanges = {};
 
   let currentCommit = await getCurrentCommit(workspaceMeta.cwd);
@@ -72,7 +75,12 @@ async function buildChangeGraph({ workspaceMeta }) {
       continue;
     }
 
-    let tagCommit = await getCommitSinceLastRelease(_package);
+    let tagCommit;
+    if (fromCommit) {
+      tagCommit = fromCommit;
+    } else {
+      tagCommit = await getCommitSinceLastRelease(_package);
+    }
 
     let changedFiles = await getPackageChangedFiles(tagCommit, currentCommit, _package);
 
