@@ -47,7 +47,7 @@ async function changedFiles({
     }
 
     for (let file of _changedFiles) {
-      if (exts.length && exts.every(ext => !file.endsWith(ext))) {
+      if (exts.length && exts.every(ext => !file.endsWith(`.${ext}`))) {
         continue;
       }
 
