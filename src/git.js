@@ -28,6 +28,18 @@ function getLinesFromOutput(output) {
   return output.split(/\r?\n/).filter(Boolean);
 }
 
+async function isCommitAncestorOf(ancestorCommit, descendantCommit, cwd) {
+  try {
+    await execa('git', ['merge-base', '--is-ancestor', ancestorCommit, descendantCommit], { cwd });
+  } catch (err) {
+    if (err.exitCode !== 1) {
+      throw err;
+    }
+    return false;
+  }
+  return true;
+}
+
 module.exports = {
   getCurrentBranch,
   getCurrentCommit,
@@ -35,4 +47,5 @@ module.exports = {
   getFirstCommit,
   getWorkspaceCwd,
   getLinesFromOutput,
+  isCommitAncestorOf,
 };
