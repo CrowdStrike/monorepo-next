@@ -7,6 +7,7 @@ const {
   getCommitAtTag,
   getFirstCommit,
   getLinesFromOutput,
+  isCommitAncestorOf,
 } = require('./git');
 
 function union(a, b) {
@@ -36,7 +37,19 @@ async function getCommitSinceLastRelease(_package) {
 }
 
 async function getPackageChangedFiles(tagCommit, currentCommit, _package) {
-  let committedChanges = (await execa('git', ['diff', '--name-only', `${tagCommit}...${currentCommit}`, _package.cwd], { cwd: _package.cwd })).stdout;
+  let isAncestor = await isCommitAncestorOf(tagCommit, currentCommit, _package.cwd);
+
+  let olderCommit;
+  let newerCommit;
+  if (isAncestor) {
+    olderCommit = tagCommit;
+    newerCommit = currentCommit;
+  } else {
+    olderCommit = currentCommit;
+    newerCommit = tagCommit;
+  }
+
+  let committedChanges = (await execa('git', ['diff', '--name-only', `${olderCommit}...${newerCommit}`, _package.cwd], { cwd: _package.cwd })).stdout;
   committedChanges = getLinesFromOutput(committedChanges);
   let dirtyChanges = (await execa('git', ['status', '--porcelain', _package.cwd], { cwd: _package.cwd })).stdout;
   dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
