@@ -140,7 +140,8 @@ describe(changedFiles, function() {
           'changed.txt': 'test',
         },
       },
-      'changed.txt2': 'test',
+      // make sure the dot is included
+      'changedtxt': 'test',
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
