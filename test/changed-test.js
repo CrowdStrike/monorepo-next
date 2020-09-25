@@ -8,6 +8,7 @@ const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
 const { gitInit } = require('git-fixtures');
+const { getCurrentCommit } = require('../src/git');
 
 describe(changed, function() {
   let tmpPath;
@@ -117,6 +118,42 @@ describe(changed, function() {
       'my-app-1',
       'package-b',
       'root',
+    ]);
+  });
+
+  it('accepts an arbitrary commit to calculate difference', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app-1': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    let commit = await getCurrentCommit(tmpPath);
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app-2': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    let _changed = await changed({
+      cwd: tmpPath,
+      fromCommit: commit,
+      silent: true,
+    });
+
+    expect(_changed).to.deep.equal([
+      'my-app-2',
     ]);
   });
 });

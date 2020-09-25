@@ -17,12 +17,16 @@ async function arePathsTheSame(path1, path2) {
 async function changed({
   cwd = process.cwd(),
   silent,
+  fromCommit,
 } = {}) {
   let workspaceCwd = await getWorkspaceCwd(cwd);
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);
 
-  let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+  let packagesWithChanges = await buildChangeGraph({
+    workspaceMeta,
+    fromCommit,
+  });
 
   let _changed = [];
 

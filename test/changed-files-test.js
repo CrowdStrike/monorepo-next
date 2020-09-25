@@ -9,6 +9,7 @@ const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
 const path = require('path');
 const { gitInit } = require('git-fixtures');
+const { getCurrentCommit } = require('../src/git');
 
 describe(changedFiles, function() {
   let tmpPath;
@@ -153,6 +154,42 @@ describe(changedFiles, function() {
 
     expect(_changedFiles).to.deep.equal([
       'packages/package-a/changed.txt',
+    ]);
+  });
+
+  it('accepts an arbitrary commit to calculate difference', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app-1': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    let commit = await getCurrentCommit(tmpPath);
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app-2': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    let _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      fromCommit: commit,
+      silent: true,
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'packages/my-app-2/changed.txt',
     ]);
   });
 });
