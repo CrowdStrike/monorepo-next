@@ -27,7 +27,7 @@ async function getChangelog({
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);
 
-  let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+  let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
   packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
     return dag.packageName && dag.version;

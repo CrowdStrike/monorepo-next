@@ -24,7 +24,7 @@ async function changedFiles({
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);
 
-  let packagesWithChanges = await buildChangeGraph(workspaceMeta);
+  let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
   let changedFiles = [];
 
