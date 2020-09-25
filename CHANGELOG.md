@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v1.1.0...v2.0.0) (2020-09-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* `ext` string is now `exts` array of strings
+
+### Features
+
+* allow multiple extensions at once ([42a8078](https://github.com/CrowdStrike/monorepo-next/commit/42a8078d7eb01423f4442f2fb31dbe9adf8356af))
+
 ## [1.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v1.0.0...v1.1.0) (2020-09-25)
 
 
