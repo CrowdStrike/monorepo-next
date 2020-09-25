@@ -149,7 +149,7 @@ describe(changedFiles, function() {
     let _changedFiles = await changedFiles({
       cwd: tmpPath,
       silent: true,
-      ext: 'txt',
+      exts: ['txt', 'none'],
     });
 
     expect(_changedFiles).to.deep.equal([
