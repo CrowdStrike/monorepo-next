@@ -19,7 +19,7 @@ async function changedFiles({
   silent,
   fromCommit,
   packages = [],
-  ext,
+  exts = [],
 } = {}) {
   let workspaceCwd = await getWorkspaceCwd(cwd);
 
@@ -47,7 +47,7 @@ async function changedFiles({
     }
 
     for (let file of _changedFiles) {
-      if (ext && !file.endsWith(ext)) {
+      if (exts.length && exts.every(ext => !file.endsWith(ext))) {
         continue;
       }
 
