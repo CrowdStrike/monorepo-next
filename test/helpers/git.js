@@ -10,7 +10,12 @@ async function getTagsOnLastCommit(cwd) {
   return (await execa('git', ['tag', '-l', '--points-at', 'HEAD'], { cwd })).stdout.split(/\r?\n/);
 }
 
+async function getCurrentCommit(cwd) {
+  return (await execa('git', ['rev-parse', 'HEAD'], { cwd })).stdout;
+}
+
 module.exports = {
   getLastCommitMessage,
   getTagsOnLastCommit,
+  getCurrentCommit,
 };

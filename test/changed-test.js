@@ -8,7 +8,7 @@ const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
 const { gitInit } = require('git-fixtures');
-const { getCurrentCommit } = require('../src/git');
+const { getCurrentCommit } = require('./helpers/git');
 
 describe(changed, function() {
   let tmpPath;

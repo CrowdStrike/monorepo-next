@@ -9,7 +9,7 @@ const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
 const path = require('path');
 const { gitInit } = require('git-fixtures');
-const { getCurrentCommit } = require('../src/git');
+const { getCurrentCommit } = require('./helpers/git');
 
 describe(changedFiles, function() {
   let tmpPath;
