@@ -1,6 +1,6 @@
 'use strict';
 
-const { describe, it } = require('./helpers/mocha');
+const { describe, it, setUpCwdReset } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
 const getChangelog = require('../src/get-changelog');
 const { createTmpDir } = require('./helpers/tmp');
@@ -11,20 +11,17 @@ const { gitInit } = require('git-fixtures');
 const path = require('path');
 const standardVersion = require('standard-version');
 
-const originalCwd = process.cwd();
-
 describe(getChangelog, function() {
   let tmpPath;
+
+  // eslint-disable-next-line mocha/no-setup-in-describe
+  setUpCwdReset();
 
   beforeEach(async function() {
     tmpPath = await createTmpDir();
 
     await gitInit({ cwd: tmpPath });
     await execa('git', ['commit', '--allow-empty', '-m', 'first'], { cwd: tmpPath });
-  });
-
-  afterEach(function() {
-    process.chdir(originalCwd);
   });
 
   it('works pre tag', async function() {
