@@ -10,7 +10,7 @@ const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
 const sinon = require('sinon');
 const { gitInit } = require('git-fixtures');
-const { getCurrentCommit } = require('../src/git');
+const { getCurrentCommit } = require('./helpers/git');
 
 describe(buildChangeGraph, function() {
   let tmpPath;
