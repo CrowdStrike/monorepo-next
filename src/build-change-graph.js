@@ -3,7 +3,6 @@
 const buildDAG = require('./build-dag');
 const execa = require('execa');
 const {
-  getCurrentCommit,
   getCommitAtTag,
   getFirstCommit,
   getLinesFromOutput,
@@ -79,8 +78,6 @@ async function buildChangeGraph({
 }) {
   let packagesWithChanges = {};
 
-  let currentCommit = await getCurrentCommit(workspaceMeta.cwd);
-
   let alreadyVisitedFiles = [];
 
   for (let _package of [...Object.values(workspaceMeta.packages), workspaceMeta]) {
@@ -95,7 +92,7 @@ async function buildChangeGraph({
       tagCommit = await getCommitSinceLastRelease(_package);
     }
 
-    let changedFiles = await getPackageChangedFiles(tagCommit, currentCommit, _package);
+    let changedFiles = await getPackageChangedFiles(tagCommit, 'HEAD', _package);
 
     let newFiles = [];
 
