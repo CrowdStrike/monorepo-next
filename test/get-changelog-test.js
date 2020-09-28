@@ -12,6 +12,8 @@ const path = require('path');
 const standardVersion = require('standard-version');
 
 describe(getChangelog, function() {
+  this.timeout(5e3);
+
   let tmpPath;
 
   // eslint-disable-next-line mocha/no-setup-in-describe

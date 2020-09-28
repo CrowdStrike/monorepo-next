@@ -16,6 +16,8 @@ const sinon = require('sinon');
 const { EOL } = require('os');
 
 describe(_release, function() {
+  this.timeout(10e3);
+
   let tmpPath;
 
   function readWorkspaces() {
