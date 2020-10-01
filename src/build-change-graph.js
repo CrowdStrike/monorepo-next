@@ -7,6 +7,7 @@ const {
   getFirstCommit,
   getLinesFromOutput,
   isCommitAncestorOf,
+  getCommonAncestor,
 } = require('./git');
 
 function union(a, b) {
@@ -77,6 +78,7 @@ let cachedChangedFiles = {};
 async function buildChangeGraph({
   workspaceMeta,
   fromCommit,
+  sinceBranch,
   cached,
 }) {
   let packagesWithChanges = {};
@@ -91,8 +93,10 @@ async function buildChangeGraph({
     let tagCommit;
     if (fromCommit) {
       tagCommit = fromCommit;
+    } else if (sinceBranch) {
+      tagCommit = await getCommonAncestor('HEAD', sinceBranch, _package.cwd);
     } else {
-      tagCommit = await getCommitSinceLastRelease(_package);
+      tagCommit = await getCommitSinceLastRelease(_package, sinceBranch);
     }
 
     if (!cachedChangedFiles[_package.cwd]) {

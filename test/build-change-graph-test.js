@@ -360,6 +360,72 @@ describe(buildChangeGraph, function() {
     ]));
   });
 
+  it('can calulate difference since branch point', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['branch', 'test-branch'], { cwd: tmpPath });
+    await execa('git', ['checkout', 'test-branch'], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'index.js': 'console.log()',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+    let workspaceMeta = await buildDepGraph(tmpPath);
+
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+    expect(packagesWithChanges).to.match(sinon.match([
+      {
+        changedFiles: [
+          'packages/package-a/index.js',
+          'packages/package-a/package.json',
+        ],
+        dag: sinon.match({
+          packageName: '@scope/package-a',
+        }),
+      },
+    ]));
+
+    packagesWithChanges = await buildChangeGraph({
+      workspaceMeta,
+      sinceBranch: 'master',
+    });
+
+    expect(packagesWithChanges).to.match(sinon.match([
+      {
+        changedFiles: [
+          'packages/package-a/index.js',
+        ],
+        dag: sinon.match({
+          packageName: '@scope/package-a',
+        }),
+      },
+    ]));
+  });
+
   it('can cache the results', async function() {
     let packagesWithChanges;
 

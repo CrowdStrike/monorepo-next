@@ -36,6 +36,10 @@ async function isCommitAncestorOf(ancestorCommit, descendantCommit, cwd) {
   return true;
 }
 
+async function getCommonAncestor(commit1, commit2, cwd) {
+  return (await execa('git', ['merge-base', commit1, commit2], { cwd })).stdout;
+}
+
 module.exports = {
   getCurrentBranch,
   getCommitAtTag,
@@ -43,4 +47,5 @@ module.exports = {
   getWorkspaceCwd,
   getLinesFromOutput,
   isCommitAncestorOf,
+  getCommonAncestor,
 };
