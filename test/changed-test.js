@@ -157,6 +157,55 @@ describe(changed, function() {
     ]);
   });
 
+  it('can calulate difference since branch point', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['branch', 'test-branch'], { cwd: tmpPath });
+    await execa('git', ['checkout', 'test-branch'], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app-2': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    let _changed = await changed({
+      cwd: tmpPath,
+      silent: true,
+      sinceBranch: 'master',
+    });
+
+    expect(_changed).to.deep.equal([
+      'my-app-2',
+    ]);
+
+    _changed = await changed({
+      cwd: tmpPath,
+      silent: true,
+    });
+
+    expect(_changed).to.deep.equal([
+      'my-app-2',
+      'package-a',
+      'my-app-1',
+      'package-b',
+      'root',
+    ]);
+  });
+
   it('can cache the results', async function() {
     this.timeout(5e3);
 

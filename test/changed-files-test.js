@@ -194,6 +194,52 @@ describe(changedFiles, function() {
     ]);
   });
 
+  it('can calulate difference since branch point', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['branch', 'test-branch'], { cwd: tmpPath });
+    await execa('git', ['checkout', 'test-branch'], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app-1': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    let _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+      sinceBranch: 'master',
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'packages/my-app-1/changed.txt',
+    ]);
+
+    _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'packages/my-app-1/changed.txt',
+      'packages/package-a/changed.txt',
+    ]);
+  });
+
   it('can cache the results', async function() {
     this.timeout(5e3);
 
