@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/CrowdStrike/monorepo-next/compare/v2.1.0...v2.2.0) (2020-10-01)
+
+
+### Features
+
+* allow caching `fromCommit` too ([7085beb](https://github.com/CrowdStrike/monorepo-next/commit/7085beb2d2a2ba1add3c9e3f5b6fee18b0bf23a5))
+
 ## [2.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v2.0.2...v2.1.0) (2020-09-28)
 
 
