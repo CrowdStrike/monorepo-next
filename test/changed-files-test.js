@@ -161,7 +161,7 @@ describe(changedFiles, function() {
   it('accepts an arbitrary commit to calculate difference', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {
-        'my-app-1': {
+        'package-a': {
           'changed.txt': 'test',
         },
       },
@@ -174,7 +174,7 @@ describe(changedFiles, function() {
 
     fixturify.writeSync(tmpPath, {
       'packages': {
-        'my-app-2': {
+        'my-app-1': {
           'changed.txt': 'test',
         },
       },
@@ -190,7 +190,7 @@ describe(changedFiles, function() {
     });
 
     expect(_changedFiles).to.deep.equal([
-      'packages/my-app-2/changed.txt',
+      'packages/my-app-1/changed.txt',
     ]);
   });
 
