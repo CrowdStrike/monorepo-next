@@ -96,7 +96,7 @@ async function buildChangeGraph({
     } else if (sinceBranch) {
       tagCommit = await getCommonAncestor('HEAD', sinceBranch, _package.cwd);
     } else {
-      tagCommit = await getCommitSinceLastRelease(_package, sinceBranch);
+      tagCommit = await getCommitSinceLastRelease(_package);
     }
 
     if (!cachedChangedFiles[_package.cwd]) {
