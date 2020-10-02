@@ -13,6 +13,8 @@ const { gitInit } = require('git-fixtures');
 const { getCurrentCommit } = require('./helpers/git');
 
 describe(buildChangeGraph, function() {
+  this.timeout(5e3);
+
   let tmpPath;
 
   beforeEach(async function() {

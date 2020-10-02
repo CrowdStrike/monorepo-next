@@ -14,6 +14,8 @@ const { matchPath } = require('./helpers/matchers');
 const { gitInit } = require('git-fixtures');
 
 describe(buildReleaseGraph, function() {
+  this.timeout(5e3);
+
   let tmpPath;
 
   beforeEach(async function() {
