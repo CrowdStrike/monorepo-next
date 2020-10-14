@@ -78,7 +78,7 @@
     "git-fixtures": "^2.3.2",
     "mocha": "^8.0.0",
     "mocha-helpers": "^5.1.0",
-    "remark-cli": "^8.0.0",
+    "remark-cli": "^9.0.0",
     "remark-preset-lint-crowdstrike": "^1.0.0",
     "renovate-config-standard": "^2.0.0",
     "sinon": "^9.0.0",
