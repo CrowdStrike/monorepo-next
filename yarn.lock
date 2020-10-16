@@ -1186,10 +1186,10 @@ escape-string-regexp@^1.0.5:
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
   integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
 
-eslint-config-crowdstrike-node@^2.0.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-crowdstrike-node/-/eslint-config-crowdstrike-node-2.2.0.tgz#3ade350b084d213ece219524196b1af288ef62e7"
-  integrity sha512-AYJwsuv/8IjIuyrfFJTSy7k6h+8G4uBktPdSUxS0NV1vW+jo4B+G/M+V/bIEcC0FGW3zq1Msxc15pePZ+MRLfQ==
+eslint-config-crowdstrike-node@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-crowdstrike-node/-/eslint-config-crowdstrike-node-3.0.0.tgz#b7b4c6dc84008f8683c74b33af86a16dcf4d8da0"
+  integrity sha512-yIeeg4BTT3SYsebbbOdg7S5MIN8g0NcexvH9RHxiagmYPKmmVaBB9BITPCT1kuVLi9wq/OGebc9U/ErypXYCDg==
 
 eslint-config-crowdstrike@^3.0.0:
   version "3.0.0"
