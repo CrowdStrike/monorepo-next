@@ -3,7 +3,6 @@
 const { describe, it, setUpCwdReset } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
 const getChangelog = require('../src/get-changelog');
-const { createTmpDir } = require('./helpers/tmp');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
@@ -20,9 +19,7 @@ describe(getChangelog, function() {
   setUpCwdReset();
 
   beforeEach(async function() {
-    tmpPath = await createTmpDir();
-
-    await gitInit({ cwd: tmpPath });
+    tmpPath = await gitInit();
     await execa('git', ['commit', '--allow-empty', '-m', 'first'], { cwd: tmpPath });
   });
 

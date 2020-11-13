@@ -4,7 +4,6 @@ const { describe, it } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
 const path = require('path');
 const attach = require('../src/attach');
-const { createTmpDir } = require('./helpers/tmp');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const { gitInit } = require('git-fixtures');
@@ -58,9 +57,7 @@ describe(attach, function() {
   let tmpPath;
 
   beforeEach(async function() {
-    tmpPath = await createTmpDir();
-
-    await gitInit({ cwd: tmpPath });
+    tmpPath = await gitInit();
   });
 
   it('package-a', async function() {

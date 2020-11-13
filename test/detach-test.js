@@ -4,7 +4,6 @@ const { describe, it } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
 const path = require('path');
 const detach = require('../src/detach');
-const { createTmpDir } = require('./helpers/tmp');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const inquirer = require('inquirer');
@@ -61,11 +60,9 @@ describe(detach, function() {
   let prompt;
 
   beforeEach(async function() {
-    tmpPath = await createTmpDir();
-
     prompt = sinon.stub(inquirer, 'prompt');
 
-    await gitInit({ cwd: tmpPath });
+    tmpPath = await gitInit();
 
     fixturify.writeSync(tmpPath, defaultWorkspace);
   });
