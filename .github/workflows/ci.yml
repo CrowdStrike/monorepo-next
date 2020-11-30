@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+
+    - run: yarn install --frozen-lockfile
+    - run: yarn lint:git
+    - run: yarn lint:md
+    - run: yarn lint:js
+
+  test:
+    needs: lint
+
+    strategy:
+      matrix:
+        os:
+        - ubuntu-latest
+        node:
+        - 10
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+
+    - run: yarn install --frozen-lockfile
+    - run: yarn test
