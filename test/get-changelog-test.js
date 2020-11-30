@@ -9,6 +9,9 @@ const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 const path = require('path');
 const standardVersion = require('standard-version');
+const {
+  getCurrentCommit,
+} = require('./helpers/git');
 
 describe(getChangelog, function() {
   this.timeout(5e3);
@@ -241,6 +244,68 @@ describe(getChangelog, function() {
     expect(changelog).to.include('* foo');
     expect(changelog).to.include('[1.0.0]');
     expect(changelog).to.include('* old-release');
+  });
+
+  it('can generate less than one release', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'package.json': stringifyJson({
+            'name': '@scope/my-app',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
+
+    await standardVersion({
+      path: path.join(tmpPath, 'packages/my-app'),
+      tagPrefix: '@scope/my-app@',
+      firstRelease: true,
+    });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'index.js': 'foo',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: ignored change'], { cwd: tmpPath });
+
+    let commit = await getCurrentCommit(tmpPath);
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'index.js': 'bar',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: included change'], { cwd: tmpPath });
+
+    let changelog = await getChangelog({
+      cwd: path.join(tmpPath, 'packages/my-app'),
+      fromCommit: commit,
+    });
+
+    expect(changelog).to.not.include('* ignored change');
+    expect(changelog).to.include('* included change');
   });
 
   it('works when dep is only changed', async function() {
