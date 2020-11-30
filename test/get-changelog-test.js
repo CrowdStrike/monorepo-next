@@ -234,7 +234,6 @@ describe(getChangelog, function() {
 
     let changelog = await getChangelog({
       cwd: path.join(tmpPath, 'packages/my-app'),
-      tagFormat: 'foo/bar-*',
       releaseCount: 2,
     });
 
