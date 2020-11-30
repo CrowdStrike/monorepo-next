@@ -19,6 +19,7 @@ async function getChangelog({
   shouldInheritGreaterReleaseType = builder['inherit-greater-release-type'].default,
   releaseCount = 1,
   fromCommit,
+  cached,
 }) {
   let { name, version } = require(path.join(cwd, 'package'));
 
@@ -31,6 +32,7 @@ async function getChangelog({
   let packagesWithChanges = await buildChangeGraph({
     workspaceMeta,
     fromCommit,
+    cached,
   });
 
   packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
