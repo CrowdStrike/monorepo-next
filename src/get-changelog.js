@@ -18,6 +18,7 @@ async function getChangelog({
   shouldBumpInRangeDependencies = builder['bump-in-range-dependencies'].default,
   shouldInheritGreaterReleaseType = builder['inherit-greater-release-type'].default,
   releaseCount = 1,
+  fromCommit,
 }) {
   let { name, version } = require(path.join(cwd, 'package'));
 
@@ -27,7 +28,10 @@ async function getChangelog({
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);
 
-  let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+  let packagesWithChanges = await buildChangeGraph({
+    workspaceMeta,
+    fromCommit,
+  });
 
   packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
     return dag.packageName && dag.version;
@@ -59,6 +63,7 @@ async function getChangelog({
     tagPrefix,
     version: newVersion,
     releaseCount,
+    from: fromCommit,
   });
 
   return changelog;
@@ -69,6 +74,7 @@ async function _getChangelog({
   tagPrefix,
   version,
   releaseCount,
+  from,
 }) {
   let changelog = '';
   let context = { version };
@@ -81,7 +87,11 @@ async function _getChangelog({
       path: cwd,
     },
     context,
-    { merges: null, path: cwd },
+    {
+      merges: null,
+      path: cwd,
+      from,
+    },
     null,
     null,
     { cwd },
