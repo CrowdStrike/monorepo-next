@@ -17,7 +17,6 @@ describe(changedFiles, function() {
 
   beforeEach(async function() {
     tmpPath = await gitInit();
-    await execa('git', ['commit', '--allow-empty', '-m', 'first'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
