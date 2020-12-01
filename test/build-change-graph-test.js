@@ -18,7 +18,6 @@ describe(buildChangeGraph, function() {
 
   beforeEach(async function() {
     tmpPath = await gitInit();
-    await execa('git', ['commit', '--allow-empty', '-m', 'first'], { cwd: tmpPath });
   });
 
   it('tracks package changes', async function() {

@@ -30,7 +30,6 @@ describe(_release, function() {
 
   beforeEach(async function() {
     tmpPath = await gitInit();
-    await execa('git', ['commit', '--allow-empty', '-m', 'first'], { cwd: tmpPath });
   });
 
   async function release(options) {
