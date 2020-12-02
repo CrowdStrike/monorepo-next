@@ -5,4 +5,5 @@ module.exports = {
   changedFiles: require('./changed-files'),
   release: require('./release'),
   getChangelog: require('./get-changelog'),
+  getLatestReleaseCommit: require('./get-latest-release-commit'),
 };
