@@ -3,37 +3,14 @@
 const buildDAG = require('./build-dag');
 const execa = require('execa');
 const {
-  getCommitAtTag,
-  getFirstCommit,
   getLinesFromOutput,
   isCommitAncestorOf,
   getCommonAncestor,
+  getCommitSinceLastRelease,
 } = require('./git');
 
 function union(a, b) {
   return [...new Set([...a, ...b])];
-}
-
-async function getCommitSinceLastRelease(_package) {
-  let version = _package.version;
-
-  let matches = version.match(/(.*)-detached.*/);
-
-  if (matches) {
-    version = matches[1];
-  }
-
-  let tag = `${_package.packageName}@${version}`;
-
-  try {
-    return await getCommitAtTag(tag, _package.cwd);
-  } catch (err) {
-    if (err.stderr.includes(`fatal: ambiguous argument '${tag}': unknown revision or path not in the working tree.`)) {
-      return await getFirstCommit(_package.cwd);
-    } else {
-      throw err;
-    }
-  }
 }
 
 async function getPackageChangedFiles(tagCommit, currentCommit, _package) {

@@ -40,12 +40,33 @@ async function getCommonAncestor(commit1, commit2, cwd) {
   return (await execa('git', ['merge-base', commit1, commit2], { cwd })).stdout;
 }
 
+async function getCommitSinceLastRelease(_package) {
+  let { version } = _package;
+
+  let matches = version.match(/(.*)-detached.*/);
+
+  if (matches) {
+    version = matches[1];
+  }
+
+  let tag = `${_package.packageName}@${version}`;
+
+  try {
+    return await getCommitAtTag(tag, _package.cwd);
+  } catch (err) {
+    if (err.stderr.includes(`fatal: ambiguous argument '${tag}': unknown revision or path not in the working tree.`)) {
+      return await getFirstCommit(_package.cwd);
+    } else {
+      throw err;
+    }
+  }
+}
+
 module.exports = {
   getCurrentBranch,
-  getCommitAtTag,
-  getFirstCommit,
   getWorkspaceCwd,
   getLinesFromOutput,
   isCommitAncestorOf,
   getCommonAncestor,
+  getCommitSinceLastRelease,
 };
