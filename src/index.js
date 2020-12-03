@@ -6,4 +6,5 @@ module.exports = {
   release: require('./release'),
   getChangelog: require('./get-changelog'),
   getLatestReleaseCommit: require('./get-latest-release-commit'),
+  getNewVersions: require('./get-new-versions'),
 };
