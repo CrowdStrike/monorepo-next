@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/CrowdStrike/monorepo-next/compare/v2.5.0...v2.6.0) (2020-12-04)
+
+
+### Features
+
+* create `getNewVersions` public api ([13743b6](https://github.com/CrowdStrike/monorepo-next/commit/13743b62b8a15c8e0106e674c2c1d161e183eb58))
+
+
+### Bug Fixes
+
+* **deps:** update dependency execa to v5 ([b6add97](https://github.com/CrowdStrike/monorepo-next/commit/b6add97565195c3b4387356e2f9f58776ee7fd01))
+
 ## [2.5.0](https://github.com/CrowdStrike/monorepo-next/compare/v2.4.0...v2.5.0) (2020-12-02)
 
 
