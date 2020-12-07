@@ -6,6 +6,8 @@ const glob = promisify(require('glob'));
 const semver = require('semver');
 const dependencyTypes = require('./dependency-types');
 const execa = require('execa');
+const fs = require('fs');
+const readFile = promisify(fs.readFile);
 
 function copyDeps(left, right) {
   for (let dependencyType of dependencyTypes) {
@@ -13,7 +15,7 @@ function copyDeps(left, right) {
   }
 }
 
-function firstPass(workspaceMeta, workspacePackageJson, packageDirs) {
+async function firstPass(workspaceMeta, workspacePackageJson, packageDirs) {
   workspaceMeta.packageName = workspacePackageJson.name || 'Workspace Root';
   workspaceMeta.version = workspacePackageJson.version;
   workspaceMeta.isPrivate = true;
@@ -22,7 +24,7 @@ function firstPass(workspaceMeta, workspacePackageJson, packageDirs) {
   for (let packageDir of packageDirs) {
     let packageJson;
     try {
-      packageJson = require(path.join(packageDir, 'package'));
+      packageJson = JSON.parse(await readFile(path.join(packageDir, 'package.json'), 'utf8'));
     } catch (err) {
       // ignore empty folders
       continue;
@@ -81,7 +83,7 @@ async function buildDepGraph(workspaceCwd) {
 
   let _1dFilesArray;
   if (!workspaces) {
-    _1dFilesArray = (await execa.command('pnpm recursive exec -- node -e "console.log(process.cwd())"', { cwd: workspaceCwd })).stdout
+    _1dFilesArray = (await execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], { cwd: workspaceCwd })).stdout
       .split(/\r?\n/)
       .map(workspace => path.relative(workspaceCwd, workspace));
   } else {
@@ -104,7 +106,7 @@ async function buildDepGraph(workspaceCwd) {
     cwd: workspaceCwd,
   };
 
-  firstPass(workspaceMeta, workspacePackageJson, packageDirs);
+  await firstPass(workspaceMeta, workspacePackageJson, packageDirs);
   secondPass(workspaceMeta);
 
   return workspaceMeta;
