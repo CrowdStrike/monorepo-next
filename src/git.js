@@ -2,31 +2,58 @@
 
 const execa = require('execa');
 
+let cache = {};
+
+function getCacheKey(args, cwd) {
+  return [cwd, ...args].join();
+}
+
+async function git(args, {
+  cwd,
+  cached,
+}) {
+  let cacheKey = getCacheKey(args, cwd);
+
+  if (cached && cacheKey in cache) {
+    return cache[cacheKey];
+  }
+
+  let { stdout } = await execa('git', args, {
+    cwd,
+  });
+
+  if (cached) {
+    cache[cacheKey] = stdout;
+  }
+
+  return stdout;
+}
+
 async function getCurrentBranch(cwd) {
-  return (await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd })).stdout;
+  return await git(['rev-parse', '--abbrev-ref', 'HEAD'], { cwd });
 }
 
-async function getCommitAtTag(tag, cwd) {
-  return (await execa('git', ['rev-list', '-1', tag], { cwd })).stdout;
+async function getCommitAtTag(tag, options) {
+  return await git(['rev-list', '-1', tag], options);
 }
 
-async function getFirstCommit(cwd) {
+async function getFirstCommit(options) {
   // https://stackoverflow.com/a/5189296
-  let rootCommits = (await execa('git', ['rev-list', '--max-parents=0', 'HEAD'], { cwd })).stdout;
+  let rootCommits = await git(['rev-list', '--max-parents=0', 'HEAD'], options);
   return getLinesFromOutput(rootCommits)[0];
 }
 
 async function getWorkspaceCwd(cwd) {
-  return (await execa('git', ['rev-parse', '--show-toplevel'], { cwd })).stdout;
+  return await git(['rev-parse', '--show-toplevel'], { cwd });
 }
 
 function getLinesFromOutput(output) {
   return output.split(/\r?\n/).filter(Boolean);
 }
 
-async function isCommitAncestorOf(ancestorCommit, descendantCommit, cwd) {
+async function isCommitAncestorOf(ancestorCommit, descendantCommit, options) {
   try {
-    await execa('git', ['merge-base', '--is-ancestor', ancestorCommit, descendantCommit], { cwd });
+    await git(['merge-base', '--is-ancestor', ancestorCommit, descendantCommit], options);
   } catch (err) {
     if (err.exitCode !== 1) {
       throw err;
@@ -36,11 +63,11 @@ async function isCommitAncestorOf(ancestorCommit, descendantCommit, cwd) {
   return true;
 }
 
-async function getCommonAncestor(commit1, commit2, cwd) {
-  return (await execa('git', ['merge-base', commit1, commit2], { cwd })).stdout;
+async function getCommonAncestor(commit1, commit2, options) {
+  return await git(['merge-base', commit1, commit2], options);
 }
 
-async function getCommitSinceLastRelease(_package) {
+async function getCommitSinceLastRelease(_package, options) {
   let { version } = _package;
 
   let matches = version.match(/(.*)-detached.*/);
@@ -52,10 +79,10 @@ async function getCommitSinceLastRelease(_package) {
   let tag = `${_package.packageName}@${version}`;
 
   try {
-    return await getCommitAtTag(tag, _package.cwd);
+    return await getCommitAtTag(tag, options);
   } catch (err) {
     if (err.stderr.includes(`fatal: ambiguous argument '${tag}': unknown revision or path not in the working tree.`)) {
-      return await getFirstCommit(_package.cwd);
+      return await getFirstCommit(options);
     } else {
       throw err;
     }
@@ -63,6 +90,7 @@ async function getCommitSinceLastRelease(_package) {
 }
 
 module.exports = {
+  git,
   getCurrentBranch,
   getWorkspaceCwd,
   getLinesFromOutput,

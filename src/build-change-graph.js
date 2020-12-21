@@ -1,8 +1,8 @@
 'use strict';
 
 const buildDAG = require('./build-dag');
-const execa = require('execa');
 const {
+  git,
   getLinesFromOutput,
   isCommitAncestorOf,
   getCommonAncestor,
@@ -13,47 +13,29 @@ function union(a, b) {
   return [...new Set([...a, ...b])];
 }
 
-let cachedChangedFiles = {};
-
 async function getPackageChangedFiles({
   tagCommit,
   currentCommit,
   packageCwd,
-  cached,
+  options,
 }) {
-  if (!cachedChangedFiles[packageCwd]) {
-    cachedChangedFiles[packageCwd] = {};
-  }
+  let isAncestor = await isCommitAncestorOf(tagCommit, currentCommit, options);
 
-  let cachedPackageChangedFiles = cachedChangedFiles[packageCwd];
-
-  let changedFiles;
-
-  if (cached && cachedPackageChangedFiles[tagCommit]) {
-    changedFiles = cachedPackageChangedFiles[tagCommit];
+  let olderCommit;
+  let newerCommit;
+  if (isAncestor) {
+    olderCommit = tagCommit;
+    newerCommit = currentCommit;
   } else {
-    let isAncestor = await isCommitAncestorOf(tagCommit, currentCommit, packageCwd);
-
-    let olderCommit;
-    let newerCommit;
-    if (isAncestor) {
-      olderCommit = tagCommit;
-      newerCommit = currentCommit;
-    } else {
-      olderCommit = currentCommit;
-      newerCommit = tagCommit;
-    }
-
-    let committedChanges = (await execa('git', ['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], { cwd: packageCwd })).stdout;
-    committedChanges = getLinesFromOutput(committedChanges);
-    let dirtyChanges = (await execa('git', ['status', '--porcelain', packageCwd], { cwd: packageCwd })).stdout;
-    dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
-    changedFiles = union(committedChanges, dirtyChanges);
+    olderCommit = currentCommit;
+    newerCommit = tagCommit;
   }
 
-  if (cached) {
-    cachedPackageChangedFiles[tagCommit] = changedFiles;
-  }
+  let committedChanges = await git(['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], options);
+  committedChanges = getLinesFromOutput(committedChanges);
+  let dirtyChanges = await git(['status', '--porcelain', packageCwd], options);
+  dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
+  let changedFiles = union(committedChanges, dirtyChanges);
 
   return changedFiles;
 }
@@ -97,17 +79,21 @@ async function buildChangeGraph({
       tagCommit = fromCommit;
     } else if (sinceBranch) {
       if (!sinceBranchCommit) {
-        sinceBranchCommit = await getCommonAncestor('HEAD', sinceBranch, workspaceMeta.cwd);
+        sinceBranchCommit = await getCommonAncestor('HEAD', sinceBranch, {
+          cwd: workspaceMeta.cwd,
+          cached,
+        });
       }
       tagCommit = sinceBranchCommit;
     } else {
-      tagCommit = await getCommitSinceLastRelease(_package);
+      tagCommit = await getCommitSinceLastRelease(_package, {
+        cwd: workspaceMeta.cwd,
+        cached,
+      });
     }
 
-    let changedFiles = await getPackageChangedFiles({
-      tagCommit,
-      currentCommit: 'HEAD',
-      packageCwd: _package.cwd,
+    let changedFiles = await getPackageChangedFiles(tagCommit, 'HEAD', _package.cwd, {
+      cwd: workspaceMeta.cwd,
       cached,
     });
 
