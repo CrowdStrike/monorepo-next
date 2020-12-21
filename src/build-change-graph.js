@@ -62,6 +62,8 @@ async function buildChangeGraph({
 
   let alreadyVisitedFiles = [];
 
+  let sinceBranchCommit;
+
   for (let _package of [...Object.values(workspaceMeta.packages), workspaceMeta]) {
     if (!_package.packageName || !_package.version) {
       continue;
@@ -71,7 +73,10 @@ async function buildChangeGraph({
     if (fromCommit) {
       tagCommit = fromCommit;
     } else if (sinceBranch) {
-      tagCommit = await getCommonAncestor('HEAD', sinceBranch, workspaceMeta.cwd);
+      if (!sinceBranchCommit) {
+        sinceBranchCommit = await getCommonAncestor('HEAD', sinceBranch, workspaceMeta.cwd);
+      }
+      tagCommit = sinceBranchCommit;
     } else {
       tagCommit = await getCommitSinceLastRelease(_package);
     }
