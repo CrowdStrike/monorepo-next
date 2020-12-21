@@ -2,12 +2,29 @@
 
 const execa = require('execa');
 
+let cache = {};
+
+function getCacheKey(args, cwd) {
+  return [cwd, ...args].join();
+}
+
 async function git(args, {
   cwd,
+  cached,
 }) {
+  let cacheKey = getCacheKey(args, cwd);
+
+  if (cached && cacheKey in cache) {
+    return cache[cacheKey];
+  }
+
   let { stdout } = await execa('git', args, {
     cwd,
   });
+
+  if (cached) {
+    cache[cacheKey] = stdout;
+  }
 
   return stdout;
 }

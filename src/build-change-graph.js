@@ -13,47 +13,35 @@ function union(a, b) {
   return [...new Set([...a, ...b])];
 }
 
-let cachedChangedFiles = {};
-
 async function getPackageChangedFiles({
   tagCommit,
   currentCommit,
   packageCwd,
   cached,
 }) {
-  if (!cachedChangedFiles[packageCwd]) {
-    cachedChangedFiles[packageCwd] = {};
-  }
+  let isAncestor = await isCommitAncestorOf(tagCommit, currentCommit, packageCwd);
 
-  let cachedPackageChangedFiles = cachedChangedFiles[packageCwd];
-
-  let changedFiles;
-
-  if (cached && cachedPackageChangedFiles[tagCommit]) {
-    changedFiles = cachedPackageChangedFiles[tagCommit];
+  let olderCommit;
+  let newerCommit;
+  if (isAncestor) {
+    olderCommit = tagCommit;
+    newerCommit = currentCommit;
   } else {
-    let isAncestor = await isCommitAncestorOf(tagCommit, currentCommit, packageCwd);
-
-    let olderCommit;
-    let newerCommit;
-    if (isAncestor) {
-      olderCommit = tagCommit;
-      newerCommit = currentCommit;
-    } else {
-      olderCommit = currentCommit;
-      newerCommit = tagCommit;
-    }
-
-    let committedChanges = await git(['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], { cwd: packageCwd });
-    committedChanges = getLinesFromOutput(committedChanges);
-    let dirtyChanges = await git(['status', '--porcelain', packageCwd], { cwd: packageCwd });
-    dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
-    changedFiles = union(committedChanges, dirtyChanges);
+    olderCommit = currentCommit;
+    newerCommit = tagCommit;
   }
 
-  if (cached) {
-    cachedPackageChangedFiles[tagCommit] = changedFiles;
-  }
+  let committedChanges = await git(['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], {
+    cwd: packageCwd,
+    cached,
+  });
+  committedChanges = getLinesFromOutput(committedChanges);
+  let dirtyChanges = await git(['status', '--porcelain', packageCwd], {
+    cwd: packageCwd,
+    cached,
+  });
+  dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
+  let changedFiles = union(committedChanges, dirtyChanges);
 
   return changedFiles;
 }
