@@ -92,9 +92,14 @@ async function buildChangeGraph({
       });
     }
 
-    let changedFiles = await getPackageChangedFiles(tagCommit, 'HEAD', _package.cwd, {
-      cwd: workspaceMeta.cwd,
-      cached,
+    let changedFiles = await getPackageChangedFiles({
+      tagCommit,
+      currentCommit: 'HEAD',
+      packageCwd: _package.cwd,
+      options: {
+        cwd: workspaceMeta.cwd,
+        cached,
+      },
     });
 
     let newFiles = [];
