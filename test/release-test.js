@@ -952,4 +952,70 @@ describe(_release, function() {
 
     expect(stdout).to.equal(['foo', 'bar'].join(EOL));
   });
+
+  it('ignores prior version bumps and changelogs', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'package.json': stringifyJson({
+            'private': true,
+            'name': 'my-app',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'name': 'my-monorepo',
+        'version': '1.0.0',
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
+
+    await execa('git', ['tag', 'my-app@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', 'my-monorepo@1.0.0'], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'index.js': 'foo',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    await release();
+
+    let tags = await getTagsOnLastCommit(tmpPath);
+
+    expect(tags).to.deep.equal([
+      'my-app@1.0.1',
+    ]);
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'index.js': 'bar',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: bar'], { cwd: tmpPath });
+
+    await release();
+
+    tags = await getTagsOnLastCommit(tmpPath);
+
+    expect(tags).to.deep.equal([
+      'my-app@1.0.2',
+    ]);
+  });
 });
