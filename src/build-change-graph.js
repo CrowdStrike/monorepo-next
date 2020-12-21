@@ -13,24 +13,49 @@ function union(a, b) {
   return [...new Set([...a, ...b])];
 }
 
-async function getPackageChangedFiles(tagCommit, currentCommit, packageCwd) {
-  let isAncestor = await isCommitAncestorOf(tagCommit, currentCommit, packageCwd);
+let cachedChangedFiles = {};
 
-  let olderCommit;
-  let newerCommit;
-  if (isAncestor) {
-    olderCommit = tagCommit;
-    newerCommit = currentCommit;
-  } else {
-    olderCommit = currentCommit;
-    newerCommit = tagCommit;
+async function getPackageChangedFiles({
+  tagCommit,
+  currentCommit,
+  packageCwd,
+  cached,
+}) {
+  if (!cachedChangedFiles[packageCwd]) {
+    cachedChangedFiles[packageCwd] = {};
   }
 
-  let committedChanges = (await execa('git', ['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], { cwd: packageCwd })).stdout;
-  committedChanges = getLinesFromOutput(committedChanges);
-  let dirtyChanges = (await execa('git', ['status', '--porcelain', packageCwd], { cwd: packageCwd })).stdout;
-  dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
-  return union(committedChanges, dirtyChanges);
+  let cachedPackageChangedFiles = cachedChangedFiles[packageCwd];
+
+  let changedFiles;
+
+  if (cached && cachedPackageChangedFiles[tagCommit]) {
+    changedFiles = cachedPackageChangedFiles[tagCommit];
+  } else {
+    let isAncestor = await isCommitAncestorOf(tagCommit, currentCommit, packageCwd);
+
+    let olderCommit;
+    let newerCommit;
+    if (isAncestor) {
+      olderCommit = tagCommit;
+      newerCommit = currentCommit;
+    } else {
+      olderCommit = currentCommit;
+      newerCommit = tagCommit;
+    }
+
+    let committedChanges = (await execa('git', ['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], { cwd: packageCwd })).stdout;
+    committedChanges = getLinesFromOutput(committedChanges);
+    let dirtyChanges = (await execa('git', ['status', '--porcelain', packageCwd], { cwd: packageCwd })).stdout;
+    dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
+    changedFiles = union(committedChanges, dirtyChanges);
+  }
+
+  if (cached) {
+    cachedPackageChangedFiles[tagCommit] = changedFiles;
+  }
+
+  return changedFiles;
 }
 
 function crawlDag(dag, packagesWithChanges) {
@@ -49,8 +74,6 @@ function crawlDag(dag, packagesWithChanges) {
     }
   }
 }
-
-let cachedChangedFiles = {};
 
 async function buildChangeGraph({
   workspaceMeta,
@@ -81,21 +104,12 @@ async function buildChangeGraph({
       tagCommit = await getCommitSinceLastRelease(_package);
     }
 
-    if (!cachedChangedFiles[_package.cwd]) {
-      cachedChangedFiles[_package.cwd] = {};
-    }
-
-    let cachedPackageChangedFiles = cachedChangedFiles[_package.cwd];
-
-    let changedFiles;
-    if (cached && cachedPackageChangedFiles[tagCommit]) {
-      changedFiles = cachedPackageChangedFiles[tagCommit];
-    } else {
-      changedFiles = await getPackageChangedFiles(tagCommit, 'HEAD', _package.cwd);
-    }
-    if (cached) {
-      cachedPackageChangedFiles[tagCommit] = changedFiles;
-    }
+    let changedFiles = await getPackageChangedFiles({
+      tagCommit,
+      currentCommit: 'HEAD',
+      packageCwd: _package.cwd,
+      cached,
+    });
 
     let newFiles = [];
 
