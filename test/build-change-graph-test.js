@@ -337,7 +337,7 @@ describe(buildChangeGraph, function() {
 
     let commit = await getCurrentCommit(tmpPath);
 
-    await execa('git', ['reset', '--hard', oldCommit, '--'], { cwd: tmpPath });
+    await execa('git', ['reset', '--hard', oldCommit], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph(tmpPath);
 
