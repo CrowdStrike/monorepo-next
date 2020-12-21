@@ -33,13 +33,13 @@ async function getCurrentBranch(cwd) {
   return await git(['rev-parse', '--abbrev-ref', 'HEAD'], { cwd });
 }
 
-async function getCommitAtTag(tag, cwd) {
-  return await git(['rev-list', '-1', tag], { cwd });
+async function getCommitAtTag(tag, options) {
+  return await git(['rev-list', '-1', tag], options);
 }
 
-async function getFirstCommit(cwd) {
+async function getFirstCommit(options) {
   // https://stackoverflow.com/a/5189296
-  let rootCommits = await git(['rev-list', '--max-parents=0', 'HEAD'], { cwd });
+  let rootCommits = await git(['rev-list', '--max-parents=0', 'HEAD'], options);
   return getLinesFromOutput(rootCommits)[0];
 }
 
@@ -51,9 +51,9 @@ function getLinesFromOutput(output) {
   return output.split(/\r?\n/).filter(Boolean);
 }
 
-async function isCommitAncestorOf(ancestorCommit, descendantCommit, cwd) {
+async function isCommitAncestorOf(ancestorCommit, descendantCommit, options) {
   try {
-    await git(['merge-base', '--is-ancestor', ancestorCommit, descendantCommit], { cwd });
+    await git(['merge-base', '--is-ancestor', ancestorCommit, descendantCommit], options);
   } catch (err) {
     if (err.exitCode !== 1) {
       throw err;
@@ -63,11 +63,11 @@ async function isCommitAncestorOf(ancestorCommit, descendantCommit, cwd) {
   return true;
 }
 
-async function getCommonAncestor(commit1, commit2, cwd) {
-  return await git(['merge-base', commit1, commit2], { cwd });
+async function getCommonAncestor(commit1, commit2, options) {
+  return await git(['merge-base', commit1, commit2], options);
 }
 
-async function getCommitSinceLastRelease(_package) {
+async function getCommitSinceLastRelease(_package, options) {
   let { version } = _package;
 
   let matches = version.match(/(.*)-detached.*/);
@@ -79,10 +79,10 @@ async function getCommitSinceLastRelease(_package) {
   let tag = `${_package.packageName}@${version}`;
 
   try {
-    return await getCommitAtTag(tag, _package.cwd);
+    return await getCommitAtTag(tag, options);
   } catch (err) {
     if (err.stderr.includes(`fatal: ambiguous argument '${tag}': unknown revision or path not in the working tree.`)) {
-      return await getFirstCommit(_package.cwd);
+      return await getFirstCommit(options);
     } else {
       throw err;
     }

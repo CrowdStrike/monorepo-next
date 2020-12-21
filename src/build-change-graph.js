@@ -17,9 +17,9 @@ async function getPackageChangedFiles({
   tagCommit,
   currentCommit,
   packageCwd,
-  cached,
+  options,
 }) {
-  let isAncestor = await isCommitAncestorOf(tagCommit, currentCommit, packageCwd);
+  let isAncestor = await isCommitAncestorOf(tagCommit, currentCommit, options);
 
   let olderCommit;
   let newerCommit;
@@ -31,15 +31,9 @@ async function getPackageChangedFiles({
     newerCommit = tagCommit;
   }
 
-  let committedChanges = await git(['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], {
-    cwd: packageCwd,
-    cached,
-  });
+  let committedChanges = await git(['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], options);
   committedChanges = getLinesFromOutput(committedChanges);
-  let dirtyChanges = await git(['status', '--porcelain', packageCwd], {
-    cwd: packageCwd,
-    cached,
-  });
+  let dirtyChanges = await git(['status', '--porcelain', packageCwd], options);
   dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
   let changedFiles = union(committedChanges, dirtyChanges);
 
@@ -85,17 +79,21 @@ async function buildChangeGraph({
       tagCommit = fromCommit;
     } else if (sinceBranch) {
       if (!sinceBranchCommit) {
-        sinceBranchCommit = await getCommonAncestor('HEAD', sinceBranch, workspaceMeta.cwd);
+        sinceBranchCommit = await getCommonAncestor('HEAD', sinceBranch, {
+          cwd: workspaceMeta.cwd,
+          cached,
+        });
       }
       tagCommit = sinceBranchCommit;
     } else {
-      tagCommit = await getCommitSinceLastRelease(_package);
+      tagCommit = await getCommitSinceLastRelease(_package, {
+        cwd: workspaceMeta.cwd,
+        cached,
+      });
     }
 
-    let changedFiles = await getPackageChangedFiles({
-      tagCommit,
-      currentCommit: 'HEAD',
-      packageCwd: _package.cwd,
+    let changedFiles = await getPackageChangedFiles(tagCommit, 'HEAD', _package.cwd, {
+      cwd: workspaceMeta.cwd,
       cached,
     });
 

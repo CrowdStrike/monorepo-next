@@ -30,7 +30,7 @@ async function getLatestReleaseCommit({
     packageName,
   });
 
-  let commit = await getCommitSinceLastRelease(_package);
+  let commit = await getCommitSinceLastRelease(_package, { cwd: _package.cwd });
 
   return commit;
 }
