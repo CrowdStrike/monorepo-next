@@ -13,8 +13,8 @@ function union(a, b) {
   return [...new Set([...a, ...b])];
 }
 
-async function getPackageChangedFiles(tagCommit, currentCommit, _package) {
-  let isAncestor = await isCommitAncestorOf(tagCommit, currentCommit, _package.cwd);
+async function getPackageChangedFiles(tagCommit, currentCommit, packageCwd) {
+  let isAncestor = await isCommitAncestorOf(tagCommit, currentCommit, packageCwd);
 
   let olderCommit;
   let newerCommit;
@@ -26,9 +26,9 @@ async function getPackageChangedFiles(tagCommit, currentCommit, _package) {
     newerCommit = tagCommit;
   }
 
-  let committedChanges = (await execa('git', ['diff', '--name-only', `${olderCommit}...${newerCommit}`, _package.cwd], { cwd: _package.cwd })).stdout;
+  let committedChanges = (await execa('git', ['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], { cwd: packageCwd })).stdout;
   committedChanges = getLinesFromOutput(committedChanges);
-  let dirtyChanges = (await execa('git', ['status', '--porcelain', _package.cwd], { cwd: _package.cwd })).stdout;
+  let dirtyChanges = (await execa('git', ['status', '--porcelain', packageCwd], { cwd: packageCwd })).stdout;
   dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
   return union(committedChanges, dirtyChanges);
 }
@@ -91,7 +91,7 @@ async function buildChangeGraph({
     if (cached && cachedPackageChangedFiles[tagCommit]) {
       changedFiles = cachedPackageChangedFiles[tagCommit];
     } else {
-      changedFiles = await getPackageChangedFiles(tagCommit, 'HEAD', _package);
+      changedFiles = await getPackageChangedFiles(tagCommit, 'HEAD', _package.cwd);
     }
     if (cached) {
       cachedPackageChangedFiles[tagCommit] = changedFiles;
