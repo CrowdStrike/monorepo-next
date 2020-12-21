@@ -1,8 +1,8 @@
 'use strict';
 
 const buildDAG = require('./build-dag');
-const execa = require('execa');
 const {
+  git,
   getLinesFromOutput,
   isCommitAncestorOf,
   getCommonAncestor,
@@ -44,9 +44,9 @@ async function getPackageChangedFiles({
       newerCommit = tagCommit;
     }
 
-    let committedChanges = (await execa('git', ['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], { cwd: packageCwd })).stdout;
+    let committedChanges = await git(['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], { cwd: packageCwd });
     committedChanges = getLinesFromOutput(committedChanges);
-    let dirtyChanges = (await execa('git', ['status', '--porcelain', packageCwd], { cwd: packageCwd })).stdout;
+    let dirtyChanges = await git(['status', '--porcelain', packageCwd], { cwd: packageCwd });
     dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
     changedFiles = union(committedChanges, dirtyChanges);
   }
