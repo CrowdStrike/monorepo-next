@@ -71,7 +71,7 @@ async function buildChangeGraph({
     if (fromCommit) {
       tagCommit = fromCommit;
     } else if (sinceBranch) {
-      tagCommit = await getCommonAncestor('HEAD', sinceBranch, _package.cwd);
+      tagCommit = await getCommonAncestor('HEAD', sinceBranch, workspaceMeta.cwd);
     } else {
       tagCommit = await getCommitSinceLastRelease(_package);
     }
