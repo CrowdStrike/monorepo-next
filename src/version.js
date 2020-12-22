@@ -23,10 +23,10 @@ function trackNewVersion({
       newRange = newVersion;
     }
   } else {
-    let left = range.set[0][0].semver;
-    let right = range.set[0][1].semver;
+    let leftMajor = range.set[0][0].semver.major;
+    let rightMajor = range.set[0][1].semver.major;
 
-    if (left.major !== right.major) {
+    if (leftMajor !== rightMajor) {
       newRange = `^${newVersion}`;
     } else {
       newRange = `~${newVersion}`;
