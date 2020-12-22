@@ -61,7 +61,7 @@
     "execa": "^5.0.0",
     "glob": "^7.1.4",
     "inquirer": "^7.0.0",
-    "semver": "7.3.2",
+    "semver": "7.3.3",
     "standard-version": "9.0.0",
     "yargs": "^16.0.0"
   },
