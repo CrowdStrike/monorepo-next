@@ -371,4 +371,64 @@ describe(getChangelog, function() {
     expect(changelog).to.include('[1.0.1]');
     expect(changelog).to.not.include('[1.0.0]');
   });
+
+  it('can generate in reverse order (revert)', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'package.json': stringifyJson({
+            'name': '@scope/my-app',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: old-release'], { cwd: tmpPath });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
+
+    await standardVersion({
+      path: path.join(tmpPath, 'packages/my-app'),
+      tagPrefix: '@scope/my-app@',
+      firstRelease: true,
+    });
+
+    let oldCommit = await getCurrentCommit(tmpPath);
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'index.js': 'foo',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    await standardVersion({
+      path: path.join(tmpPath, 'packages/my-app'),
+      tagPrefix: '@scope/my-app@',
+    });
+
+    let newCommit = await getCurrentCommit(tmpPath);
+
+    await execa('git', ['reset', '--hard', oldCommit], { cwd: tmpPath });
+
+    let changelog = await getChangelog({
+      cwd: path.join(tmpPath, 'packages/my-app'),
+      fromCommit: newCommit,
+    });
+
+    expect(changelog).to.include('[1.0.0]');
+    expect(changelog).to.not.include('[1.0.1]');
+  });
 });
