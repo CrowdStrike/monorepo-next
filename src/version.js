@@ -26,6 +26,11 @@ function trackNewVersion({
     let leftMajor = range.set[0][0].semver.major;
     let rightMajor = range.set[0][1].semver.major;
 
+    // https://github.com/npm/node-semver/pull/321/commits/100f07aa7137b774180f983ea7968361d26c17b6
+    if (leftMajor === undefined) {
+      leftMajor = 0;
+    }
+
     if (leftMajor !== rightMajor) {
       newRange = `^${newVersion}`;
     } else {
