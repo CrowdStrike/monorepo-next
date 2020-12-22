@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.2](https://github.com/CrowdStrike/monorepo-next/compare/v2.7.1...v2.7.2) (2020-12-22)
+
+
+### Bug Fixes
+
+* never use `require` to load `package.json` ([4e467c6](https://github.com/CrowdStrike/monorepo-next/commit/4e467c62764940042538dc04838a0f9dfb91e550))
+
 ### [2.7.1](https://github.com/CrowdStrike/monorepo-next/compare/v2.7.0...v2.7.1) (2020-12-21)
 
 
