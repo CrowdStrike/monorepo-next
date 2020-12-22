@@ -7,6 +7,7 @@ const buildReleaseGraph = require('./build-release-graph');
 const semver = require('semver');
 const {
   getWorkspaceCwd,
+  isCommitAncestorOf,
 } = require('./git');
 const readJson = require('./json').read;
 
@@ -60,6 +61,19 @@ async function getChangelog({
   }
 
   let newVersion = semver.inc(version, releaseTree.releaseType);
+
+  // There is currently no way to get a good/correct changelog out of a revert,
+  // or in other words, a commit range in reverse order.
+  if (fromCommit) {
+    let isAncestor = await isCommitAncestorOf(fromCommit, 'HEAD', {
+      cwd: workspaceCwd,
+      cached,
+    });
+
+    if (!isAncestor) {
+      newVersion = version;
+    }
+  }
 
   let changelog = await _getChangelog({
     cwd,
