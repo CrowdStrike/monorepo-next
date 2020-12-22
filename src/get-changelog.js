@@ -8,6 +8,7 @@ const semver = require('semver');
 const {
   getWorkspaceCwd,
 } = require('./git');
+const readJson = require('./json').read;
 
 const defaults = require('standard-version/defaults');
 
@@ -21,7 +22,7 @@ async function getChangelog({
   fromCommit,
   cached,
 }) {
-  let { name, version } = require(path.join(cwd, 'package'));
+  let { name, version } = await readJson(path.join(cwd, 'package.json'));
 
   let tagPrefix = `${name}@`;
 
