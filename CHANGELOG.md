@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.8.1](https://github.com/CrowdStrike/monorepo-next/compare/v2.8.0...v2.8.1) (2020-12-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency semver to v7.3.4 ([6d1529d](https://github.com/CrowdStrike/monorepo-next/commit/6d1529d3bc968dbacbe7e943664eadb435d8dc90))
+* fix change in semver package ([ad3bfce](https://github.com/CrowdStrike/monorepo-next/commit/ad3bfcec2c6843b4199ef19257c64cbe491192ff))
+* pin semver package ([6526e60](https://github.com/CrowdStrike/monorepo-next/commit/6526e607a8d98445e1132f88d22aae6d301519bb))
+* support the internal semver change ([03e2d48](https://github.com/CrowdStrike/monorepo-next/commit/03e2d48aa4e282e68fd633287590a06f939290c1))
+* update semver to 7.3.2 ([d912dca](https://github.com/CrowdStrike/monorepo-next/commit/d912dcaa9356281cc50d52a29058ac7287e73e2f))
+* update to last non-breaking semver version ([e93f683](https://github.com/CrowdStrike/monorepo-next/commit/e93f683654560c9e4dd382d645a75e2e7e135123))
+
 ## [2.8.0](https://github.com/CrowdStrike/monorepo-next/compare/v2.7.2...v2.8.0) (2020-12-22)
 
 
