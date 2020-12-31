@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.8.2](https://github.com/CrowdStrike/monorepo-next/compare/v2.8.1...v2.8.2) (2020-12-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency conventional-recommended-bump to v6.1.0 ([61e62f2](https://github.com/CrowdStrike/monorepo-next/commit/61e62f20f517c3f687100fe20abe29c29dce7c1e))
+* **deps:** update dependency standard-version to v9.1.0 ([cd15194](https://github.com/CrowdStrike/monorepo-next/commit/cd1519466e6d845f7cfdba421623f73a847a4450))
+
 ### [2.8.1](https://github.com/CrowdStrike/monorepo-next/compare/v2.8.0...v2.8.1) (2020-12-22)
 
 
