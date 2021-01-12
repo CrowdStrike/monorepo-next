@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v2.8.2...v3.0.0) (2021-01-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* The object structure has changed.
+
+### Features
+
+* expose old version and release type in `getNewVersions` ([8a83aeb](https://github.com/CrowdStrike/monorepo-next/commit/8a83aebd1bd6a014c3df62304ab03af1ea4a8a5c))
+
 ### [2.8.2](https://github.com/CrowdStrike/monorepo-next/compare/v2.8.1...v2.8.2) (2020-12-31)
 
 
