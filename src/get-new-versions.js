@@ -49,7 +49,11 @@ async function getNewVersions({
 
     let newVersion = semver.inc(oldVersion, releaseType);
 
-    newVersions[name] = newVersion;
+    newVersions[name] = {
+      oldVersion,
+      releaseType,
+      newVersion,
+    };
   }
 
   return newVersions;

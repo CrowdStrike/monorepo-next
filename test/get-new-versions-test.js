@@ -43,8 +43,16 @@ describe(getNewVersions, function() {
     });
 
     expect(newVersions).to.deep.equal({
-      '@scope/my-app': '1.1.0',
-      'my-monorepo': '2.2.0',
+      '@scope/my-app': {
+        oldVersion: '1.0.0',
+        releaseType: 'minor',
+        newVersion: '1.1.0',
+      },
+      'my-monorepo': {
+        oldVersion: '2.1.1',
+        releaseType: 'minor',
+        newVersion: '2.2.0',
+      },
     });
   });
 
@@ -74,7 +82,11 @@ describe(getNewVersions, function() {
     });
 
     expect(newVersions).to.deep.equal({
-      '@scope/my-app': '1.1.0',
+      '@scope/my-app': {
+        oldVersion: '1.0.0',
+        releaseType: 'minor',
+        newVersion: '1.1.0',
+      },
     });
   });
 });
