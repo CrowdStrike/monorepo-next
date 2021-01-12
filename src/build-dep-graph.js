@@ -67,9 +67,7 @@ function deleteOutOfRangePackages(_package, packages) {
 function secondPass(workspaceMeta) {
   let { packages } = workspaceMeta;
   let packageNames = Object.keys(packages);
-  deleteUnrecognizedDeps(workspaceMeta, packageNames);
-  deleteOutOfRangePackages(workspaceMeta, packages);
-  for (let _package of Object.values(packages)) {
+  for (let _package of [...Object.values(packages), workspaceMeta]) {
     deleteUnrecognizedDeps(_package, packageNames);
     deleteOutOfRangePackages(_package, packages);
   }
