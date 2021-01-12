@@ -25,7 +25,7 @@ describe(buildDAG, function() {
   it('package-a', async function() {
     let _package = '@scope/package-a';
 
-    let dag = buildDAG(await buildDepGraph(cwd), _package);
+    let dag = buildDAG(await buildDepGraph({ workspaceCwd: cwd }), _package);
 
     expect(dag).to.match(this.match({
       isPackage: true,
@@ -107,7 +107,7 @@ describe(buildDAG, function() {
   it('package-b', async function() {
     let _package = '@scope/package-b';
 
-    let dag = buildDAG(await buildDepGraph(cwd), _package);
+    let dag = buildDAG(await buildDepGraph({ workspaceCwd: cwd }), _package);
 
     expect(dag).to.match(this.match({
       isPackage: true,
@@ -191,7 +191,7 @@ describe(buildDAG, function() {
   it('package-c', async function() {
     let _package = '@scope/package-c';
 
-    let dag = buildDAG(await buildDepGraph(cwd), _package);
+    let dag = buildDAG(await buildDepGraph({ workspaceCwd: cwd }), _package);
 
     expect(dag).to.match(this.match({
       isPackage: true,
@@ -227,7 +227,7 @@ describe(buildDAG, function() {
       }),
     });
 
-    let dag = buildDAG(await buildDepGraph(tmpPath), packageName);
+    let dag = buildDAG(await buildDepGraph({ workspaceCwd: tmpPath }), packageName);
 
     expect(dag).to.deep.equal({
       isPackage: true,

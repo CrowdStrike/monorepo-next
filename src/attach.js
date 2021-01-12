@@ -55,7 +55,7 @@ async function attach({
   if (_package) {
     let workspaceCwd = await getWorkspaceCwd(cwd);
 
-    let workspaceMeta = await buildDepGraph(workspaceCwd);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd });
 
     let otherPackageCwd = Object.values(workspaceMeta.packages).find(({ cwd }) => path.basename(cwd) === _package).cwd;
 
@@ -75,7 +75,7 @@ async function attach({
     if (!dag) {
       let workspaceCwd = await getWorkspaceCwd(cwd);
 
-      let workspaceMeta = await buildDepGraph(workspaceCwd);
+      let workspaceMeta = await buildDepGraph({ workspaceCwd });
 
       dag = buildDAG(workspaceMeta, myPackageJson.name);
     }

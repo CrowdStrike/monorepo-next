@@ -22,7 +22,7 @@ describe(buildDepGraph, function() {
   });
 
   it('works', async function() {
-    let workspaceMeta = await buildDepGraph(cwd);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: cwd });
 
     expect(workspaceMeta).to.match(this.match({
       cwd: matchPath('/workspace'),
@@ -87,7 +87,7 @@ describe(buildDepGraph, function() {
       }),
     });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     expect(workspaceMeta).to.deep.equal({
       cwd: tmpPath,

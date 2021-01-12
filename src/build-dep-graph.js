@@ -73,7 +73,9 @@ function secondPass(workspaceMeta) {
   }
 }
 
-async function buildDepGraph(workspaceCwd) {
+async function buildDepGraph({
+  workspaceCwd,
+}) {
   let workspacePackageJson = await readJson(path.join(workspaceCwd, 'package.json'));
 
   let { workspaces } = workspacePackageJson;
