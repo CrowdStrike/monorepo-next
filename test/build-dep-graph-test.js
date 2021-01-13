@@ -74,6 +74,26 @@ describe(buildDepGraph, function() {
     }));
   });
 
+  it('can include unrecognized and out of range deps', async function() {
+    let workspaceMeta = await buildDepGraph({
+      workspaceCwd: cwd,
+      shouldPruneDeps: false,
+    });
+
+    expect(workspaceMeta).to.match(this.match({
+      devDependencies: {
+        '@scope/package-b': '^1.0.0',
+      },
+      packages: {
+        '@scope/package-c': {
+          devDependencies: {
+            '@scope/package-d': '^1.0.0',
+          },
+        },
+      },
+    }));
+  });
+
   it('ignores empty folders', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {
