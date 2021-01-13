@@ -5,6 +5,7 @@ const {
   getCommitSinceLastRelease,
 } = require('./git');
 const buildDepGraph = require('./build-dep-graph');
+const { collectPackages } = buildDepGraph;
 
 async function getPackage({
   cwd,
@@ -14,7 +15,7 @@ async function getPackage({
 
   let workspaceMeta = await buildDepGraph(workspaceCwd);
 
-  let packages = [...Object.values(workspaceMeta.packages), workspaceMeta];
+  let packages = collectPackages(workspaceMeta);
 
   let _package = packages.find(_package => _package.packageName === packageName);
 

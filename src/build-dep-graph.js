@@ -109,4 +109,11 @@ async function buildDepGraph(workspaceCwd) {
   return workspaceMeta;
 }
 
+function collectPackages(workspaceMeta) {
+  return [...Object.values(workspaceMeta.packages), workspaceMeta];
+}
+
 module.exports = buildDepGraph;
+Object.assign(module.exports, {
+  collectPackages,
+});
