@@ -13,20 +13,12 @@ const {
 } = require('./helpers/git');
 const sinon = require('sinon');
 const { EOL } = require('os');
+const readWorkspaces = require('./helpers/read-workspaces');
 
 describe(_release, function() {
   this.timeout(10e3);
 
   let tmpPath;
-
-  function readWorkspaces() {
-    return fixturify.readSync(tmpPath, {
-      ignore: [
-        '.git',
-        '**/CHANGELOG.md',
-      ],
-    });
-  }
 
   beforeEach(async function() {
     tmpPath = await gitInit();
@@ -117,7 +109,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: true,
     });
 
-    let workspace = readWorkspaces();
+    let workspace = readWorkspaces(tmpPath);
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -270,7 +262,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: true,
     });
 
-    let workspace = readWorkspaces();
+    let workspace = readWorkspaces(tmpPath);
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -390,7 +382,7 @@ describe(_release, function() {
 
     await release();
 
-    let workspace = readWorkspaces();
+    let workspace = readWorkspaces(tmpPath);
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -482,7 +474,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: false,
     });
 
-    let workspace = readWorkspaces();
+    let workspace = readWorkspaces(tmpPath);
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -567,7 +559,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: false,
     });
 
-    let workspace = readWorkspaces();
+    let workspace = readWorkspaces(tmpPath);
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -652,7 +644,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: true,
     });
 
-    let workspace = readWorkspaces();
+    let workspace = readWorkspaces(tmpPath);
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -738,7 +730,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: false,
     });
 
-    let workspace = readWorkspaces();
+    let workspace = readWorkspaces(tmpPath);
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -824,7 +816,7 @@ describe(_release, function() {
       shouldInheritGreaterReleaseType: true,
     });
 
-    let workspace = readWorkspaces();
+    let workspace = readWorkspaces(tmpPath);
 
     expect(workspace).to.deep.equal({
       'packages': {
@@ -887,7 +879,7 @@ describe(_release, function() {
 
     await release();
 
-    let workspace = readWorkspaces();
+    let workspace = readWorkspaces(tmpPath);
 
     expect(workspace).to.deep.equal({
       'packages': {
