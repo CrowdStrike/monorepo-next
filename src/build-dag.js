@@ -1,6 +1,7 @@
 'use strict';
 
 const dependencyTypes = require('./dependency-types');
+const { collectPackages } = require('./build-dep-graph');
 
 function doesDependOnPackage(_package, packageName) {
   for (let dependencyType of dependencyTypes) {
@@ -16,7 +17,7 @@ function doesDependOnPackage(_package, packageName) {
 function thirdPass(workspaceMeta, dag) {
   let currentPackageName = dag.packageName;
 
-  for (let _package of [...Object.values(workspaceMeta.packages), workspaceMeta]) {
+  for (let _package of collectPackages(workspaceMeta)) {
     if (_package.packageName === currentPackageName) {
       continue;
     }

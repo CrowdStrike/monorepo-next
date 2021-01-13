@@ -8,6 +8,7 @@ const {
   getCommonAncestor,
   getCommitSinceLastRelease,
 } = require('./git');
+const { collectPackages } = require('./build-dep-graph');
 
 function union(a, b) {
   return [...new Set([...a, ...b])];
@@ -69,7 +70,7 @@ async function buildChangeGraph({
 
   let sinceBranchCommit;
 
-  for (let _package of [...Object.values(workspaceMeta.packages), workspaceMeta]) {
+  for (let _package of collectPackages(workspaceMeta)) {
     if (!_package.packageName || !_package.version) {
       continue;
     }
