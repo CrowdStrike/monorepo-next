@@ -1,21 +1,19 @@
 'use strict';
 
-const { describe, it } = require('./helpers/mocha');
+const { describe, it, setUpSinon } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
 const { trackNewVersion } = require('../src/version');
-const sinon = require('sinon');
 
 const name = 'test-package';
 
 describe(function() {
+  // eslint-disable-next-line mocha/no-setup-in-describe
+  setUpSinon();
+
   let warn;
 
   beforeEach(function() {
-    warn = sinon.stub(console, 'warn');
-  });
-
-  afterEach(function() {
-    sinon.restore();
+    warn = this.stub(console, 'warn');
   });
 
   describe(trackNewVersion, function() {

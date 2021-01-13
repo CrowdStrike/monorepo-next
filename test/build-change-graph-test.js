@@ -1,18 +1,20 @@
 'use strict';
 
-const { describe, it } = require('./helpers/mocha');
+const { describe, it, setUpSinon } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
 const buildDepGraph = require('../src/build-dep-graph');
 const buildChangeGraph = require('../src/build-change-graph');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
-const sinon = require('sinon');
 const { gitInit } = require('git-fixtures');
 const { getCurrentCommit } = require('./helpers/git');
 
 describe(buildChangeGraph, function() {
   this.timeout(5e3);
+
+  // eslint-disable-next-line mocha/no-setup-in-describe
+  setUpSinon();
 
   let tmpPath;
 
@@ -56,12 +58,12 @@ describe(buildChangeGraph, function() {
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/package-a/index.js',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: '@scope/package-a',
         }),
       },
@@ -131,12 +133,12 @@ describe(buildChangeGraph, function() {
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/package-a/index.js',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: '@scope/package-a',
         }),
       },
@@ -169,12 +171,12 @@ describe(buildChangeGraph, function() {
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'index.js',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: 'workspace-root',
         }),
       },
@@ -237,13 +239,13 @@ describe(buildChangeGraph, function() {
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/package-a/index.js',
           'packages/package-a/package.json',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: '@scope/package-a',
         }),
       },
@@ -290,12 +292,12 @@ describe(buildChangeGraph, function() {
       fromCommit: commit,
     });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/package-a/index.js',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: '@scope/package-a',
         }),
       },
@@ -346,12 +348,12 @@ describe(buildChangeGraph, function() {
       fromCommit: commit,
     });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/package-a/index.js',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: '@scope/package-a',
         }),
       },
@@ -395,13 +397,13 @@ describe(buildChangeGraph, function() {
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/package-a/index.js',
           'packages/package-a/package.json',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: '@scope/package-a',
         }),
       },
@@ -412,12 +414,12 @@ describe(buildChangeGraph, function() {
       sinceBranch: 'master',
     });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/package-a/index.js',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: '@scope/package-a',
         }),
       },
@@ -472,12 +474,12 @@ describe(buildChangeGraph, function() {
       cached: true,
     });
 
-    expect(cachedPackagesWithChanges).to.match(sinon.match([
+    expect(cachedPackagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/package-a/changed.txt',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: '@scope/package-a',
         }),
       },
@@ -501,12 +503,12 @@ describe(buildChangeGraph, function() {
       cached: true,
     });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/package-a/changed.txt',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: '@scope/package-a',
         }),
       },
@@ -518,12 +520,12 @@ describe(buildChangeGraph, function() {
       cached: true,
     });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/my-app-1/changed.txt',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: 'my-app-1',
         }),
       },
@@ -533,12 +535,12 @@ describe(buildChangeGraph, function() {
       workspaceMeta,
     });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/my-app-1/changed.txt',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: 'my-app-1',
         }),
       },
@@ -546,7 +548,7 @@ describe(buildChangeGraph, function() {
         changedFiles: [
           'packages/package-a/changed.txt',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: '@scope/package-a',
         }),
       },
@@ -602,12 +604,12 @@ describe(buildChangeGraph, function() {
       cached: true,
     });
 
-    expect(cachedPackagesWithChanges).to.match(sinon.match([
+    expect(cachedPackagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/package-a/changed.txt',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: '@scope/package-a',
         }),
       },
@@ -632,12 +634,12 @@ describe(buildChangeGraph, function() {
       cached: true,
     });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/my-app-1/changed.txt',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: 'my-app-1',
         }),
       },
@@ -649,12 +651,12 @@ describe(buildChangeGraph, function() {
       cached: true,
     });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/package-a/changed.txt',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: '@scope/package-a',
         }),
       },
@@ -665,13 +667,13 @@ describe(buildChangeGraph, function() {
       cached: true,
     });
 
-    expect(packagesWithChanges).to.match(sinon.match([
+    expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
           'packages/my-app-1/changed.txt',
           'packages/my-app-1/package.json',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: 'my-app-1',
         }),
       },
@@ -680,7 +682,7 @@ describe(buildChangeGraph, function() {
           'packages/package-a/changed.txt',
           'packages/package-a/package.json',
         ],
-        dag: sinon.match({
+        dag: this.match({
           packageName: '@scope/package-a',
         }),
       },

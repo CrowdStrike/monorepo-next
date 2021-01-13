@@ -1,13 +1,12 @@
 'use strict';
 
-const { describe, it } = require('./helpers/mocha');
+const { describe, it, setUpSinon } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
 const path = require('path');
 const detach = require('../src/detach');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const inquirer = require('inquirer');
-const sinon = require('sinon');
 const { gitInit } = require('git-fixtures');
 
 const defaultWorkspace = {
@@ -56,25 +55,24 @@ const defaultWorkspace = {
 };
 
 describe(detach, function() {
+  // eslint-disable-next-line mocha/no-setup-in-describe
+  setUpSinon();
+
   let tmpPath;
   let prompt;
 
   beforeEach(async function() {
-    prompt = sinon.stub(inquirer, 'prompt');
+    prompt = this.stub(inquirer, 'prompt');
 
     tmpPath = await gitInit();
 
     fixturify.writeSync(tmpPath, defaultWorkspace);
   });
 
-  afterEach(function() {
-    sinon.restore();
-  });
-
   it('package-a', async function() {
     let cwd = path.resolve(tmpPath, './packages/package-a');
 
-    prompt.withArgs([sinon.match({
+    prompt.withArgs([this.match({
       choices: [
         '@scope/package-b',
         '@scope/package-c',
@@ -142,7 +140,7 @@ describe(detach, function() {
   it('package-b', async function() {
     let cwd = path.resolve(tmpPath, './packages/package-b');
 
-    prompt.withArgs([sinon.match({
+    prompt.withArgs([this.match({
       choices: [
         '@scope/package-a',
         '@scope/package-c',

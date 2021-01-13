@@ -1,18 +1,20 @@
 'use strict';
 
-const { describe, it } = require('./helpers/mocha');
+const { describe, it, setUpSinon } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
 const path = require('path');
 const buildDepGraph = require('../src/build-dep-graph');
 const { createTmpDir } = require('./helpers/tmp');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const sinon = require('sinon');
 const { matchPath } = require('./helpers/matchers');
 
 let cwd = path.resolve(__dirname, './fixtures/workspace');
 
 describe(buildDepGraph, function() {
+  // eslint-disable-next-line mocha/no-setup-in-describe
+  setUpSinon();
+
   let tmpPath;
 
   beforeEach(async function() {
@@ -22,7 +24,7 @@ describe(buildDepGraph, function() {
   it('works', async function() {
     let workspaceMeta = await buildDepGraph(cwd);
 
-    expect(workspaceMeta).to.match(sinon.match({
+    expect(workspaceMeta).to.match(this.match({
       cwd: matchPath('/workspace'),
       packageName: 'Workspace Root',
       version: undefined,
