@@ -1,9 +1,8 @@
 'use strict';
 
-const { describe, it } = require('./helpers/mocha');
+const { describe, it, setUpSinon } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
 const path = require('path');
-const sinon = require('sinon');
 const buildDepGraph = require('../src/build-dep-graph');
 const buildDAG = require('../src/build-dag');
 const { matchPath } = require('./helpers/matchers');
@@ -16,6 +15,9 @@ let cwd = path.resolve(__dirname, './fixtures/workspace');
 describe(buildDAG, function() {
   let tmpPath;
 
+  // eslint-disable-next-line mocha/no-setup-in-describe
+  setUpSinon();
+
   beforeEach(async function() {
     tmpPath = await createTmpDir();
   });
@@ -25,7 +27,7 @@ describe(buildDAG, function() {
 
     let dag = buildDAG(await buildDepGraph(cwd), _package);
 
-    expect(dag).to.match(sinon.match({
+    expect(dag).to.match(this.match({
       isPackage: true,
       cwd: matchPath('/workspace/packages/package-a'),
       packageName: '@scope/package-a',
@@ -107,7 +109,7 @@ describe(buildDAG, function() {
 
     let dag = buildDAG(await buildDepGraph(cwd), _package);
 
-    expect(dag).to.match(sinon.match({
+    expect(dag).to.match(this.match({
       isPackage: true,
       cwd: matchPath('/workspace/packages/package-b'),
       packageName: '@scope/package-b',
@@ -191,7 +193,7 @@ describe(buildDAG, function() {
 
     let dag = buildDAG(await buildDepGraph(cwd), _package);
 
-    expect(dag).to.match(sinon.match({
+    expect(dag).to.match(this.match({
       isPackage: true,
       cwd: matchPath('/workspace/packages/package-c'),
       packageName: '@scope/package-c',

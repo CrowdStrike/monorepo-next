@@ -1,6 +1,6 @@
 'use strict';
 
-const { describe, it } = require('./helpers/mocha');
+const { describe, it, setUpSinon } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
 const buildDepGraph = require('../src/build-dep-graph');
 const buildChangeGraph = require('../src/build-change-graph');
@@ -8,12 +8,14 @@ const buildReleaseGraph = require('../src/build-release-graph');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
-const sinon = require('sinon');
 const { matchPath } = require('./helpers/matchers');
 const { gitInit } = require('git-fixtures');
 
 describe(buildReleaseGraph, function() {
   this.timeout(5e3);
+
+  // eslint-disable-next-line mocha/no-setup-in-describe
+  setUpSinon();
 
   let tmpPath;
 
@@ -78,7 +80,7 @@ describe(buildReleaseGraph, function() {
       shouldInheritGreaterReleaseType,
     });
 
-    expect(releaseTrees).to.match(sinon.match([
+    expect(releaseTrees).to.match(this.match([
       {
         name: '@scope/package-a',
         cwd: matchPath('/packages/package-a'),
@@ -166,7 +168,7 @@ describe(buildReleaseGraph, function() {
       shouldInheritGreaterReleaseType,
     });
 
-    expect(releaseTrees).to.match(sinon.match([
+    expect(releaseTrees).to.match(this.match([
       {
         name: '@scope/package-a',
         cwd: matchPath('/packages/package-a'),
@@ -239,7 +241,7 @@ describe(buildReleaseGraph, function() {
       shouldInheritGreaterReleaseType,
     });
 
-    expect(releaseTrees).to.match(sinon.match([
+    expect(releaseTrees).to.match(this.match([
       {
         name: '@scope/package-a',
         cwd: matchPath('/packages/package-a'),
@@ -327,7 +329,7 @@ describe(buildReleaseGraph, function() {
       shouldInheritGreaterReleaseType,
     });
 
-    expect(releaseTrees).to.match(sinon.match([
+    expect(releaseTrees).to.match(this.match([
       {
         name: '@scope/package-a',
         cwd: matchPath('/packages/package-a'),
@@ -415,7 +417,7 @@ describe(buildReleaseGraph, function() {
       shouldInheritGreaterReleaseType,
     });
 
-    expect(releaseTrees).to.match(sinon.match([
+    expect(releaseTrees).to.match(this.match([
       {
         name: '@scope/package-a',
         cwd: matchPath('/packages/package-a'),
@@ -488,7 +490,7 @@ describe(buildReleaseGraph, function() {
       shouldInheritGreaterReleaseType,
     });
 
-    expect(releaseTrees).to.match(sinon.match([
+    expect(releaseTrees).to.match(this.match([
       {
         name: '@scope/package-a',
         cwd: matchPath('/packages/package-a'),
@@ -577,7 +579,7 @@ describe(buildReleaseGraph, function() {
       shouldInheritGreaterReleaseType,
     });
 
-    expect(releaseTrees).to.match(sinon.match([
+    expect(releaseTrees).to.match(this.match([
       {
         name: '@scope/package-a',
         cwd: matchPath('/packages/package-a'),
@@ -665,7 +667,7 @@ describe(buildReleaseGraph, function() {
       shouldInheritGreaterReleaseType,
     });
 
-    expect(releaseTrees).to.match(sinon.match([
+    expect(releaseTrees).to.match(this.match([
       {
         name: '@scope/package-b',
         cwd: matchPath('/packages/package-b'),
@@ -738,7 +740,7 @@ describe(buildReleaseGraph, function() {
       shouldInheritGreaterReleaseType,
     });
 
-    expect(releaseTrees).to.match(sinon.match([
+    expect(releaseTrees).to.match(this.match([
       {
         name: '@scope/package-a',
         cwd: matchPath('/packages/package-a'),
@@ -837,7 +839,7 @@ describe(buildReleaseGraph, function() {
       shouldInheritGreaterReleaseType,
     });
 
-    expect(releaseTrees).to.match(sinon.match([
+    expect(releaseTrees).to.match(this.match([
       {
         name: '@scope/package-a',
         cwd: matchPath('/packages/package-a'),

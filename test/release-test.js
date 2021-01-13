@@ -1,6 +1,6 @@
 'use strict';
 
-const { describe, it } = require('./helpers/mocha');
+const { describe, it, setUpSinon } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
 const _release = require('../src/release');
 const fixturify = require('fixturify');
@@ -11,11 +11,13 @@ const {
   getLastCommitMessage,
   getTagsOnLastCommit,
 } = require('./helpers/git');
-const sinon = require('sinon');
 const { EOL } = require('os');
 
 describe(_release, function() {
   this.timeout(10e3);
+
+  // eslint-disable-next-line mocha/no-setup-in-describe
+  setUpSinon();
 
   let tmpPath;
 
@@ -938,7 +940,7 @@ describe(_release, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let spy = sinon.spy(execa, 'command');
+    let spy = this.spy(execa, 'command');
 
     let precommit = 'echo foo&& echo bar';
 
