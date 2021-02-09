@@ -13,7 +13,7 @@ async function getPackage({
 }) {
   let workspaceCwd = await getWorkspaceCwd(cwd);
 
-  let workspaceMeta = await buildDepGraph(workspaceCwd);
+  let workspaceMeta = await buildDepGraph({ workspaceCwd });
 
   let packages = collectPackages(workspaceMeta);
 

@@ -36,7 +36,7 @@ async function detach({
 
   let workspaceCwd = await getWorkspaceCwd(cwd);
 
-  let workspaceMeta = await buildDepGraph(workspaceCwd);
+  let workspaceMeta = await buildDepGraph({ workspaceCwd });
 
   if (_package) {
     let otherPackageCwd = Object.values(workspaceMeta.packages).find(({ cwd }) => path.basename(cwd) === _package).cwd;

@@ -23,7 +23,7 @@ async function changed({
 } = {}) {
   let workspaceCwd = await getWorkspaceCwd(cwd);
 
-  let workspaceMeta = await buildDepGraph(workspaceCwd);
+  let workspaceMeta = await buildDepGraph({ workspaceCwd });
 
   let packagesWithChanges = await buildChangeGraph({
     workspaceMeta,

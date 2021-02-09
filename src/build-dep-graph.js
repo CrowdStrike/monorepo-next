@@ -73,7 +73,10 @@ function secondPass(workspaceMeta) {
   }
 }
 
-async function buildDepGraph(workspaceCwd) {
+async function buildDepGraph({
+  workspaceCwd,
+  shouldPruneDeps = true,
+}) {
   let workspacePackageJson = await readJson(path.join(workspaceCwd, 'package.json'));
 
   let { workspaces } = workspacePackageJson;
@@ -104,7 +107,9 @@ async function buildDepGraph(workspaceCwd) {
   };
 
   await firstPass(workspaceMeta, workspacePackageJson, packageDirs);
-  secondPass(workspaceMeta);
+  if (shouldPruneDeps) {
+    secondPass(workspaceMeta);
+  }
 
   return workspaceMeta;
 }

@@ -63,7 +63,7 @@ describe(buildReleaseGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -151,7 +151,7 @@ describe(buildReleaseGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -224,7 +224,7 @@ describe(buildReleaseGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -312,7 +312,7 @@ describe(buildReleaseGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -400,7 +400,7 @@ describe(buildReleaseGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -473,7 +473,7 @@ describe(buildReleaseGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -562,7 +562,7 @@ describe(buildReleaseGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -650,7 +650,7 @@ describe(buildReleaseGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -723,7 +723,7 @@ describe(buildReleaseGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo\n\nBREAKING CHANGE: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -822,7 +822,7 @@ describe(buildReleaseGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 

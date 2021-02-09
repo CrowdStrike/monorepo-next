@@ -54,7 +54,7 @@ describe(buildChangeGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -93,7 +93,7 @@ describe(buildChangeGraph, function() {
 
     await execa('git', ['commit', '--allow-empty', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -129,7 +129,7 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -167,7 +167,7 @@ describe(buildChangeGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -197,7 +197,7 @@ describe(buildChangeGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -235,7 +235,7 @@ describe(buildChangeGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -285,7 +285,7 @@ describe(buildChangeGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({
       workspaceMeta,
@@ -341,7 +341,7 @@ describe(buildChangeGraph, function() {
 
     await execa('git', ['reset', '--hard', oldCommit], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({
       workspaceMeta,
@@ -393,7 +393,7 @@ describe(buildChangeGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
@@ -467,7 +467,7 @@ describe(buildChangeGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let cachedPackagesWithChanges = await buildChangeGraph({
       workspaceMeta,
@@ -596,7 +596,7 @@ describe(buildChangeGraph, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
-    let workspaceMeta = await buildDepGraph(tmpPath);
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
     let cachedPackagesWithChanges = await buildChangeGraph({
       workspaceMeta,
