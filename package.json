@@ -34,7 +34,7 @@
     "lint:js": "eslint . --ext js,json",
     "lint:md": "remark -f README.md",
     "start": "next",
-    "release": "standard-version",
+    "release": "standard-version --commit-all",
     "test": "mocha --recursive"
   },
   "standard-version": {
