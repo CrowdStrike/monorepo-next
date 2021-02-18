@@ -33,12 +33,14 @@
     "lint:git": "commitlint",
     "lint:js": "eslint . --ext js,json",
     "lint:md": "remark -f README.md",
-    "start": "./bin/index.js",
+    "start": "next",
     "release": "standard-version",
     "test": "mocha --recursive"
   },
   "standard-version": {
     "scripts": {
+      "prerelease": "yargs-help-output README.md --npm-script-name start",
+      "precommit": "git add README.md",
       "posttag": "git push --follow-tags --atomic"
     }
   },
@@ -78,11 +80,13 @@
     "git-fixtures": "^3.0.0",
     "mocha": "^8.0.0",
     "mocha-helpers": "^5.1.0",
+    "monorepo-next": "file:",
     "remark-cli": "^9.0.0",
     "remark-preset-lint-crowdstrike": "^2.0.0",
     "renovate-config-standard": "^2.0.0",
     "sinon": "^9.0.0",
     "sinon-chai": "^3.3.0",
-    "tmp": "0.2.1"
+    "tmp": "0.2.1",
+    "yargs-help-output": "^1.0.4"
   }
 }

@@ -2262,6 +2262,18 @@ modify-values@^1.0.0:
   resolved "https://registry.npmjs.org/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
 
+"monorepo-next@file:.":
+  version "3.0.1"
+  dependencies:
+    conventional-changelog "3.1.24"
+    conventional-recommended-bump "6.1.0"
+    execa "^5.0.0"
+    glob "^7.1.4"
+    inquirer "^7.0.0"
+    semver "7.3.4"
+    standard-version "9.1.1"
+    yargs "^16.0.0"
+
 ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
@@ -4021,6 +4033,14 @@ yaml@^1.10.0:
   resolved "https://registry.npmjs.org/yaml/-/yaml-1.10.0.tgz#3b593add944876077d4d683fee01081bd9fff31e"
   integrity sha512-yr2icI4glYaNG+KWONODapy2/jDdMSDnrONSjblABjD9B4Z5LgiircSt8m8sRZFNi08kG9Sm0uSHtEmP3zaEGg==
 
+yargs-help-output@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/yargs-help-output/-/yargs-help-output-1.0.4.tgz#1c42db4f9159448c5065c986ad9aed0d3c627936"
+  integrity sha512-+8dwg1qslrIJSPAUpsDOg8ijJS8eExAoP76uyxBvBRK99vO4cuzmZoz14BpU2nGTyJWtSDyz9RQ4uUUpgPu1oA==
+  dependencies:
+    execa "^5.0.0"
+    yargs "^16.2.0"
+
 yargs-parser@13.1.2, yargs-parser@^13.1.2:
   version "13.1.2"
   resolved "https://registry.npmjs.org/yargs-parser/-/yargs-parser-13.1.2.tgz#130f09702ebaeef2650d54ce6e3e5706f7a4fb38"
@@ -4060,7 +4080,7 @@ yargs@13.3.2:
     y18n "^4.0.0"
     yargs-parser "^13.1.2"
 
-yargs@^16.0.0:
+yargs@^16.0.0, yargs@^16.2.0:
   version "16.2.0"
   resolved "https://registry.npmjs.org/yargs/-/yargs-16.2.0.tgz#1c82bf0f6b6a66eafce7ef30e376f49a12477f66"
   integrity sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==
