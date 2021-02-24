@@ -68,7 +68,7 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "@crowdstrike/commitlint": "^2.0.0",
+    "@crowdstrike/commitlint": "^3.0.0",
     "chai": "^4.2.0",
     "eslint": "^7.0.0",
     "eslint-config-crowdstrike": "^3.0.0",
