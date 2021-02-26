@@ -131,7 +131,7 @@ async function secondPass({
   }
 }
 
-async function thirdPass({
+function thirdPass({
   releaseTrees,
   packagesWithChanges,
   shouldInheritGreaterReleaseType,
@@ -141,7 +141,7 @@ async function thirdPass({
       continue;
     }
 
-    await (async function crawlDag({
+    (function crawlDag({
       dag,
       parent,
     }) {
@@ -166,7 +166,7 @@ async function thirdPass({
           continue;
         }
 
-        await crawlDag({
+        crawlDag({
           dag: node,
           parent: current,
         });
@@ -177,7 +177,7 @@ async function thirdPass({
   }
 }
 
-async function fourthPass({
+function fourthPass({
   releaseTrees,
   packagesWithChanges,
   shouldBumpInRangeDependencies,
@@ -187,7 +187,7 @@ async function fourthPass({
       continue;
     }
 
-    await (async function crawlDag({
+    (function crawlDag({
       dag,
       parent,
     }) {
@@ -231,7 +231,7 @@ async function fourthPass({
           continue;
         }
 
-        await crawlDag({
+        crawlDag({
           dag: node,
           parent: current,
         });
@@ -265,7 +265,7 @@ async function buildReleaseGraph({
 
   // packages without changes, but need to be analyzed because of options
 
-  await thirdPass({
+  thirdPass({
     releaseTrees,
     packagesWithChanges,
     shouldInheritGreaterReleaseType,
@@ -273,7 +273,7 @@ async function buildReleaseGraph({
 
   // dependents have now inherited release type
 
-  await fourthPass({
+  fourthPass({
     releaseTrees,
     packagesWithChanges,
     shouldBumpInRangeDependencies,
