@@ -885,4 +885,64 @@ describe(buildReleaseGraph, function() {
       },
     ]));
   });
+
+  it('ignores child package changes in root package', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'name': 'root',
+        'version': '1.0.0',
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', 'root@1.0.0'], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'index.js': 'console.log()',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+    packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
+      return dag.packageName && dag.version;
+    });
+
+    let shouldBumpInRangeDependencies = true;
+    let shouldInheritGreaterReleaseType = false;
+
+    let releaseTrees = await buildReleaseGraph({
+      packagesWithChanges,
+      shouldBumpInRangeDependencies,
+      shouldInheritGreaterReleaseType,
+    });
+
+    expect(releaseTrees).to.match(this.match(releaseTrees => {
+      return !releaseTrees.some(tree => {
+        return tree.name === 'root';
+      });
+    }));
+  });
 });
