@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v3.0.3...v3.1.0) (2021-03-15)
+
+
+### Features
+
+* store `packagesGlobs` on `workspaceMeta` ([239c430](https://github.com/CrowdStrike/monorepo-next/commit/239c4307a4225f85eb8c37674ad30b2fd3abd9cb))
+
+
+### Bug Fixes
+
+* ignores old child package changes in root package ([959644f](https://github.com/CrowdStrike/monorepo-next/commit/959644f988cde83f17c33f4f662d1468826202aa))
+* remove unnecessary async ([cf0ed32](https://github.com/CrowdStrike/monorepo-next/commit/cf0ed32e1c9ef24ff938559f40cbd9370ca7e698))
+
 ### [3.0.3](https://github.com/CrowdStrike/monorepo-next/compare/v3.0.2...v3.0.3) (2021-02-18)
 
 ### [3.0.2](https://github.com/CrowdStrike/monorepo-next/compare/v3.0.1...v3.0.2) (2021-02-18)
