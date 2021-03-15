@@ -946,4 +946,76 @@ describe(_release, function() {
 
     expect(stdout).to.equal(['foo', 'bar'].join(EOL));
   });
+
+  it('ignores child package changes in root package', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'name': 'root',
+        'version': '1.0.0',
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', 'root@1.0.0'], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'index.js': 'console.log()',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+    await release({
+      shouldInheritGreaterReleaseType: true,
+    });
+
+    let workspace = readWorkspaces(tmpPath);
+
+    expect(workspace).to.deep.equal({
+      'packages': {
+        'package-a': {
+          'index.js': 'console.log()',
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.1.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'name': 'root',
+        'version': '1.0.0',
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    let lastCommitMessage = await getLastCommitMessage(tmpPath);
+
+    expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0');
+
+    let tags = await getTagsOnLastCommit(tmpPath);
+
+    expect(tags).to.deep.equal([
+      '@scope/package-a@1.1.0',
+    ]);
+  });
 });
