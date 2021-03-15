@@ -29,6 +29,9 @@ describe(buildDepGraph, function() {
       packageName: 'Workspace Root',
       version: undefined,
       isPrivate: true,
+      packagesGlobs: [
+        'packages/*',
+      ],
       dependencies: {},
       devDependencies: {
         '@scope/package-a': '^1.0.0',
@@ -114,6 +117,9 @@ describe(buildDepGraph, function() {
       packageName: 'Workspace Root',
       version: undefined,
       isPrivate: true,
+      packagesGlobs: [
+        'packages/*',
+      ],
       dependencies: {},
       devDependencies: {},
       optionalDependencies: {},

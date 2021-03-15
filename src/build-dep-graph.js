@@ -81,13 +81,17 @@ async function buildDepGraph({
 
   let { workspaces } = workspacePackageJson;
 
+  let packagesGlobs;
+
   let _1dFilesArray;
   if (!workspaces) {
     _1dFilesArray = (await execa.command('pnpm recursive exec -- node -e "console.log(process.cwd())"', { cwd: workspaceCwd })).stdout
       .split(/\r?\n/)
       .map(workspace => path.relative(workspaceCwd, workspace));
+
+    packagesGlobs = [];
   } else {
-    let packagesGlobs = workspaces.packages || workspaces;
+    packagesGlobs = workspaces.packages || workspaces;
 
     let _2dFilesArray = await Promise.all(packagesGlobs.map(packagesGlob => {
       return glob(packagesGlob, {
@@ -104,6 +108,7 @@ async function buildDepGraph({
 
   let workspaceMeta = {
     cwd: workspaceCwd,
+    packagesGlobs,
   };
 
   await firstPass(workspaceMeta, workspacePackageJson, packageDirs);
