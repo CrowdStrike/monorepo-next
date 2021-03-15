@@ -87,9 +87,9 @@ async function buildDepGraph({
       .split(/\r?\n/)
       .map(workspace => path.relative(workspaceCwd, workspace));
   } else {
-    let packages = workspaces.packages || workspaces;
+    let packagesGlobs = workspaces.packages || workspaces;
 
-    let _2dFilesArray = await Promise.all(packages.map(packagesGlob => {
+    let _2dFilesArray = await Promise.all(packagesGlobs.map(packagesGlob => {
       return glob(packagesGlob, {
         cwd: workspaceCwd,
       });
