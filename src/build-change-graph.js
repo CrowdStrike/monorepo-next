@@ -9,6 +9,7 @@ const {
   getCommitSinceLastRelease,
 } = require('./git');
 const { collectPackages } = require('./build-dep-graph');
+const minimatch = require('minimatch');
 
 function union(a, b) {
   return [...new Set([...a, ...b])];
@@ -66,8 +67,6 @@ async function buildChangeGraph({
 }) {
   let packagesWithChanges = {};
 
-  let alreadyVisitedFiles = [];
-
   let sinceBranchCommit;
 
   for (let _package of collectPackages(workspaceMeta)) {
@@ -103,16 +102,15 @@ async function buildChangeGraph({
       },
     });
 
-    let newFiles = [];
+    let newFiles = changedFiles;
 
     // remove package changes from the workspace root's changed files
-    for (let file of changedFiles) {
-      if (alreadyVisitedFiles.includes(file)) {
-        continue;
-      }
-
-      alreadyVisitedFiles.push(file);
-      newFiles.push(file);
+    if (_package.cwd === workspaceMeta.cwd) {
+      newFiles = newFiles.filter(file => {
+        return !workspaceMeta.packagesGlobs.some(glob => {
+          return minimatch(file, `${glob}/**`);
+        });
+      });
     }
 
     if (newFiles.length) {
