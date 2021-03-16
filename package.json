@@ -35,7 +35,7 @@
     "lint:md": "remark -f README.md",
     "start": "next",
     "release": "standard-version --commit-all",
-    "test": "mocha --recursive"
+    "test": "mocha"
   },
   "standard-version": {
     "scripts": {
