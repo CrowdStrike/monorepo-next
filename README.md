@@ -14,6 +14,8 @@ Commands:
                                    resume normal linking            [aliases: a]
   next changed-files [packages..]  list changed files
   next changed                     list changed packages
+  next defrag                      synchronize all dependency version
+                                   discrepancies
   next detach [package]            detach a package from normal linking
                                                                     [aliases: d]
   next release                     release all packages as needed
@@ -36,17 +38,37 @@ next changed-files [packages..]
 list changed files
 
 Options:
-  --help     Show help                                                 [boolean]
-  --version  Show version number                                       [boolean]
-  --ext      filter by extension                                        [string]
+  --help                    Show help                                  [boolean]
+  --version                 Show version number                        [boolean]
+  --ext                     filter by extension                         [string]
+  --only-include-published  If a file was changed that is not published, don't
+                            count it towards a package change.
+                                                      [boolean] [default: false]
 
 next changed
 
 list changed packages
 
 Options:
-  --help     Show help                                                 [boolean]
-  --version  Show version number                                       [boolean]
+  --help                    Show help                                  [boolean]
+  --version                 Show version number                        [boolean]
+  --only-include-published  If a file was changed that is not published, don't
+                            count it towards a package change.
+                                                      [boolean] [default: false]
+
+next defrag
+
+synchronize all dependency version discrepancies
+
+Options:
+  --help          Show help                                            [boolean]
+  --version       Show version number                                  [boolean]
+  --include       only synchronize a subset of dependencies[array] [default: []]
+  --exclude       ignore a subset of dependencies          [array] [default: []]
+  --out-of-range  override ranges that are out of range
+                                   [string] [choices: "major", "minor", "patch"]
+  --dry-run       log to console instead of modifying files
+                                                      [boolean] [default: false]
 
 next detach [package]
 
@@ -75,6 +97,9 @@ Options:
   --inherit-greater-release-type  If a dependency has a greater release type,
                                   bump my package the with the same release
                                   type.               [boolean] [default: false]
+  --only-include-published        If a file was changed that is not published,
+                                  don't count it as a releasable change.
+                                                      [boolean] [default: false]
   --scripts                       Provide scripts to execute for lifecycle
                                   events (prebump, precommit, etc.,)
                                                                    [default: {}]
@@ -89,9 +114,13 @@ next run
 run script against changed packages
 
 Options:
-  --help     Show help                                                 [boolean]
-  --version  Show version number                                       [boolean]
-  --silent   Don't print logs and errors              [boolean] [default: false]
+  --help                    Show help                                  [boolean]
+  --version                 Show version number                        [boolean]
+  --only-include-published  If a file was changed that is not published, don't
+                            count it towards a package change.
+                                                      [boolean] [default: false]
+  --silent                  Don't print logs and errors
+                                                      [boolean] [default: false]
 ```
 
 <!-- CODEGEN_CLI_HELP -->

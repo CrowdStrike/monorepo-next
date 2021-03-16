@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.1](https://github.com/CrowdStrike/monorepo-next/compare/v3.2.0...v3.2.1) (2021-03-16)
+
+
+### Bug Fixes
+
+* ignore catch-all ranges in defrag ([3ce095a](https://github.com/CrowdStrike/monorepo-next/commit/3ce095ad1b04fa92228d38f0be069e7a11293660))
+
 ## [3.2.0](https://github.com/CrowdStrike/monorepo-next/compare/v3.1.0...v3.2.0) (2021-03-16)
 
 
