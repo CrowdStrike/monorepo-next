@@ -1,5 +1,7 @@
 'use strict';
 
+const commonArgs = require('../common-args');
+
 module.exports = {
   command: 'defrag',
   describe: 'synchronize all dependency version discrepancies',
@@ -19,11 +21,7 @@ module.exports = {
       type: 'string',
       choices: ['major', 'minor', 'patch'],
     },
-    'dry-run': {
-      describe: 'log to console instead of modifying files',
-      type: 'boolean',
-      default: false,
-    },
+    'dry-run': commonArgs['dry-run'],
   },
   async handler(argv) {
     const defrag = require('../../src/defrag');

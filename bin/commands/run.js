@@ -1,16 +1,12 @@
 'use strict';
 
-const defaults = require('standard-version/defaults');
+const commonArgs = require('../common-args');
 
 module.exports = {
   command: 'run',
   describe: 'run script against changed packages',
   builder: {
-    'silent': {
-      describe: 'Don\'t print logs and errors',
-      type: 'boolean',
-      default: defaults.silent,
-    },
+    'silent': commonArgs['silent'],
   },
   async handler(argv) {
     const run = require('../../src/run');
