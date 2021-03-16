@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/CrowdStrike/monorepo-next/compare/v3.1.0...v3.2.0) (2021-03-16)
+
+
+### Features
+
+* add defrag command ([2a2fb6e](https://github.com/CrowdStrike/monorepo-next/commit/2a2fb6e8d963b5b4169d560c26673160d1b807d7))
+
 ## [3.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v3.0.3...v3.1.0) (2021-03-15)
 
 
