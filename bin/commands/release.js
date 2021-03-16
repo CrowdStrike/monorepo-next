@@ -1,5 +1,6 @@
 'use strict';
 
+const commonArgs = require('../common-args');
 const postRun = require('../../src/post-run');
 
 const defaults = require('standard-version/defaults');
@@ -8,11 +9,7 @@ module.exports = {
   command: 'release',
   describe: 'release all packages as needed',
   builder: {
-    'silent': {
-      describe: 'Don\'t print logs and errors',
-      type: 'boolean',
-      default: defaults.silent,
-    },
+    'silent': commonArgs['silent'],
     'push': {
       describe: 'git push + tags when done',
       type: 'boolean',
