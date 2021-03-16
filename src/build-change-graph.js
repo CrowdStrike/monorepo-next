@@ -108,7 +108,7 @@ async function buildChangeGraph({
     if (_package.cwd === workspaceMeta.cwd) {
       newFiles = newFiles.filter(file => {
         return !workspaceMeta.packagesGlobs.some(glob => {
-          return minimatch(file, `${glob}/**`);
+          return minimatch(file, `${glob}/**`, { dot: true });
         });
       });
     }
