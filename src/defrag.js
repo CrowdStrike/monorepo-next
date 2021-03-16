@@ -12,6 +12,7 @@ const semverSatisfies = require('semver/functions/satisfies');
 const semverValidRange = require('semver/ranges/valid');
 const semverMajor = require('semver/functions/major');
 const semverMinor = require('semver/functions/minor');
+const Range = require('semver/classes/range');
 const path = require('path');
 const { replaceJsonFile } = require('./fs');
 
@@ -62,6 +63,12 @@ function filterRangeUpdates(allRanges, {
         }
 
         if (!semverValidRange(oldRange) || !semverValidRange(newRange)) {
+          continue;
+        }
+
+        // Assume ranges like "*" are monorepo links
+        // and should be ignored.
+        if (new Range(oldRange).range === '') {
           continue;
         }
 
