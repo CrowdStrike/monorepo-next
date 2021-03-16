@@ -1,4 +1,5 @@
 'use strict';
+
 const postRun = require('../../src/post-run');
 
 module.exports = {
