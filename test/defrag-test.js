@@ -154,6 +154,10 @@ describe(function() {
           '~1.1.0',
           '~1.2.0',
         ],
+        packageE: [
+          '1.0.0',
+          '*',
+        ],
       };
 
       let rangeUpdates = filterRangeUpdates(allRanges);
@@ -244,6 +248,20 @@ describe(function() {
         packageA: [
           '^1.0.0',
           '^1.0.0 ',
+        ],
+      };
+
+      let rangeUpdates = filterRangeUpdates(allRanges);
+
+      expect(rangeUpdates).to.deep.equal({});
+    });
+
+    it('ignores catch-all ranges', function() {
+      let allRanges = {
+        packageA: [
+          '1.0.0',
+          '*',
+          '',
         ],
       };
 
