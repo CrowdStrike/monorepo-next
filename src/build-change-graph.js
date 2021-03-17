@@ -10,10 +10,9 @@ const {
 } = require('./git');
 const { collectPackages } = require('./build-dep-graph');
 const minimatch = require('minimatch');
-
-function union(a, b) {
-  return [...new Set([...a, ...b])];
-}
+const {
+  union,
+} = require('./set');
 
 async function getPackageChangedFiles({
   tagCommit,
