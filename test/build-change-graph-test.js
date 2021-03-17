@@ -9,6 +9,8 @@ const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 const { getCurrentCommit } = require('./helpers/git');
+const { replaceJsonFile } = require('../src/fs');
+const path = require('path');
 
 describe(buildChangeGraph, function() {
   this.timeout(5e3);
@@ -998,6 +1000,57 @@ describe(buildChangeGraph, function() {
           changedReleasableFiles: [
             'packages/package-a/index.js',
           ],
+          dag: this.match({
+            packageName: '@scope/package-a',
+          }),
+        },
+      ]));
+    });
+
+    it('can ignore non production dependencies', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+              'devDependencies': {
+                'external-package': '1.0.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+
+      await replaceJsonFile(path.join(tmpPath, 'packages/package-a/package.json'), json => {
+        json.devDependencies['external-package'] = '2.0.0';
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({
+        workspaceMeta,
+        shouldExcludeDevChanges: true,
+      });
+
+      expect(packagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/package-a/package.json',
+          ],
+          changedReleasableFiles: [],
           dag: this.match({
             packageName: '@scope/package-a',
           }),

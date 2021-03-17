@@ -7,6 +7,7 @@ module.exports = {
   describe: 'run script against changed packages',
   builder: {
     'only-include-releasable': commonArgs['only-include-releasable'],
+    'exclude-dev-changes': commonArgs['exclude-dev-changes'],
     'silent': commonArgs['silent'],
   },
   async handler(argv) {
@@ -15,6 +16,7 @@ module.exports = {
     await run({
       ...argv,
       shouldOnlyIncludeReleasable: argv['only-include-releasable'],
+      shouldExcludeDevChanges: argv['exclude-dev-changes'],
       args: process.argv.slice(3),
     });
   },

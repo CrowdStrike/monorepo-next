@@ -25,6 +25,7 @@ async function getNewVersions({
 
   let packagesWithChanges = await buildChangeGraph({
     workspaceMeta,
+    shouldExcludeDevChanges,
     fromCommit,
     sinceBranch,
     cached,

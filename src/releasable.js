@@ -8,17 +8,24 @@ const { promisify } = require('util');
 const copyFile = promisify(fs.copyFile);
 const writeFile = promisify(fs.writeFile);
 const mkdir = promisify(fs.mkdir);
+const readFile = promisify(fs.readFile);
 const {
   union,
   intersection,
   map,
 } = require('./set');
+const { createPatch } = require('rfc6902');
+const {
+  getFileAtCommit,
+} = require('./git');
 
 const filesContributingToReleasability = new Set([
   '.gitignore',
   '.npmignore',
   'package.json',
 ]);
+
+const packageJsonDevChangeRegex = /^\/(?:devDependencies|publishConfig)(?:\/|$)/m;
 
 async function prepareTmpPackage({
   cwd,
@@ -101,10 +108,32 @@ async function _getChangedReleasableFiles({
   return changedPublishedFilesNew;
 }
 
+async function isPackageJsonChangeReleasable({
+  relativePackageJsonPath,
+  tagCommit,
+  workspacesCwd,
+}) {
+  let newPackageJson = JSON.parse(await readFile(path.join(workspacesCwd, relativePackageJsonPath)));
+
+  let oldPackageJson = JSON.parse(await getFileAtCommit(relativePackageJsonPath, tagCommit, workspacesCwd));
+
+  let patch = createPatch(oldPackageJson, newPackageJson);
+
+  let changesAffectingRelease = patch.filter(({ path }) => {
+    let isMatch = packageJsonDevChangeRegex.test(path);
+
+    return !isMatch;
+  });
+
+  return !!changesAffectingRelease.length;
+}
+
 async function getChangedReleasableFiles({
   changedFiles,
   packageCwd,
   workspacesCwd,
+  shouldExcludeDevChanges,
+  tagCommit,
 }) {
   changedFiles = new Set(changedFiles);
 
@@ -117,9 +146,26 @@ async function getChangedReleasableFiles({
 
   changedPublishedFiles = map(changedPublishedFiles, file => path.join(relative, file));
 
+  if (shouldExcludeDevChanges) {
+    let relativePackageJsonPath = path.join(relative, 'package.json');
+
+    if (changedPublishedFiles.has(relativePackageJsonPath)) {
+      let _isPackageJsonChangeReleasable = await isPackageJsonChangeReleasable({
+        relativePackageJsonPath,
+        tagCommit,
+        workspacesCwd,
+      });
+
+      if (!_isPackageJsonChangeReleasable) {
+        changedPublishedFiles.delete(relativePackageJsonPath);
+      }
+    }
+  }
+
   return Array.from(changedPublishedFiles);
 }
 
 module.exports = {
   getChangedReleasableFiles,
+  packageJsonDevChangeRegex,
 };

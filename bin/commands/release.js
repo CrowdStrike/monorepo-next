@@ -30,11 +30,7 @@ module.exports = {
       type: 'boolean',
       default: false,
     },
-    'exclude-dev-changes': {
-      describe: 'If a change doesn\'t affect consumers, like a monorepo dev dep change, don\'t count it towards a package change.',
-      type: 'boolean',
-      default: false,
-    },
+    'exclude-dev-changes': commonArgs['exclude-dev-changes'],
     'scripts': {
       describe: 'Provide scripts to execute for lifecycle events (prebump, precommit, etc.,)',
       default: defaults.scripts,

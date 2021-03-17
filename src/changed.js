@@ -20,6 +20,7 @@ async function changed({
   cwd = process.cwd(),
   silent,
   shouldOnlyIncludeReleasable = builder['only-include-releasable'].default,
+  shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
   fromCommit,
   sinceBranch,
   cached,
@@ -31,6 +32,7 @@ async function changed({
   let packagesWithChanges = await buildChangeGraph({
     workspaceMeta,
     shouldOnlyIncludeReleasable,
+    shouldExcludeDevChanges,
     fromCommit,
     sinceBranch,
     cached,

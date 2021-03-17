@@ -2,9 +2,16 @@
 
 const { describe, it, setUpTmpDir } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
-const { getChangedReleasableFiles } = require('../src/releasable');
+const {
+  getChangedReleasableFiles,
+  packageJsonDevChangeRegex,
+} = require('../src/releasable');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
+const execa = require('execa');
+const { gitInit } = require('git-fixtures');
+const { getCurrentCommit } = require('./helpers/git');
+const { replaceJsonFile } = require('../src/fs');
 const path = require('path');
 
 describe(function() {
@@ -185,6 +192,93 @@ describe(function() {
       expect(changedReleasableFiles).to.deep.equal([
         'package-a/.npmignore',
       ]);
+    });
+
+    describe('shouldExcludeDevChanges', function() {
+      let shouldExcludeDevChanges = true;
+
+      beforeEach(async function() {
+        this.tmpPath = await gitInit();
+      });
+
+      it('excludes with option', async function() {
+        fixturify.writeSync(this.tmpPath, {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+              'devDependencies': {
+                'external-package': '1.0.0',
+              },
+            }),
+          },
+        });
+
+        await execa('git', ['add', '.'], { cwd: this.tmpPath });
+        await execa('git', ['commit', '-m', 'old file'], { cwd: this.tmpPath });
+
+        await replaceJsonFile(path.join(this.tmpPath, 'package-a/package.json'), json => {
+          json.devDependencies['external-package'] = '2.0.0';
+        });
+
+        let commit = await getCurrentCommit(this.tmpPath);
+
+        let changedReleasableFiles = await getChangedReleasableFiles({
+          changedFiles: [
+            'package-a/package.json',
+          ],
+          packageCwd: path.join(this.tmpPath, 'package-a'),
+          workspacesCwd: this.tmpPath,
+          shouldExcludeDevChanges,
+          tagCommit: commit,
+        });
+
+        expect(changedReleasableFiles).to.deep.equal([]);
+      });
+
+      it('includes without option', async function() {
+        fixturify.writeSync(this.tmpPath, {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+              'devDependencies': {
+                'external-package': '1.0.0',
+              },
+            }),
+          },
+        });
+
+        await execa('git', ['add', '.'], { cwd: this.tmpPath });
+        await execa('git', ['commit', '-m', 'old file'], { cwd: this.tmpPath });
+
+        await replaceJsonFile(path.join(this.tmpPath, 'package-a/package.json'), json => {
+          json.devDependencies['external-package'] = '2.0.0';
+        });
+
+        let changedReleasableFiles = await getChangedReleasableFiles({
+          changedFiles: [
+            'package-a/package.json',
+          ],
+          packageCwd: path.join(this.tmpPath, 'package-a'),
+          workspacesCwd: this.tmpPath,
+        });
+
+        expect(changedReleasableFiles).to.deep.equal([
+          'package-a/package.json',
+        ]);
+      });
+    });
+  });
+
+  describe('packageJsonDevChangeRegex', function() {
+    it('works', function() {
+      expect(packageJsonDevChangeRegex.test('/devDependencies')).to.be.ok;
+      expect(packageJsonDevChangeRegex.test('/devDependencies/foo')).to.be.ok;
+      expect(packageJsonDevChangeRegex.test('/publishConfig')).to.be.ok;
+      expect(packageJsonDevChangeRegex.test('/publishConfig/foo')).to.be.ok;
+      expect(packageJsonDevChangeRegex.test('/dependencies')).to.not.be.ok;
+      expect(packageJsonDevChangeRegex.test('/dependencies/foo')).to.not.be.ok;
     });
   });
 });

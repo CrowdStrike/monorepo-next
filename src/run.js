@@ -12,6 +12,7 @@ const { builder } = require('../bin/commands/run');
 async function run({
   cwd = process.cwd(),
   shouldOnlyIncludeReleasable = builder['only-include-releasable'].default,
+  shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
   silent,
   args,
 }) {
@@ -22,6 +23,7 @@ async function run({
   let packagesWithChanges = await buildChangeGraph({
     workspaceMeta,
     shouldOnlyIncludeReleasable,
+    shouldExcludeDevChanges,
   });
 
   let stdout = '';

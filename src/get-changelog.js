@@ -34,6 +34,7 @@ async function getChangelog({
 
   let packagesWithChanges = await buildChangeGraph({
     workspaceMeta,
+    shouldExcludeDevChanges,
     fromCommit,
     cached,
   });

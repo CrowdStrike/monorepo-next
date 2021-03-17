@@ -65,6 +65,7 @@
     "inquirer": "^7.0.0",
     "minimatch": "^3.0.4",
     "npm-packlist": "^2.1.4",
+    "rfc6902": "^4.0.2",
     "semver": "7.3.4",
     "standard-version": "9.1.1",
     "tmp": "0.2.1",

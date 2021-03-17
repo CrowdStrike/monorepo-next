@@ -8,6 +8,7 @@ module.exports = {
   describe: 'list changed packages',
   builder: {
     'only-include-releasable': commonArgs['only-include-releasable'],
+    'exclude-dev-changes': commonArgs['exclude-dev-changes'],
   },
   async handler(argv) {
     const changed = require('../../src/changed');
@@ -15,6 +16,7 @@ module.exports = {
     await changed({
       ...argv,
       shouldOnlyIncludeReleasable: argv['only-include-releasable'],
+      shouldExcludeDevChanges: argv['exclude-dev-changes'],
     });
   },
 };
