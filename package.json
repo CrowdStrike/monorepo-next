@@ -33,7 +33,7 @@
     "lint:git": "commitlint",
     "lint:js": "eslint . --ext js,json",
     "lint:md": "remark -f README.md",
-    "start": "next",
+    "start": "./bin/index.js",
     "release": "standard-version --commit-all",
     "test": "mocha"
   },
@@ -81,7 +81,6 @@
     "git-fixtures": "^3.0.0",
     "mocha": "^8.0.0",
     "mocha-helpers": "^5.1.0",
-    "monorepo-next": "file:",
     "remark-cli": "^9.0.0",
     "remark-preset-lint-crowdstrike": "^2.0.0",
     "renovate-config-standard": "^2.0.0",
