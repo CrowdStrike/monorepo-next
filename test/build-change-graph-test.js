@@ -729,9 +729,9 @@ describe(buildChangeGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     expect(packagesWithChanges).to.match(this.match(packagesWithChanges => {
-      return !packagesWithChanges.filter(pkg => {
+      return !packagesWithChanges.some(pkg => {
         return pkg.dag.packageName === 'root';
-      }).length;
+      });
     }));
   });
 
