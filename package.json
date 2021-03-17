@@ -3,7 +3,7 @@
   "version": "3.2.3",
   "description": "Detach monorepo packages from normal linking",
   "bin": {
-    "next": "bin/index.js"
+    "next": "bin/next.js"
   },
   "main": "src",
   "files": [
@@ -33,7 +33,7 @@
     "lint:git": "commitlint",
     "lint:js": "eslint . --ext js,json",
     "lint:md": "remark -f README.md",
-    "start": "./bin/index.js",
+    "start": "node bin/next",
     "release": "standard-version --commit-all",
     "test": "mocha"
   },
