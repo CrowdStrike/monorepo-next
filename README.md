@@ -7,25 +7,25 @@ Detach monorepo packages from normal linking. Work on breaking changes while gra
 <!-- CODEGEN_CLI_HELP -->
 
 ```
-index.js [command]
+next [command]
 
 Commands:
-  index.js attach [package]            attach a package to a detached package to
-                                       resume normal linking        [aliases: a]
-  index.js changed-files [packages..]  list changed files
-  index.js changed                     list changed packages
-  index.js defrag                      synchronize all dependency version
-                                       discrepancies
-  index.js detach [package]            detach a package from normal linking
+  next attach [package]            attach a package to a detached package to
+                                   resume normal linking            [aliases: a]
+  next changed-files [packages..]  list changed files
+  next changed                     list changed packages
+  next defrag                      synchronize all dependency version
+                                   discrepancies
+  next detach [package]            detach a package from normal linking
                                                                     [aliases: d]
-  index.js release                     release all packages as needed
-  index.js run                         run script against changed packages
+  next release                     release all packages as needed
+  next run                         run script against changed packages
 
 Options:
   --help     Show help                                                 [boolean]
   --version  Show version number                                       [boolean]
 
-index.js attach [package]
+next attach [package]
 
 attach a package to a detached package to resume normal linking
 
@@ -33,7 +33,7 @@ Options:
   --help     Show help                                                 [boolean]
   --version  Show version number                                       [boolean]
 
-index.js changed-files [packages..]
+next changed-files [packages..]
 
 list changed files
 
@@ -42,7 +42,7 @@ Options:
   --version  Show version number                                       [boolean]
   --ext      filter by extension                                        [string]
 
-index.js changed
+next changed
 
 list changed packages
 
@@ -50,7 +50,7 @@ Options:
   --help     Show help                                                 [boolean]
   --version  Show version number                                       [boolean]
 
-index.js defrag
+next defrag
 
 synchronize all dependency version discrepancies
 
@@ -64,7 +64,7 @@ Options:
   --dry-run       log to console instead of modifying files
                                                       [boolean] [default: false]
 
-index.js detach [package]
+next detach [package]
 
 detach a package from normal linking
 
@@ -72,7 +72,7 @@ Options:
   --help     Show help                                                 [boolean]
   --version  Show version number                                       [boolean]
 
-index.js release
+next release
 
 release all packages as needed
 
@@ -100,7 +100,7 @@ Options:
   [array] [default: ["package.json","bower.json","manifest.json","package-lock.j
                                                     son","npm-shrinkwrap.json"]]
 
-index.js run
+next run
 
 run script against changed packages
 

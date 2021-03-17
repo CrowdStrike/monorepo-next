@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v3.2.3...v4.0.0) (2021-03-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* rename `bin/index.js` to `bin/next.js`
+
+* rename `bin/index.js` to `bin/next.js` ([23a9818](https://github.com/CrowdStrike/monorepo-next/commit/23a9818d17022f9079e96da41a0529af7f3c6d8c))
+
 ### [3.2.3](https://github.com/CrowdStrike/monorepo-next/compare/v3.2.2...v3.2.3) (2021-03-17)
 
 ### [3.2.2](https://github.com/CrowdStrike/monorepo-next/compare/v3.2.1...v3.2.2) (2021-03-16)
