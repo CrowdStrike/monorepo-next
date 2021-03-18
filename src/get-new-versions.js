@@ -39,11 +39,11 @@ async function getNewVersions({
 
   for (let {
     name,
-    canBumpVersion,
+    shouldBumpVersion,
     oldVersion,
     releaseType,
   } of releaseTrees) {
-    if (!canBumpVersion) {
+    if (!shouldBumpVersion) {
       continue;
     }
 

@@ -64,13 +64,18 @@ async function init(dag, releaseTrees, releaseType) {
     releaseType = await getReleaseType(name, cwd);
   }
 
+  let canBumpVersion = !!(version && name);
+  let canPublish = dag.isPackage;
+  let shouldBumpVersion = canBumpVersion;
+  let shouldPublish = canPublish && shouldBumpVersion;
+
   return releaseTrees[name] = {
     oldVersion: version,
     releaseType,
     cwd,
     name,
-    canPublish: dag.isPackage,
-    canBumpVersion: !!(version && name),
+    shouldBumpVersion,
+    shouldPublish,
   };
 }
 
