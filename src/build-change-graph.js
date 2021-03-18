@@ -112,14 +112,16 @@ async function buildChangeGraph({
       });
     }
 
-    if (newFiles.length) {
-      let dag = buildDAG(workspaceMeta, _package.packageName);
-
-      packagesWithChanges[dag.packageName] = {
-        changedFiles: newFiles,
-        dag,
-      };
+    if (!newFiles.length) {
+      continue;
     }
+
+    let dag = buildDAG(workspaceMeta, _package.packageName);
+
+    packagesWithChanges[dag.packageName] = {
+      changedFiles: newFiles,
+      dag,
+    };
   }
 
   for (let { dag } of Object.values(packagesWithChanges)) {
