@@ -858,6 +858,121 @@ describe(_release, function() {
     ]);
   });
 
+  it('doesn\'t bump version when dev dep changes', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+            'devDependencies': {
+              '@scope/package-a': '1.0.0',
+            },
+          }),
+        },
+        'package-c': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-c',
+            'version': '1.0.0',
+            'dependencies': {
+              '@scope/package-b': '1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-c@1.0.0'], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'index.js': 'console.log()',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+    let publishOverride = this.spy();
+
+    await release({
+      shouldBumpInRangeDependencies: true,
+      shouldInheritGreaterReleaseType: true,
+      shouldPublish: true,
+      publishOverride,
+    });
+
+    let workspace = readWorkspaces(tmpPath);
+
+    expect(workspace).to.deep.equal({
+      'packages': {
+        'package-a': {
+          'index.js': 'console.log()',
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.1.0',
+          }),
+        },
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+            'devDependencies': {
+              '@scope/package-a': '1.1.0',
+            },
+          }),
+        },
+        'package-c': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-c',
+            'version': '1.0.0',
+            'dependencies': {
+              '@scope/package-b': '1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    let lastCommitMessage = await getLastCommitMessage(tmpPath);
+
+    expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0');
+
+    let tags = await getTagsOnLastCommit(tmpPath);
+
+    expect(tags).to.deep.equal([
+      '@scope/package-a@1.1.0',
+    ]);
+
+    expect(publishOverride).calledOnceWith(this.match({
+      cwd: this.match('packages/package-a'),
+    }));
+  });
+
   it('can release a package without an initial version', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {
