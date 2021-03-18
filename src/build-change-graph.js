@@ -36,7 +36,7 @@ async function getPackageChangedFiles({
   committedChanges = getLinesFromOutput(committedChanges);
   let dirtyChanges = await git(['status', '--porcelain', packageCwd], options);
   dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
-  let changedFiles = union(committedChanges, dirtyChanges);
+  let changedFiles = Array.from(union(committedChanges, dirtyChanges));
 
   return changedFiles;
 }
