@@ -99,7 +99,7 @@ async function release({
       });
     }
 
-    if (releaseTree.canBumpVersion) {
+    if (releaseTree.shouldBumpVersion) {
       let originalCwd = process.cwd();
 
       try {
@@ -134,7 +134,7 @@ async function release({
   }
 
   let tags = releaseTrees
-    .filter(({ canBumpVersion }) => canBumpVersion)
+    .filter(({ shouldBumpVersion }) => shouldBumpVersion)
     .map(({ name, newVersion }) => `${name}@${newVersion}`);
 
   let commitMessage = `chore(release): ${tags.join()}`;
@@ -179,8 +179,8 @@ async function release({
   }
 
   // eslint-disable-next-line require-atomic-updates
-  for (let { canPublish, cwd } of releaseTrees) {
-    if (shouldPublish && canPublish) {
+  for (let { shouldPublish: _shouldPublish, cwd } of releaseTrees) {
+    if (shouldPublish && _shouldPublish) {
       // eslint-disable-next-line no-inner-declarations
       async function originalPublish() {
         await publish({ cwd });
