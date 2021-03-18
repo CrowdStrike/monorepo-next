@@ -9,7 +9,7 @@ const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 
 describe(run, function() {
-  this.timeout(5e3);
+  this.timeout(10e3);
 
   let tmpPath;
 
