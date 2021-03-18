@@ -5,7 +5,7 @@ const {
 } = require('./git');
 const buildDepGraph = require('./build-dep-graph');
 const buildChangeGraph = require('./build-change-graph');
-const _buildReleaseGraph = require('./build-release-graph');
+const buildReleaseGraph = require('./build-release-graph');
 const semver = require('semver');
 
 const { builder } = require('../bin/commands/release');
@@ -29,7 +29,7 @@ async function getNewVersions({
     cached,
   });
 
-  let releaseTrees = await _buildReleaseGraph({
+  let releaseTrees = await buildReleaseGraph({
     packagesWithChanges,
     shouldBumpInRangeDependencies,
     shouldInheritGreaterReleaseType,
