@@ -42,7 +42,12 @@ function isReleaseTypeInRange(version, type, range) {
   return semver.satisfies(semver.inc(version, type), range);
 }
 
-async function init(dag, releaseTrees, releaseType) {
+async function init({
+  dag,
+  releaseTrees,
+  releaseType,
+  shouldVersionBump = true,
+}) {
   let {
     packageName: name,
     cwd,
@@ -66,7 +71,7 @@ async function init(dag, releaseTrees, releaseType) {
 
   let canBumpVersion = !!(version && name);
   let canPublish = dag.isPackage;
-  let shouldBumpVersion = canBumpVersion;
+  let shouldBumpVersion = canBumpVersion && shouldVersionBump;
   let shouldPublish = canPublish && shouldBumpVersion;
 
   return releaseTrees[name] = {
@@ -88,7 +93,7 @@ async function firstPass({
       continue;
     }
 
-    await init(dag, releaseTrees);
+    await init({ dag, releaseTrees });
   }
 }
 
@@ -109,13 +114,20 @@ async function secondPass({
     }) {
       let doesPackageHaveChanges = !!releaseTrees[dag.packageName];
       if (!doesPackageHaveChanges) {
-        if (dag.isPackage && shouldInheritGreaterReleaseType && dag.dependencyType !== 'devDependencies' && shouldBumpInRangeDependencies) {
-          await init(dag, releaseTrees, parent.releaseType);
+        let isDevDep = dag.dependencyType === 'devDependencies';
+        let shouldVersionBump = !isDevDep;
+
+        if (dag.isPackage && shouldInheritGreaterReleaseType && !isDevDep && shouldBumpInRangeDependencies) {
+          await init({ dag, releaseTrees, releaseType: parent.releaseType });
         } else if (!isReleaseTypeInRange(parent.oldVersion, parent.releaseType, dag.dependencyRange)) {
-          await init(dag, releaseTrees);
+          await init({ dag, releaseTrees, shouldVersionBump });
         } else if (shouldBumpInRangeDependencies) {
-          await init(dag, releaseTrees);
+          await init({ dag, releaseTrees, shouldVersionBump });
         } else {
+          return;
+        }
+
+        if (!shouldVersionBump) {
           return;
         }
       }
