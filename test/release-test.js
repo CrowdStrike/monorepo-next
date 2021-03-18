@@ -966,6 +966,7 @@ describe(_release, function() {
         ],
       }),
     });
+
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
     await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
