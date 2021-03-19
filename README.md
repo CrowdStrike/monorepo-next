@@ -38,17 +38,23 @@ next changed-files [packages..]
 list changed files
 
 Options:
-  --help     Show help                                                 [boolean]
-  --version  Show version number                                       [boolean]
-  --ext      filter by extension                                        [string]
+  --help                     Show help                                 [boolean]
+  --version                  Show version number                       [boolean]
+  --ext                      filter by extension                        [string]
+  --only-include-releasable  If a file was changed that is not published, don't
+                             count it towards a package change.
+                                                      [boolean] [default: false]
 
 next changed
 
 list changed packages
 
 Options:
-  --help     Show help                                                 [boolean]
-  --version  Show version number                                       [boolean]
+  --help                     Show help                                 [boolean]
+  --version                  Show version number                       [boolean]
+  --only-include-releasable  If a file was changed that is not published, don't
+                             count it towards a package change.
+                                                      [boolean] [default: false]
 
 next defrag
 
@@ -105,9 +111,13 @@ next run
 run script against changed packages
 
 Options:
-  --help     Show help                                                 [boolean]
-  --version  Show version number                                       [boolean]
-  --silent   Don't print logs and errors              [boolean] [default: false]
+  --help                     Show help                                 [boolean]
+  --version                  Show version number                       [boolean]
+  --only-include-releasable  If a file was changed that is not published, don't
+                             count it towards a package change.
+                                                      [boolean] [default: false]
+  --silent                   Don't print logs and errors
+                                                      [boolean] [default: false]
 ```
 
 <!-- CODEGEN_CLI_HELP -->

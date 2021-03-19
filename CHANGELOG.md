@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.0](https://github.com/CrowdStrike/monorepo-next/compare/v4.1.0...v4.2.0) (2021-03-19)
+
+
+### Features
+
+* only consider published code as releasable ([942f3ea](https://github.com/CrowdStrike/monorepo-next/commit/942f3ea540b3bd4b44349aeae378b4bb65348148))
+
 ## [4.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v4.0.2...v4.1.0) (2021-03-19)
 
 
