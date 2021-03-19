@@ -64,8 +64,10 @@
     "glob": "^7.1.4",
     "inquirer": "^7.0.0",
     "minimatch": "^3.0.4",
+    "npm-packlist": "^2.1.4",
     "semver": "7.3.4",
     "standard-version": "9.1.1",
+    "tmp": "0.2.1",
     "yargs": "^16.0.0"
   },
   "devDependencies": {
@@ -86,7 +88,6 @@
     "renovate-config-standard": "^2.0.0",
     "sinon": "^9.0.0",
     "sinon-chai": "^3.3.0",
-    "tmp": "0.2.1",
     "yargs-help-output": "^1.0.4"
   }
 }

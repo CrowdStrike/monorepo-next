@@ -10,6 +10,7 @@ const {
 } = require('./git');
 const { collectPackages } = require('./build-dep-graph');
 const minimatch = require('minimatch');
+const { getChangedReleasableFiles } = require('./releasable');
 const {
   union,
 } = require('./set');
@@ -49,6 +50,7 @@ function crawlDag(dag, packagesWithChanges) {
 
     packagesWithChanges[node.packageName] = {
       changedFiles: [],
+      changedReleasableFiles: [],
       dag: node,
     };
 
@@ -116,15 +118,26 @@ async function buildChangeGraph({
       continue;
     }
 
+    let changedReleasableFiles = await getChangedReleasableFiles({
+      changedFiles: newFiles,
+      packageCwd: _package.cwd,
+      workspacesCwd: workspaceMeta.cwd,
+    });
+
     let dag = buildDAG(workspaceMeta, _package.packageName);
 
     packagesWithChanges[dag.packageName] = {
       changedFiles: newFiles,
+      changedReleasableFiles,
       dag,
     };
   }
 
-  for (let { dag } of Object.values(packagesWithChanges)) {
+  for (let { dag, changedReleasableFiles } of Object.values(packagesWithChanges)) {
+    if (!changedReleasableFiles.length) {
+      continue;
+    }
+
     crawlDag(dag, packagesWithChanges);
   }
 

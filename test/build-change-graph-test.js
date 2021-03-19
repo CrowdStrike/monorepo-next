@@ -63,6 +63,9 @@ describe(buildChangeGraph, function() {
         changedFiles: [
           'packages/package-a/index.js',
         ],
+        changedReleasableFiles: [
+          'packages/package-a/index.js',
+        ],
         dag: this.match({
           packageName: '@scope/package-a',
         }),
@@ -138,6 +141,9 @@ describe(buildChangeGraph, function() {
         changedFiles: [
           'packages/package-a/index.js',
         ],
+        changedReleasableFiles: [
+          'packages/package-a/index.js',
+        ],
         dag: this.match({
           packageName: '@scope/package-a',
         }),
@@ -174,6 +180,9 @@ describe(buildChangeGraph, function() {
     expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
+          'index.js',
+        ],
+        changedReleasableFiles: [
           'index.js',
         ],
         dag: this.match({
@@ -245,6 +254,10 @@ describe(buildChangeGraph, function() {
           'packages/package-a/index.js',
           'packages/package-a/package.json',
         ],
+        changedReleasableFiles: [
+          'packages/package-a/index.js',
+          'packages/package-a/package.json',
+        ],
         dag: this.match({
           packageName: '@scope/package-a',
         }),
@@ -295,6 +308,9 @@ describe(buildChangeGraph, function() {
     expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
+          'packages/package-a/index.js',
+        ],
+        changedReleasableFiles: [
           'packages/package-a/index.js',
         ],
         dag: this.match({
@@ -353,6 +369,9 @@ describe(buildChangeGraph, function() {
         changedFiles: [
           'packages/package-a/index.js',
         ],
+        changedReleasableFiles: [
+          'packages/package-a/index.js',
+        ],
         dag: this.match({
           packageName: '@scope/package-a',
         }),
@@ -403,6 +422,10 @@ describe(buildChangeGraph, function() {
           'packages/package-a/index.js',
           'packages/package-a/package.json',
         ],
+        changedReleasableFiles: [
+          'packages/package-a/index.js',
+          'packages/package-a/package.json',
+        ],
         dag: this.match({
           packageName: '@scope/package-a',
         }),
@@ -417,6 +440,9 @@ describe(buildChangeGraph, function() {
     expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
+          'packages/package-a/index.js',
+        ],
+        changedReleasableFiles: [
           'packages/package-a/index.js',
         ],
         dag: this.match({
@@ -479,6 +505,9 @@ describe(buildChangeGraph, function() {
         changedFiles: [
           'packages/package-a/changed.txt',
         ],
+        changedReleasableFiles: [
+          'packages/package-a/changed.txt',
+        ],
         dag: this.match({
           packageName: '@scope/package-a',
         }),
@@ -508,6 +537,9 @@ describe(buildChangeGraph, function() {
         changedFiles: [
           'packages/package-a/changed.txt',
         ],
+        changedReleasableFiles: [
+          'packages/package-a/changed.txt',
+        ],
         dag: this.match({
           packageName: '@scope/package-a',
         }),
@@ -525,6 +557,9 @@ describe(buildChangeGraph, function() {
         changedFiles: [
           'packages/my-app-1/changed.txt',
         ],
+        changedReleasableFiles: [
+          'packages/my-app-1/changed.txt',
+        ],
         dag: this.match({
           packageName: 'my-app-1',
         }),
@@ -540,12 +575,18 @@ describe(buildChangeGraph, function() {
         changedFiles: [
           'packages/my-app-1/changed.txt',
         ],
+        changedReleasableFiles: [
+          'packages/my-app-1/changed.txt',
+        ],
         dag: this.match({
           packageName: 'my-app-1',
         }),
       },
       {
         changedFiles: [
+          'packages/package-a/changed.txt',
+        ],
+        changedReleasableFiles: [
           'packages/package-a/changed.txt',
         ],
         dag: this.match({
@@ -609,6 +650,9 @@ describe(buildChangeGraph, function() {
         changedFiles: [
           'packages/package-a/changed.txt',
         ],
+        changedReleasableFiles: [
+          'packages/package-a/changed.txt',
+        ],
         dag: this.match({
           packageName: '@scope/package-a',
         }),
@@ -639,6 +683,9 @@ describe(buildChangeGraph, function() {
         changedFiles: [
           'packages/my-app-1/changed.txt',
         ],
+        changedReleasableFiles: [
+          'packages/my-app-1/changed.txt',
+        ],
         dag: this.match({
           packageName: 'my-app-1',
         }),
@@ -654,6 +701,9 @@ describe(buildChangeGraph, function() {
     expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
+          'packages/package-a/changed.txt',
+        ],
+        changedReleasableFiles: [
           'packages/package-a/changed.txt',
         ],
         dag: this.match({
@@ -673,12 +723,20 @@ describe(buildChangeGraph, function() {
           'packages/my-app-1/changed.txt',
           'packages/my-app-1/package.json',
         ],
+        changedReleasableFiles: [
+          'packages/my-app-1/changed.txt',
+          'packages/my-app-1/package.json',
+        ],
         dag: this.match({
           packageName: 'my-app-1',
         }),
       },
       {
         changedFiles: [
+          'packages/package-a/changed.txt',
+          'packages/package-a/package.json',
+        ],
+        changedReleasableFiles: [
           'packages/package-a/changed.txt',
           'packages/package-a/package.json',
         ],
@@ -825,5 +883,126 @@ describe(buildChangeGraph, function() {
         return pkg.dag.packageName === 'root';
       });
     }));
+  });
+
+  describe('ignoring dev changes', function() {
+    it('changed files ignored in npm publish do not cascade', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+              'files': ['src'],
+            }),
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-b',
+              'version': '1.0.0',
+              'dependencies': {
+                '@scope/package-a': '^1.0.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'index.js': 'console.log()',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+      expect(packagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/package-a/index.js',
+          ],
+          changedReleasableFiles: [],
+          dag: this.match({
+            packageName: '@scope/package-a',
+          }),
+        },
+      ]));
+
+      expect(packagesWithChanges).to.match(this.match(packagesWithChanges => {
+        return !packagesWithChanges.some(pkg => {
+          return pkg.dag.packageName === '@scope/package-b';
+        });
+      }));
+    });
+
+    it('removed files still show up in published files', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'index.js': 'console.log()',
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+              'files': ['index.js'],
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'index.js': null,
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+      expect(packagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/package-a/index.js',
+          ],
+          changedReleasableFiles: [
+            'packages/package-a/index.js',
+          ],
+          dag: this.match({
+            packageName: '@scope/package-a',
+          }),
+        },
+      ]));
+    });
   });
 });

@@ -6,7 +6,7 @@ const path = require('path');
 const buildDepGraph = require('../src/build-dep-graph');
 const buildDAG = require('../src/build-dag');
 const { matchPath } = require('./helpers/matchers');
-const { createTmpDir } = require('./helpers/tmp');
+const { createTmpDir } = require('../src/tmp');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 
