@@ -54,6 +54,8 @@ const defaultWorkspace = {
 };
 
 describe(attach, function() {
+  this.timeout(5e3);
+
   let tmpPath;
 
   beforeEach(async function() {
