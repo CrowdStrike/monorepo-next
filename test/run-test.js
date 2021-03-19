@@ -105,7 +105,7 @@ describe(run, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
     await execa('git', ['tag', '@scope/package-c@1.0.0'], { cwd: tmpPath });

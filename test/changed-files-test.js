@@ -51,7 +51,7 @@ describe(changedFiles, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
     await execa('git', ['tag', 'my-app-1@0.0.0'], { cwd: tmpPath });
@@ -69,7 +69,7 @@ describe(changedFiles, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let _changedFiles = await changedFiles({
       cwd: tmpPath,
@@ -93,7 +93,7 @@ describe(changedFiles, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let _changedFiles = await changedFiles({
       cwd: tmpPath,
@@ -119,7 +119,7 @@ describe(changedFiles, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let _changedFiles = await changedFiles({
       cwd: path.join(tmpPath, 'packages/package-a'),
@@ -143,7 +143,7 @@ describe(changedFiles, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let _changedFiles = await changedFiles({
       cwd: tmpPath,
@@ -166,7 +166,7 @@ describe(changedFiles, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let commit = await getCurrentCommit(tmpPath);
 
@@ -179,7 +179,7 @@ describe(changedFiles, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let _changedFiles = await changedFiles({
       cwd: tmpPath,
@@ -202,7 +202,7 @@ describe(changedFiles, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
     await execa('git', ['branch', 'test-branch'], { cwd: tmpPath });
     await execa('git', ['checkout', 'test-branch'], { cwd: tmpPath });
 
@@ -215,7 +215,7 @@ describe(changedFiles, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let _changedFiles = await changedFiles({
       cwd: tmpPath,
@@ -253,7 +253,7 @@ describe(changedFiles, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let cachedChangedFiles = await changedFiles({
       cwd: tmpPath,
@@ -280,7 +280,7 @@ describe(changedFiles, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     _changedFiles = await changedFiles({
       cwd: tmpPath,
