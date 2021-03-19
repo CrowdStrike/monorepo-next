@@ -7,8 +7,11 @@ const {
   getWorkspaceCwd,
 } = require('./git');
 
+const { builder } = require('../bin/commands/run');
+
 async function run({
   cwd = process.cwd(),
+  shouldOnlyIncludeReleasable = builder['only-include-releasable'].default,
   silent,
   args,
 }) {
@@ -16,7 +19,10 @@ async function run({
 
   let workspaceMeta = await buildDepGraph({ workspaceCwd });
 
-  let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+  let packagesWithChanges = await buildChangeGraph({
+    workspaceMeta,
+    shouldOnlyIncludeReleasable,
+  });
 
   let stdout = '';
   let stderr = '';

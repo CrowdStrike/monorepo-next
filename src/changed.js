@@ -9,6 +9,8 @@ const {
   getWorkspaceCwd,
 } = require('./git');
 
+const { builder } = require('../bin/commands/changed');
+
 // stupid Mac /private symlink means normal equality won't work
 async function arePathsTheSame(path1, path2) {
   return await realpath(path1) === await realpath(path2);
@@ -17,6 +19,7 @@ async function arePathsTheSame(path1, path2) {
 async function changed({
   cwd = process.cwd(),
   silent,
+  shouldOnlyIncludeReleasable = builder['only-include-releasable'].default,
   fromCommit,
   sinceBranch,
   cached,
@@ -27,6 +30,7 @@ async function changed({
 
   let packagesWithChanges = await buildChangeGraph({
     workspaceMeta,
+    shouldOnlyIncludeReleasable,
     fromCommit,
     sinceBranch,
     cached,
