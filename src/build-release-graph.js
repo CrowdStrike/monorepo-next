@@ -1,7 +1,5 @@
 'use strict';
 
-const { promisify } = require('util');
-const conventionalRecommendedBump = promisify(require('conventional-recommended-bump'));
 const path = require('path');
 const {
   read: readJson,
@@ -12,26 +10,24 @@ const dependencyTypes = require('./dependency-types');
 
 const defaultReleaseType = 'patch';
 
-async function getReleaseType(packageName, cwd) {
+async function getReleaseType(packageName, cwd, useFork) {
   let tagPrefix = `${packageName}@`;
+  let releaseType;
 
-  let originalCwd = process.cwd();
+  if (useFork) {
+    let process = require('child_process').fork(require.resolve('./get-release-type'), [tagPrefix], {
+      cwd,
+    });
 
-  let myReleaseType;
-  try {
-    process.chdir(cwd);
-
-    myReleaseType = (await conventionalRecommendedBump({
-      // preset: require('standard-version/defaults').preset,
-      preset: require('standard-version/lib/preset-loader')({}),
-      path: cwd,
-      tagPrefix,
-    })).releaseType;
-  } finally {
-    process.chdir(originalCwd);
+    releaseType = await new Promise((resolve, reject) => {
+      process.on('message', resolve);
+      process.on('error', reject);
+    });
+  } else {
+    releaseType = await require('./get-release-type')(tagPrefix, cwd);
   }
 
-  return myReleaseType;
+  return releaseType;
 }
 
 const orderedReleaseTypes = ['patch', 'minor', 'major'];
@@ -49,6 +45,7 @@ async function init({
   releaseTrees,
   releaseType,
   shouldVersionBump = true,
+  useFork,
 }) {
   let {
     packageName: name,
@@ -68,7 +65,7 @@ async function init({
   }
 
   if (!releaseType) {
-    releaseType = await module.exports.getReleaseType(name, cwd);
+    releaseType = await module.exports.getReleaseType(name, cwd, useFork);
   }
 
   let canBumpVersion = !!(version && name);
@@ -90,12 +87,31 @@ async function firstPass({
   releaseTrees,
   packagesWithChanges,
 }) {
+  let promises = [];
+  let unorderedReleaseTrees = {};
+
   for (let { dag, changedReleasableFiles } of packagesWithChanges) {
     if (!changedReleasableFiles.length) {
       continue;
     }
 
-    await init({ dag, releaseTrees });
+    let promise = init({
+      dag,
+      releaseTrees: unorderedReleaseTrees,
+      useFork: true,
+    });
+
+    promises.push(promise);
+  }
+
+  await Promise.all(promises);
+
+  for (let { dag: { packageName } } of packagesWithChanges) {
+    let releaseTree = unorderedReleaseTrees[packageName];
+
+    if (releaseTree) {
+      releaseTrees[packageName] = releaseTree;
+    }
   }
 }
 
