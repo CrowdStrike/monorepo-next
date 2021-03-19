@@ -49,7 +49,7 @@ async function release({
     return dag.packageName && dag.version;
   });
 
-  if (!packagesWithChanges.length) {
+  if (!packagesWithChanges.some(({ changedReleasableFiles }) => changedReleasableFiles.length)) {
     console.log('no releasable code');
     return;
   }

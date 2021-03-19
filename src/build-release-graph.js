@@ -88,8 +88,8 @@ async function firstPass({
   releaseTrees,
   packagesWithChanges,
 }) {
-  for (let { dag, changedFiles } of packagesWithChanges) {
-    if (!changedFiles.length) {
+  for (let { dag, changedReleasableFiles } of packagesWithChanges) {
+    if (!changedReleasableFiles.length) {
       continue;
     }
 
@@ -103,8 +103,8 @@ async function secondPass({
   shouldBumpInRangeDependencies,
   shouldInheritGreaterReleaseType,
 }) {
-  for (let { dag, changedFiles } of packagesWithChanges) {
-    if (!changedFiles.length) {
+  for (let { dag, changedReleasableFiles } of packagesWithChanges) {
+    if (!changedReleasableFiles.length) {
       continue;
     }
 
@@ -153,8 +153,8 @@ function thirdPass({
   packagesWithChanges,
   shouldInheritGreaterReleaseType,
 }) {
-  for (let { dag, changedFiles } of packagesWithChanges) {
-    if (!changedFiles.length) {
+  for (let { dag, changedReleasableFiles } of packagesWithChanges) {
+    if (!changedReleasableFiles.length) {
       continue;
     }
 
@@ -199,8 +199,8 @@ function fourthPass({
   packagesWithChanges,
   shouldBumpInRangeDependencies,
 }) {
-  for (let { dag, changedFiles } of packagesWithChanges) {
-    if (!changedFiles.length) {
+  for (let { dag, changedReleasableFiles } of packagesWithChanges) {
+    if (!changedReleasableFiles.length) {
       continue;
     }
 
