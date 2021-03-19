@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v4.0.2...v4.1.0) (2021-03-19)
+
+
+### Features
+
+* don't cascade npm ignored changes to dependencies ([8a91b08](https://github.com/CrowdStrike/monorepo-next/commit/8a91b08a9a5b72b09c607e9f7010777a9b8b89e8))
+
 ### [4.0.2](https://github.com/CrowdStrike/monorepo-next/compare/v4.0.1...v4.0.2) (2021-03-18)
 
 
