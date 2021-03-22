@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.3.0](https://github.com/CrowdStrike/monorepo-next/compare/v4.2.1...v4.3.0) (2021-03-22)
+
+
+### Features
+
+* exclude manual devDependency changes from releasability ([eb10971](https://github.com/CrowdStrike/monorepo-next/commit/eb10971b27e2a41b802595ec625fdc0167cc02d8))
+
+
+### Bug Fixes
+
+* add option to exclude monorepo devDependency changes from releasability ([63ecd3c](https://github.com/CrowdStrike/monorepo-next/commit/63ecd3c4df323004d6ebfe984c1df973b7f671ea))
+
 ### [4.2.1](https://github.com/CrowdStrike/monorepo-next/compare/v4.2.0...v4.2.1) (2021-03-22)
 
 

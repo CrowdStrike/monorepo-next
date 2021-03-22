@@ -44,6 +44,10 @@ Options:
   --only-include-releasable  If a file was changed that is not published, don't
                              count it towards a package change.
                                                       [boolean] [default: false]
+  --exclude-dev-changes      If a change doesn't affect consumers, like a
+                             monorepo dev dep change or manually bumping an
+                             external dev dep, don't count it towards a package
+                             change.                  [boolean] [default: false]
 
 next changed
 
@@ -55,6 +59,10 @@ Options:
   --only-include-releasable  If a file was changed that is not published, don't
                              count it towards a package change.
                                                       [boolean] [default: false]
+  --exclude-dev-changes      If a change doesn't affect consumers, like a
+                             monorepo dev dep change or manually bumping an
+                             external dev dep, don't count it towards a package
+                             change.                  [boolean] [default: false]
 
 next defrag
 
@@ -97,6 +105,10 @@ Options:
   --inherit-greater-release-type  If a dependency has a greater release type,
                                   bump my package the with the same release
                                   type.               [boolean] [default: false]
+  --exclude-dev-changes           If a change doesn't affect consumers, like a
+                                  monorepo dev dep change or manually bumping an
+                                  external dev dep, don't count it towards a
+                                  package change.     [boolean] [default: false]
   --scripts                       Provide scripts to execute for lifecycle
                                   events (prebump, precommit, etc.,)
                                                                    [default: {}]
@@ -116,6 +128,10 @@ Options:
   --only-include-releasable  If a file was changed that is not published, don't
                              count it towards a package change.
                                                       [boolean] [default: false]
+  --exclude-dev-changes      If a change doesn't affect consumers, like a
+                             monorepo dev dep change or manually bumping an
+                             external dev dep, don't count it towards a package
+                             change.                  [boolean] [default: false]
   --silent                   Don't print logs and errors
                                                       [boolean] [default: false]
 ```
