@@ -14,6 +14,7 @@ async function getNewVersions({
   cwd = process.cwd(),
   shouldBumpInRangeDependencies = builder['bump-in-range-dependencies'].default,
   shouldInheritGreaterReleaseType = builder['inherit-greater-release-type'].default,
+  shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
   fromCommit,
   sinceBranch,
   cached,
@@ -24,6 +25,7 @@ async function getNewVersions({
 
   let packagesWithChanges = await buildChangeGraph({
     workspaceMeta,
+    shouldExcludeDevChanges,
     fromCommit,
     sinceBranch,
     cached,
@@ -33,6 +35,7 @@ async function getNewVersions({
     packagesWithChanges,
     shouldBumpInRangeDependencies,
     shouldInheritGreaterReleaseType,
+    shouldExcludeDevChanges,
   });
 
   let newVersions = {};

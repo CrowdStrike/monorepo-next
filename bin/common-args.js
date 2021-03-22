@@ -8,6 +8,11 @@ module.exports = {
     type: 'boolean',
     default: false,
   },
+  'exclude-dev-changes': {
+    describe: 'If a change doesn\'t affect consumers, like a monorepo dev dep change or manually bumping an external dev dep, don\'t count it towards a package change.',
+    type: 'boolean',
+    default: false,
+  },
   'silent': {
     describe: 'Don\'t print logs and errors',
     type: 'boolean',

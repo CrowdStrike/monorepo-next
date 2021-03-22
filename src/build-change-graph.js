@@ -63,6 +63,7 @@ function crawlDag(dag, packagesWithChanges) {
 async function buildChangeGraph({
   workspaceMeta,
   shouldOnlyIncludeReleasable,
+  shouldExcludeDevChanges,
   fromCommit,
   sinceBranch,
   cached,
@@ -123,6 +124,8 @@ async function buildChangeGraph({
       changedFiles: newFiles,
       packageCwd: _package.cwd,
       workspacesCwd: workspaceMeta.cwd,
+      shouldExcludeDevChanges,
+      tagCommit,
     });
 
     if (shouldOnlyIncludeReleasable && !changedReleasableFiles.length) {

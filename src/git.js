@@ -89,6 +89,10 @@ async function getCommitSinceLastRelease(_package, options) {
   }
 }
 
+async function getFileAtCommit(filePath, commit, cwd) {
+  return await git(['show', `${commit}:${filePath}`], { cwd });
+}
+
 module.exports = {
   git,
   getCurrentBranch,
@@ -97,4 +101,5 @@ module.exports = {
   isCommitAncestorOf,
   getCommonAncestor,
   getCommitSinceLastRelease,
+  getFileAtCommit,
 };

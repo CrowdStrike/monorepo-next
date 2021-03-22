@@ -886,105 +886,216 @@ describe(buildReleaseGraph, function() {
     ]));
   });
 
-  it('doesn\'t bump version when dev dep changes', async function() {
-    fixturify.writeSync(tmpPath, {
-      'packages': {
-        'package-a': {
-          'package.json': stringifyJson({
-            'name': '@scope/package-a',
-            'version': '1.0.0',
-          }),
-        },
-        'package-b': {
-          'package.json': stringifyJson({
-            'name': '@scope/package-b',
-            'version': '1.0.0',
-            'devDependencies': {
-              '@scope/package-a': '1.0.0',
-            },
-          }),
-        },
-        'package-c': {
-          'package.json': stringifyJson({
-            'name': '@scope/package-c',
-            'version': '1.0.0',
-            'dependencies': {
-              '@scope/package-b': '1.0.0',
-            },
-          }),
-        },
-      },
-      'package.json': stringifyJson({
-        'private': true,
-        'workspaces': [
-          'packages/*',
-        ],
-      }),
-    });
-
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/package-c@1.0.0'], { cwd: tmpPath });
-
-    fixturify.writeSync(tmpPath, {
-      'packages': {
-        'package-a': {
-          'index.js': 'console.log()',
-        },
-      },
-    });
-
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
-
-    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
-
-    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
-
-    packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-      return dag.packageName && dag.version;
-    });
-
-    let shouldBumpInRangeDependencies = true;
-    let shouldInheritGreaterReleaseType = true;
-
-    let releaseTrees = await buildReleaseGraph({
-      packagesWithChanges,
-      shouldBumpInRangeDependencies,
-      shouldInheritGreaterReleaseType,
-    });
-
-    expect(releaseTrees).to.match(this.match([
-      {
-        name: '@scope/package-a',
-        cwd: matchPath('/packages/package-a'),
-        oldVersion: '1.0.0',
-        releaseType: 'minor',
-        shouldBumpVersion: true,
-        shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [],
-      },
-      {
-        name: '@scope/package-b',
-        cwd: matchPath('/packages/package-b'),
-        oldVersion: '1.0.0',
-        releaseType: 'patch',
-        shouldBumpVersion: false,
-        shouldPublish: false,
-        dependencies: [],
-        devDependencies: [
-          {
-            name: '@scope/package-a',
-            newRange: '1.1.0',
+  describe('shouldExcludeDevChanges', function() {
+    it('doesn\'t bump version when dev dep changes', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
           },
-        ],
-        optionalDependencies: [],
-      },
-    ]));
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-b',
+              'version': '1.0.0',
+              'devDependencies': {
+                '@scope/package-a': '1.0.0',
+              },
+            }),
+          },
+          'package-c': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-c',
+              'version': '1.0.0',
+              'dependencies': {
+                '@scope/package-b': '1.0.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-c@1.0.0'], { cwd: tmpPath });
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'index.js': 'console.log()',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+      packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
+        return dag.packageName && dag.version;
+      });
+
+      let releaseTrees = await buildReleaseGraph({
+        packagesWithChanges,
+        shouldExcludeDevChanges: true,
+      });
+
+      expect(releaseTrees).to.match(this.match([
+        {
+          name: '@scope/package-a',
+          cwd: matchPath('/packages/package-a'),
+          oldVersion: '1.0.0',
+          releaseType: 'minor',
+          shouldBumpVersion: true,
+          shouldPublish: true,
+          dependencies: [],
+          devDependencies: [],
+          optionalDependencies: [],
+        },
+        {
+          name: '@scope/package-b',
+          cwd: matchPath('/packages/package-b'),
+          oldVersion: '1.0.0',
+          releaseType: 'patch',
+          shouldBumpVersion: false,
+          shouldPublish: false,
+          dependencies: [],
+          devDependencies: [
+            {
+              name: '@scope/package-a',
+              newRange: '1.1.0',
+            },
+          ],
+          optionalDependencies: [],
+        },
+      ]));
+    });
+
+    it('bumps version when dev dep changes when option is off', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-b',
+              'version': '1.0.0',
+              'devDependencies': {
+                '@scope/package-a': '1.0.0',
+              },
+            }),
+          },
+          'package-c': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-c',
+              'version': '1.0.0',
+              'devDependencies': {
+                '@scope/package-b': '1.0.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-c@1.0.0'], { cwd: tmpPath });
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'index.js': 'console.log()',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+      packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
+        return dag.packageName && dag.version;
+      });
+
+      let releaseTrees = await buildReleaseGraph({
+        packagesWithChanges,
+        shouldExcludeDevChanges: false,
+      });
+
+      expect(releaseTrees).to.match(this.match([
+        {
+          name: '@scope/package-a',
+          cwd: matchPath('/packages/package-a'),
+          oldVersion: '1.0.0',
+          releaseType: 'minor',
+          shouldBumpVersion: true,
+          shouldPublish: true,
+          dependencies: [],
+          devDependencies: [],
+          optionalDependencies: [],
+        },
+        {
+          name: '@scope/package-b',
+          cwd: matchPath('/packages/package-b'),
+          oldVersion: '1.0.0',
+          releaseType: 'patch',
+          shouldBumpVersion: true,
+          shouldPublish: true,
+          dependencies: [],
+          devDependencies: [
+            {
+              name: '@scope/package-a',
+              newRange: '1.1.0',
+            },
+          ],
+          optionalDependencies: [],
+        },
+        {
+          name: '@scope/package-c',
+          cwd: matchPath('/packages/package-c'),
+          oldVersion: '1.0.0',
+          releaseType: 'patch',
+          shouldBumpVersion: true,
+          shouldPublish: true,
+          dependencies: [],
+          devDependencies: [
+            {
+              name: '@scope/package-b',
+              newRange: '1.0.1',
+            },
+          ],
+          optionalDependencies: [],
+        },
+      ]));
+    });
   });
 
   it('ignores child package changes in root package', async function() {

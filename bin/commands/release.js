@@ -30,6 +30,7 @@ module.exports = {
       type: 'boolean',
       default: false,
     },
+    'exclude-dev-changes': commonArgs['exclude-dev-changes'],
     'scripts': {
       describe: 'Provide scripts to execute for lifecycle events (prebump, precommit, etc.,)',
       default: defaults.scripts,
@@ -52,6 +53,7 @@ module.exports = {
       shouldPublish: argv['publish'],
       shouldBumpInRangeDependencies: argv['bump-in-range-dependencies'],
       shouldInheritGreaterReleaseType: argv['inherit-greater-release-type'],
+      shouldExcludeDevChanges: argv['exclude-dev-changes'],
     });
 
     await postRun();

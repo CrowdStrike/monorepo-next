@@ -102,6 +102,7 @@ async function secondPass({
   packagesWithChanges,
   shouldBumpInRangeDependencies,
   shouldInheritGreaterReleaseType,
+  shouldExcludeDevChanges,
 }) {
   for (let { dag, changedReleasableFiles } of packagesWithChanges) {
     if (!changedReleasableFiles.length) {
@@ -115,7 +116,7 @@ async function secondPass({
       let doesPackageHaveChanges = !!releaseTrees[dag.packageName];
       if (!doesPackageHaveChanges) {
         let isDevDep = dag.dependencyType === 'devDependencies';
-        let shouldVersionBump = !isDevDep;
+        let shouldVersionBump = !shouldExcludeDevChanges || !isDevDep;
 
         if (dag.isPackage && shouldInheritGreaterReleaseType && !isDevDep && shouldBumpInRangeDependencies) {
           await init({ dag, releaseTrees, releaseType: parent.releaseType });
@@ -263,6 +264,7 @@ async function buildReleaseGraph({
   packagesWithChanges,
   shouldBumpInRangeDependencies,
   shouldInheritGreaterReleaseType,
+  shouldExcludeDevChanges,
 }) {
   let releaseTrees = {};
 
@@ -278,6 +280,7 @@ async function buildReleaseGraph({
     packagesWithChanges,
     shouldBumpInRangeDependencies,
     shouldInheritGreaterReleaseType,
+    shouldExcludeDevChanges,
   });
 
   // packages without changes, but need to be analyzed because of options
