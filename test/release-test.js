@@ -916,6 +916,7 @@ describe(_release, function() {
     await release({
       shouldBumpInRangeDependencies: true,
       shouldInheritGreaterReleaseType: true,
+      shouldExcludeDevChanges: true,
       shouldPublish: true,
       publishOverride,
     });

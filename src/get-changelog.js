@@ -19,6 +19,7 @@ async function getChangelog({
   cwd = process.cwd(),
   shouldBumpInRangeDependencies = builder['bump-in-range-dependencies'].default,
   shouldInheritGreaterReleaseType = builder['inherit-greater-release-type'].default,
+  shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
   releaseCount = 1,
   fromCommit,
   cached,
@@ -45,6 +46,7 @@ async function getChangelog({
     packagesWithChanges,
     shouldBumpInRangeDependencies,
     shouldInheritGreaterReleaseType,
+    shouldExcludeDevChanges,
   });
 
   let releaseTree = releaseTrees.find(releaseTree => releaseTree.name === name);
