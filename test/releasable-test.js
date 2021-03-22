@@ -161,5 +161,30 @@ describe(function() {
 
       expect(changedReleasableFiles).to.deep.equal([]);
     });
+
+    it('injected and changed files are respected', async function() {
+      fixturify.writeSync(this.tmpPath, {
+        'package-a': {
+          '.npmignore': 'exclude.js',
+          'package.json': stringifyJson({
+            'name': 'package-a',
+            'version': '1.0.0',
+          }),
+        },
+      });
+
+      let changedReleasableFiles = await getChangedReleasableFiles({
+        changedFiles: [
+          'package-a/.npmignore',
+          'package-a/exclude.js',
+        ],
+        packageCwd: path.join(this.tmpPath, 'package-a'),
+        workspacesCwd: this.tmpPath,
+      });
+
+      expect(changedReleasableFiles).to.deep.equal([
+        'package-a/.npmignore',
+      ]);
+    });
   });
 });

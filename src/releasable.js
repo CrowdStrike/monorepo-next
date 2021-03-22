@@ -41,6 +41,10 @@ async function prepareTmpPackage({
   }
 
   for (let file of changedFiles) {
+    if (filesContributingToReleasability.has(file)) {
+      continue;
+    }
+
     let filePath = path.join(tmpDir, file);
 
     await mkdir(path.dirname(filePath), { recursive: true });
