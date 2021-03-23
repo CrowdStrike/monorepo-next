@@ -10,6 +10,7 @@ const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
 const { matchPath } = require('./helpers/matchers');
 const { gitInit } = require('git-fixtures');
+const path = require('path');
 
 describe(buildReleaseGraph, function() {
   this.timeout(5e3);
@@ -1156,5 +1157,100 @@ describe(buildReleaseGraph, function() {
         return tree.name === 'root';
       });
     }));
+  });
+
+  it('doesn\'t calculate release type when patch is guaranteed', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+            'dependencies': {
+              '@scope/package-a': '1.0.0',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'index.js': 'console.log()',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+    packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
+      return dag.packageName && dag.version;
+    });
+
+    let getReleaseType = this.spy(buildReleaseGraph, 'getReleaseType');
+
+    let releaseTrees = await buildReleaseGraph({
+      packagesWithChanges,
+    });
+
+    expect(getReleaseType.args).to.deep.equal([
+      [
+        '@scope/package-a',
+        path.join(tmpPath, 'packages/package-a'),
+      ],
+    ]);
+
+    expect(releaseTrees).to.match(this.match([
+      {
+        name: '@scope/package-a',
+        cwd: matchPath('/packages/package-a'),
+        oldVersion: '1.0.0',
+        releaseType: 'minor',
+        shouldBumpVersion: true,
+        shouldPublish: true,
+        dependencies: [],
+        devDependencies: [],
+        optionalDependencies: [],
+      },
+      {
+        name: '@scope/package-b',
+        cwd: matchPath('/packages/package-b'),
+        oldVersion: '1.0.0',
+        releaseType: 'patch',
+        shouldBumpVersion: true,
+        shouldPublish: true,
+        dependencies: [
+          {
+            name: '@scope/package-a',
+            newRange: '1.1.0',
+          },
+        ],
+        devDependencies: [],
+        optionalDependencies: [],
+      },
+    ]));
   });
 });
