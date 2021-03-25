@@ -8,10 +8,10 @@ const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 const path = require('path');
-const standardVersion = require('standard-version');
 const {
   getCurrentCommit,
 } = require('./helpers/git');
+const { replaceJsonFile } = require('../src/fs');
 
 describe(getChangelog, function() {
   this.timeout(5e3);
@@ -24,6 +24,37 @@ describe(getChangelog, function() {
   beforeEach(async function() {
     tmpPath = await gitInit();
   });
+
+  // calling the real `standardVersion` is a lot slower
+  async function fakeVersion({
+    packageDir,
+    newVersion,
+    firstVersion,
+  }) {
+    let packageName;
+
+    await replaceJsonFile(path.join(tmpPath, packageDir, 'package.json'), json => {
+      if (firstVersion) {
+        newVersion = json.version;
+      } else {
+        json.version = newVersion;
+      }
+
+      packageName = json.name;
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+
+    try {
+      await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
+    } catch (err) {
+      if (!firstVersion || !err.message.includes('nothing to commit, working tree clean')) {
+        throw err;
+      }
+    }
+
+    await execa('git', ['tag', `${packageName}@${newVersion}`], { cwd: tmpPath });
+  }
 
   it('works pre tag', async function() {
     fixturify.writeSync(tmpPath, {
@@ -43,15 +74,9 @@ describe(getChangelog, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
-
-    process.chdir(path.join(tmpPath, 'packages/my-app'));
-
-    await standardVersion({
-      path: path.join(tmpPath, 'packages/my-app'),
-      tagPrefix: '@scope/my-app@',
-      firstRelease: true,
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      firstVersion: true,
     });
 
     fixturify.writeSync(tmpPath, {
@@ -64,6 +89,8 @@ describe(getChangelog, function() {
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
 
     let changelog = await getChangelog({
       cwd: path.join(tmpPath, 'packages/my-app'),
@@ -92,15 +119,9 @@ describe(getChangelog, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
-
-    process.chdir(path.join(tmpPath, 'packages/my-app'));
-
-    await standardVersion({
-      path: path.join(tmpPath, 'packages/my-app'),
-      tagPrefix: '@scope/my-app@',
-      firstRelease: true,
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      firstVersion: true,
     });
 
     fixturify.writeSync(tmpPath, {
@@ -114,10 +135,12 @@ describe(getChangelog, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
-    await standardVersion({
-      path: path.join(tmpPath, 'packages/my-app'),
-      tagPrefix: '@scope/my-app@',
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      newVersion: '1.0.1',
     });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
 
     let changelog = await getChangelog({
       cwd: path.join(tmpPath, 'packages/my-app'),
@@ -152,23 +175,14 @@ describe(getChangelog, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
-
-    process.chdir(path.join(tmpPath, 'packages/my-app'));
-
-    await standardVersion({
-      path: path.join(tmpPath, 'packages/my-app'),
-      tagPrefix: '@scope/my-app@',
-      firstRelease: true,
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      firstVersion: true,
     });
 
-    process.chdir(path.join(tmpPath, 'packages/my-app-2'));
-
-    await standardVersion({
-      path: path.join(tmpPath, 'packages/my-app-2'),
-      tagPrefix: '@scope/my-app-2@',
-      firstRelease: true,
+    await fakeVersion({
+      packageDir: 'packages/my-app-2',
+      firstVersion: true,
     });
 
     fixturify.writeSync(tmpPath, {
@@ -181,6 +195,8 @@ describe(getChangelog, function() {
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
 
     let changelog = await getChangelog({
       cwd: path.join(tmpPath, 'packages/my-app'),
@@ -210,12 +226,9 @@ describe(getChangelog, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'fix: old-release'], { cwd: tmpPath });
 
-    process.chdir(path.join(tmpPath, 'packages/my-app'));
-
-    await standardVersion({
-      path: path.join(tmpPath, 'packages/my-app'),
-      tagPrefix: '@scope/my-app@',
-      firstRelease: true,
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      firstVersion: true,
     });
 
     fixturify.writeSync(tmpPath, {
@@ -229,10 +242,12 @@ describe(getChangelog, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
-    await standardVersion({
-      path: path.join(tmpPath, 'packages/my-app'),
-      tagPrefix: '@scope/my-app@',
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      newVersion: '1.0.1',
     });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
 
     let changelog = await getChangelog({
       cwd: path.join(tmpPath, 'packages/my-app'),
@@ -263,15 +278,9 @@ describe(getChangelog, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
-
-    process.chdir(path.join(tmpPath, 'packages/my-app'));
-
-    await standardVersion({
-      path: path.join(tmpPath, 'packages/my-app'),
-      tagPrefix: '@scope/my-app@',
-      firstRelease: true,
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      firstVersion: true,
     });
 
     fixturify.writeSync(tmpPath, {
@@ -297,6 +306,8 @@ describe(getChangelog, function() {
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'fix: included change'], { cwd: tmpPath });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
 
     let changelog = await getChangelog({
       cwd: path.join(tmpPath, 'packages/my-app'),
@@ -334,23 +345,14 @@ describe(getChangelog, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
-
-    process.chdir(path.join(tmpPath, 'packages/my-dep'));
-
-    await standardVersion({
-      path: path.join(tmpPath, 'packages/my-dep'),
-      tagPrefix: '@scope/my-dep@',
-      firstRelease: true,
+    await fakeVersion({
+      packageDir: 'packages/my-dep',
+      firstVersion: true,
     });
 
-    process.chdir(path.join(tmpPath, 'packages/my-app'));
-
-    await standardVersion({
-      path: path.join(tmpPath, 'packages/my-app'),
-      tagPrefix: '@scope/my-app@',
-      firstRelease: true,
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      firstVersion: true,
     });
 
     fixturify.writeSync(tmpPath, {
@@ -363,6 +365,8 @@ describe(getChangelog, function() {
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
 
     let changelog = await getChangelog({
       cwd: path.join(tmpPath, 'packages/my-app'),
@@ -393,12 +397,9 @@ describe(getChangelog, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'fix: old-release'], { cwd: tmpPath });
 
-    process.chdir(path.join(tmpPath, 'packages/my-app'));
-
-    await standardVersion({
-      path: path.join(tmpPath, 'packages/my-app'),
-      tagPrefix: '@scope/my-app@',
-      firstRelease: true,
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      firstVersion: true,
     });
 
     let oldCommit = await getCurrentCommit(tmpPath);
@@ -414,14 +415,16 @@ describe(getChangelog, function() {
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
-    await standardVersion({
-      path: path.join(tmpPath, 'packages/my-app'),
-      tagPrefix: '@scope/my-app@',
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      newVersion: '1.0.1',
     });
 
     let newCommit = await getCurrentCommit(tmpPath);
 
     await execa('git', ['reset', '--hard', oldCommit], { cwd: tmpPath });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
 
     let changelog = await getChangelog({
       cwd: path.join(tmpPath, 'packages/my-app'),
