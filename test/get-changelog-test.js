@@ -8,7 +8,7 @@ const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 const path = require('path');
-const standardVersion = require('standard-version');
+const _standardVersion = require('standard-version');
 const {
   getCurrentCommit,
 } = require('./helpers/git');
@@ -24,6 +24,13 @@ describe(getChangelog, function() {
   beforeEach(async function() {
     tmpPath = await gitInit();
   });
+
+  async function standardVersion(options = {}) {
+    await _standardVersion({
+      silent: true,
+      ...options,
+    });
+  }
 
   it('works pre tag', async function() {
     fixturify.writeSync(tmpPath, {
