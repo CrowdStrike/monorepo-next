@@ -434,4 +434,71 @@ describe(getChangelog, function() {
     expect(changelog).to.include('[1.0.0]');
     expect(changelog).to.not.include('[1.0.1]');
   });
+
+  it('only generates one release when no changes', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'package.json': stringifyJson({
+            'name': '@scope/my-app',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      firstVersion: true,
+    });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'index.js': 'foo',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      newVersion: '1.0.1',
+    });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'index.js': 'bar',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: bar'], { cwd: tmpPath });
+
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      newVersion: '1.0.2',
+    });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
+
+    let changelog = await getChangelog({
+      cwd: path.join(tmpPath, 'packages/my-app'),
+    });
+
+    expect(changelog).to.include('[1.0.2]');
+    expect(changelog).to.include('* bar');
+    expect(changelog).to.not.include('[1.0.1]');
+    expect(changelog).to.not.include('* foo');
+  });
 });
