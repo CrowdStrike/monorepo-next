@@ -110,7 +110,7 @@ async function _getChangelog({
     {
       merges: null,
       path: cwd,
-      from,
+      ...from ? { from } : {},
     },
     null,
     null,
