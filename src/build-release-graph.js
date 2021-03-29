@@ -10,6 +10,8 @@ const { trackNewVersion } = require('./version');
 const semver = require('semver');
 const dependencyTypes = require('./dependency-types');
 
+const defaultReleaseType = 'patch';
+
 async function getReleaseType(packageName, cwd) {
   let tagPrefix = `${packageName}@`;
 
@@ -66,7 +68,7 @@ async function init({
   }
 
   if (!releaseType) {
-    releaseType = await getReleaseType(name, cwd);
+    releaseType = await module.exports.getReleaseType(name, cwd);
   }
 
   let canBumpVersion = !!(version && name);
@@ -121,9 +123,9 @@ async function secondPass({
         if (dag.isPackage && shouldInheritGreaterReleaseType && !isDevDep && shouldBumpInRangeDependencies) {
           await init({ dag, releaseTrees, releaseType: parent.releaseType });
         } else if (!isReleaseTypeInRange(parent.oldVersion, parent.releaseType, dag.dependencyRange)) {
-          await init({ dag, releaseTrees, shouldVersionBump });
+          await init({ dag, releaseTrees, releaseType: defaultReleaseType, shouldVersionBump });
         } else if (shouldBumpInRangeDependencies) {
-          await init({ dag, releaseTrees, shouldVersionBump });
+          await init({ dag, releaseTrees, releaseType: defaultReleaseType, shouldVersionBump });
         } else {
           return;
         }
@@ -305,3 +307,6 @@ async function buildReleaseGraph({
 }
 
 module.exports = buildReleaseGraph;
+Object.assign(module.exports, {
+  getReleaseType,
+});
