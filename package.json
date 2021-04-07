@@ -67,7 +67,7 @@
     "npm-packlist": "^2.1.4",
     "rfc6902": "^4.0.2",
     "semver": "7.3.5",
-    "standard-version": "9.1.1",
+    "standard-version": "9.2.0",
     "tmp": "0.2.1",
     "yargs": "^16.0.0"
   },
