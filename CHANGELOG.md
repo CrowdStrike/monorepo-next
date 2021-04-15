@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v4.3.4...v5.0.0) (2021-04-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* The `silent` option is removed from the js functions, and the js functions no longer log to console.
+
+### Bug Fixes
+
+* remove logging of js `changed` and `changedFiles` ([2fd8921](https://github.com/CrowdStrike/monorepo-next/commit/2fd89213a959727e18b856aba212dc03621977bf))
+
 ### [4.3.4](https://github.com/CrowdStrike/monorepo-next/compare/v4.3.3...v4.3.4) (2021-04-07)
 
 
