@@ -69,7 +69,7 @@ async function buildChangeGraph({
   cached,
 }) {
   let packagesWithChanges = {};
-
+  let currentCommit = 'HEAD';
   let sinceBranchCommit;
 
   for (let _package of collectPackages(workspaceMeta)) {
@@ -82,7 +82,7 @@ async function buildChangeGraph({
       tagCommit = fromCommit;
     } else if (sinceBranch) {
       if (!sinceBranchCommit) {
-        sinceBranchCommit = await getCommonAncestor('HEAD', sinceBranch, {
+        sinceBranchCommit = await getCommonAncestor(currentCommit, sinceBranch, {
           cwd: workspaceMeta.cwd,
           cached,
         });
@@ -97,7 +97,7 @@ async function buildChangeGraph({
 
     let changedFiles = await getPackageChangedFiles({
       tagCommit,
-      currentCommit: 'HEAD',
+      currentCommit,
       packageCwd: _package.cwd,
       options: {
         cwd: workspaceMeta.cwd,
