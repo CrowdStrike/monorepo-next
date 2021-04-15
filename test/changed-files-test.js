@@ -203,8 +203,7 @@ describe(changedFiles, function() {
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
     await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-    await execa('git', ['branch', 'test-branch'], { cwd: tmpPath });
-    await execa('git', ['checkout', 'test-branch'], { cwd: tmpPath });
+    await execa('git', ['checkout', '-b', 'test-branch'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
