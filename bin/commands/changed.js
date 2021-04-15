@@ -13,10 +13,14 @@ module.exports = {
   async handler(argv) {
     const changed = require('../../src/changed');
 
-    await changed({
+    let _changed = await changed({
       ...argv,
       shouldOnlyIncludeReleasable: argv['only-include-releasable'],
       shouldExcludeDevChanges: argv['exclude-dev-changes'],
     });
+
+    for (let name of _changed) {
+      console.log(name);
+    }
   },
 };

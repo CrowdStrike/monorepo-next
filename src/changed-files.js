@@ -18,7 +18,6 @@ async function arePathsTheSame(path1, path2) {
 
 async function changedFiles({
   cwd = process.cwd(),
-  silent,
   shouldOnlyIncludeReleasable = builder['only-include-releasable'].default,
   shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
   fromCommit,
@@ -61,9 +60,6 @@ async function changedFiles({
         continue;
       }
 
-      if (!silent) {
-        console.log(file);
-      }
       changedFiles.push(file);
     }
   }

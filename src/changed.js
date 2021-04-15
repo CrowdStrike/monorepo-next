@@ -18,7 +18,6 @@ async function arePathsTheSame(path1, path2) {
 
 async function changed({
   cwd = process.cwd(),
-  silent,
   shouldOnlyIncludeReleasable = builder['only-include-releasable'].default,
   shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
   fromCommit,
@@ -43,9 +42,6 @@ async function changed({
   for (let { dag } of packagesWithChanges) {
     let name = await arePathsTheSame(dag.cwd, workspaceCwd) ? dag.packageName : path.basename(dag.cwd);
 
-    if (!silent) {
-      console.log(name);
-    }
     _changed.push(name);
   }
 

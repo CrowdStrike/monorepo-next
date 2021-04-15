@@ -17,10 +17,14 @@ module.exports = {
   async handler(argv) {
     const changedFiles = require('../../src/changed-files');
 
-    await changedFiles({
+    let _changedFiles = await changedFiles({
       ...argv,
       shouldOnlyIncludeReleasable: argv['only-include-releasable'],
       shouldExcludeDevChanges: argv['exclude-dev-changes'],
     });
+
+    for (let file of _changedFiles) {
+      console.log(file);
+    }
   },
 };
