@@ -322,6 +322,172 @@ describe(buildChangeGraph, function() {
     ]));
   });
 
+  describe('fromCommitIfNewer', function() {
+    it('works', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+      let commit = await getCurrentCommit(tmpPath);
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'index.js': 'console.log()',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({
+        workspaceMeta,
+        fromCommitIfNewer: commit,
+      });
+
+      expect(packagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/package-a/index.js',
+          ],
+          changedReleasableFiles: [
+            'packages/package-a/index.js',
+          ],
+          dag: this.match({
+            packageName: '@scope/package-a',
+          }),
+        },
+      ]));
+    });
+
+    it('ignores commits older than last version tag', async function() {
+      let commit = await getCurrentCommit(tmpPath);
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({
+        workspaceMeta,
+        fromCommitIfNewer: commit,
+      });
+
+      expect(packagesWithChanges).to.deep.equal([]);
+    });
+
+    it('ignores non-ancestor commits', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+
+      let oldCommit = await getCurrentCommit(tmpPath);
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'index.js': 'console.log()',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+      let newCommit = await getCurrentCommit(tmpPath);
+
+      await execa('git', ['reset', '--hard', oldCommit], { cwd: tmpPath });
+      await execa('git', ['checkout', '-b', 'test-branch'], { cwd: tmpPath });
+      await execa('git', ['commit', '--allow-empty', '-m', 'test'], { cwd: tmpPath });
+
+      let orphanCommit = await getCurrentCommit(tmpPath);
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'orhpan.js': 'console.log()',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await execa('git', ['reset', '--hard', newCommit], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({
+        workspaceMeta,
+        fromCommitIfNewer: orphanCommit,
+      });
+
+      expect(packagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/package-a/index.js',
+          ],
+          changedReleasableFiles: [
+            'packages/package-a/index.js',
+          ],
+          dag: this.match({
+            packageName: '@scope/package-a',
+          }),
+        },
+      ]));
+    });
+  });
+
   it('can calulate difference in reverse order using an arbitrary commit', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {

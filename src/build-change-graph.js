@@ -65,6 +65,7 @@ async function buildChangeGraph({
   shouldOnlyIncludeReleasable,
   shouldExcludeDevChanges,
   fromCommit,
+  fromCommitIfNewer,
   sinceBranch,
   cached,
 }) {
@@ -93,6 +94,26 @@ async function buildChangeGraph({
         cwd: workspaceMeta.cwd,
         cached,
       });
+    }
+
+    if (fromCommitIfNewer) {
+      let [
+        isNewerThanTagCommit,
+        isInSameBranch,
+      ] = await Promise.all([
+        isCommitAncestorOf(tagCommit, fromCommitIfNewer, {
+          cwd: workspaceMeta.cwd,
+          cached,
+        }),
+        isCommitAncestorOf(fromCommitIfNewer, currentCommit, {
+          cwd: workspaceMeta.cwd,
+          cached,
+        }),
+      ]);
+
+      if (isNewerThanTagCommit && isInSameBranch) {
+        tagCommit = fromCommitIfNewer;
+      }
     }
 
     let changedFiles = await getPackageChangedFiles({

@@ -21,6 +21,7 @@ async function changed({
   shouldOnlyIncludeReleasable = builder['only-include-releasable'].default,
   shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
   fromCommit,
+  fromCommitIfNewer,
   sinceBranch,
   cached,
 } = {}) {
@@ -33,6 +34,7 @@ async function changed({
     shouldOnlyIncludeReleasable,
     shouldExcludeDevChanges,
     fromCommit,
+    fromCommitIfNewer,
     sinceBranch,
     cached,
   });
