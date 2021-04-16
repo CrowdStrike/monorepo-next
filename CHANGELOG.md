@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v5.0.0...v5.1.0) (2021-04-16)
+
+
+### Features
+
+* add `fromCommitIfNewer` ([3406876](https://github.com/CrowdStrike/monorepo-next/commit/3406876adf76e53eb7f15d2314738d66dea006f8))
+
 ## [5.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v4.3.4...v5.0.0) (2021-04-15)
 
 
