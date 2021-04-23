@@ -485,6 +485,60 @@ describe(buildChangeGraph, function() {
         },
       ]));
     });
+
+    it('ignores deleted commits', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'index.js': 'console.log()',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({
+        workspaceMeta,
+        fromCommitIfNewer: 'missing-commit',
+      });
+
+      expect(packagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/package-a/index.js',
+          ],
+          changedReleasableFiles: [
+            'packages/package-a/index.js',
+          ],
+          dag: this.match({
+            packageName: '@scope/package-a',
+          }),
+        },
+      ]));
+    });
   });
 
   it('can calulate difference in reverse order using an arbitrary commit', async function() {
