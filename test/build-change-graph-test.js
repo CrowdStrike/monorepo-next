@@ -447,8 +447,7 @@ describe(buildChangeGraph, function() {
 
       let newCommit = await getCurrentCommit(tmpPath);
 
-      await execa('git', ['reset', '--hard', oldCommit], { cwd: tmpPath });
-      await execa('git', ['checkout', '-b', 'test-branch'], { cwd: tmpPath });
+      await execa('git', ['checkout', '-b', 'test-branch', oldCommit], { cwd: tmpPath });
       await execa('git', ['commit', '--allow-empty', '-m', 'test'], { cwd: tmpPath });
 
       let orphanCommit = await getCurrentCommit(tmpPath);
@@ -463,7 +462,7 @@ describe(buildChangeGraph, function() {
 
       await execa('git', ['add', '.'], { cwd: tmpPath });
       await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-      await execa('git', ['reset', '--hard', newCommit], { cwd: tmpPath });
+      await execa('git', ['checkout', newCommit], { cwd: tmpPath });
 
       let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
