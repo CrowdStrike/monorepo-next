@@ -55,7 +55,8 @@ async function isCommitAncestorOf(ancestorCommit, descendantCommit, options) {
   try {
     await git(['merge-base', '--is-ancestor', ancestorCommit, descendantCommit], options);
   } catch (err) {
-    if (err.exitCode !== 1) {
+    let missingCommit = 128;
+    if (![1, missingCommit].includes(err.exitCode)) {
       throw err;
     }
     return false;
