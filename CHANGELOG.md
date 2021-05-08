@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v5.1.1...v6.0.0) (2021-05-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* bump node 12
+
+### Features
+
+* bump node 12 ([0fbd705](https://github.com/CrowdStrike/monorepo-next/commit/0fbd70557e6288010a38b9ff573e43709d90dcf4))
+
+
+### Bug Fixes
+
+* **deps:** update dependency inquirer to v8 ([ee7304d](https://github.com/CrowdStrike/monorepo-next/commit/ee7304d51ff2e869ad1b108ec084c0af9632561c))
+* **deps:** update dependency standard-version to v9.3.0 ([9928d9a](https://github.com/CrowdStrike/monorepo-next/commit/9928d9ab1812c7e45e4d933f19f491f0532dd90d))
+* **deps:** update dependency yargs to v17 ([7036e39](https://github.com/CrowdStrike/monorepo-next/commit/7036e396bc22a06fc107b7a1a95ab6bbc6e43402))
+
 ### [5.1.1](https://github.com/CrowdStrike/monorepo-next/compare/v5.1.0...v5.1.1) (2021-04-23)
 
 
