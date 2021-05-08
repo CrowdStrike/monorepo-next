@@ -62,7 +62,7 @@
     "conventional-recommended-bump": "6.1.0",
     "execa": "^5.0.0",
     "glob": "^7.1.4",
-    "inquirer": "^7.0.0",
+    "inquirer": "^8.0.0",
     "minimatch": "^3.0.4",
     "npm-packlist": "^2.1.4",
     "rfc6902": "^4.0.2",
