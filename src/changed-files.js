@@ -25,6 +25,7 @@ async function changedFiles({
   cached,
   packages = [],
   exts = [],
+  globs = [],
 } = {}) {
   let workspaceCwd = await getWorkspaceCwd(cwd);
 
@@ -57,11 +58,14 @@ async function changedFiles({
     }
 
     for (let file of _changedFiles) {
-      if (exts.length && exts.every(ext => !file.endsWith(`.${ext}`))) {
+      if (exts.length && exts.some(ext => file.endsWith(`.${ext}`))) {
+        changedFiles.push(file);
         continue;
       }
 
-      changedFiles.push(file);
+      if (globs.length && globs.some(glob => glob.test(file))) {
+        changedFiles.push(file);
+      }
     }
   }
 
