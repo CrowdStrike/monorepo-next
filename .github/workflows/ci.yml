@@ -56,3 +56,21 @@ jobs:
 
     - run: yarn install --frozen-lockfile
     - run: yarn test
+
+  ember-cli-update:
+    needs: test
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.head_ref }}
+        token: ${{ secrets.GitHubToken }}
+    - uses: actions/setup-node@v2
+
+    - uses: kellyselden/ember-cli-update-action@v3
+      with:
+        autofix_command: yarn lint:js --fix && yarn lint:md -o
+        ignore_to: true
