@@ -145,10 +145,10 @@
   dependencies:
     chalk "^4.0.0"
 
-"@crowdstrike/commitlint@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@crowdstrike/commitlint/-/commitlint-3.0.0.tgz#e1da400b20de8c55991ee919627d78ef34d2baf6"
-  integrity sha512-2Eu/YWj6/ZEC6tP0iYNElTXTc7XqxxdYM8VcHd0lFCIu09rlrWikEK0JepO7z9AB3szZFtPipLlCuBryBfkQhg==
+"@crowdstrike/commitlint@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@crowdstrike/commitlint/-/commitlint-4.0.0.tgz#e17e39aab48075ff845d1836a89d393256e5bc78"
+  integrity sha512-2W8Rr3uBpgjsP0bhNFCB1YepbOhddfjSaLzZo0Wu2Vq5CLbLiWZGin2NwCcJvPtf8YeSqauxspz1M/A9F6pF4g==
   dependencies:
     "@commitlint/config-conventional" "^12.0.0"
     "@commitlint/format" "^12.0.0"
@@ -158,7 +158,7 @@
     commitlint-format-junit "^1.1.4"
     debug "^4.1.1"
     execa "^5.0.0"
-    yargs "^16.2.0"
+    yargs "^17.0.0"
 
 "@eslint/eslintrc@^0.4.0":
   version "0.4.0"
