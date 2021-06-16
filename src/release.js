@@ -13,6 +13,7 @@ const dependencyTypes = require('./dependency-types');
 const {
   getCurrentBranch,
   getWorkspaceCwd,
+  getCurrentCommit,
 } = require('./git');
 
 const { builder } = require('../bin/commands/release');
@@ -25,6 +26,7 @@ async function release({
   shouldBumpInRangeDependencies = builder['bump-in-range-dependencies'].default,
   shouldInheritGreaterReleaseType = builder['inherit-greater-release-type'].default,
   shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
+  shouldCleanUpAfterFailedPush = builder['clean-up-after-failed-push'].default,
   scripts = builder['scripts'].default,
   packageFiles = builder['package-files'].default,
   bumpFiles = builder['bump-files'].default,
@@ -150,6 +152,8 @@ async function release({
 
   await handleLifecycleScript('precommit');
 
+  let previousCommit = await getCurrentCommit(workspaceCwd);
+
   await execa('git', ['commit', '-m', commitMessage], { cwd: workspaceCwd });
 
   await handleLifecycleScript('postcommit');
@@ -169,13 +173,23 @@ async function release({
   if (shouldPush) {
     await prePushCallback();
 
-    if (pushOverride) {
-      await pushOverride({
-        cwd: workspaceCwd,
-        originalPush,
-      });
-    } else {
-      await originalPush();
+    try {
+      if (pushOverride) {
+        await pushOverride({
+          cwd: workspaceCwd,
+          originalPush,
+        });
+      } else {
+        await originalPush();
+      }
+    } catch (err) {
+      if (shouldCleanUpAfterFailedPush) {
+        await execa('git', ['tag', '-d', ...tags], { cwd: workspaceCwd });
+      }
+
+      await execa('git', ['reset', '--hard', previousCommit], { cwd: workspaceCwd });
+
+      throw err;
     }
   }
 
