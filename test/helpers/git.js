@@ -15,6 +15,7 @@ async function getCurrentCommit(cwd) {
 }
 
 module.exports = {
+  ...require('../../src/git'),
   getLastCommitMessage,
   getTagsOnLastCommit,
   getCurrentCommit,
