@@ -109,6 +109,9 @@ Options:
                                   monorepo dev dep change or manually bumping an
                                   external dev dep, don't count it towards a
                                   package change.     [boolean] [default: false]
+  --clean-up-after-failed-push    If there's already a new commit on the remote,
+                                  clean up the commit and tags that won't be
+                                  used                [boolean] [default: false]
   --scripts                       Provide scripts to execute for lifecycle
                                   events (prebump, precommit, etc.,)
                                                                    [default: {}]

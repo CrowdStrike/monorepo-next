@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v6.0.0...v6.1.0) (2021-06-16)
+
+
+### Features
+
+* clean up commit and tags after failed push ([a1d9171](https://github.com/CrowdStrike/monorepo-next/commit/a1d91714de846e346fd80a4e5ba50f6102907b80))
+
 ## [6.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v5.1.1...v6.0.0) (2021-05-08)
 
 
