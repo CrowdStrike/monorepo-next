@@ -31,6 +31,11 @@ module.exports = {
       default: false,
     },
     'exclude-dev-changes': commonArgs['exclude-dev-changes'],
+    'clean-up-after-failed-push': {
+      describe: 'If there\'s already a new commit on the remote, clean up the commit and tags that won\'t be used',
+      type: 'boolean',
+      default: false,
+    },
     'scripts': {
       describe: 'Provide scripts to execute for lifecycle events (prebump, precommit, etc.,)',
       default: defaults.scripts,

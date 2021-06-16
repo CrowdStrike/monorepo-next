@@ -10,13 +10,30 @@ async function getTagsOnLastCommit(cwd) {
   return (await execa('git', ['tag', '-l', '--points-at', 'HEAD'], { cwd })).stdout.split(/\r?\n/).filter(Boolean);
 }
 
-async function getCurrentCommit(cwd) {
-  return (await execa('git', ['rev-parse', 'HEAD'], { cwd })).stdout;
+async function doesTagExist(ref, cwd) {
+  try {
+    await execa('git', ['rev-parse', ref], { cwd });
+  } catch (err) {
+    if (err.stderr.includes('unknown revision or path not in the working tree')) {
+      return false;
+    }
+
+    throw err;
+  }
+
+  return true;
+}
+
+async function isGitClean(cwd) {
+  let { stdout } = await execa('git', ['status', '--porcelain'], { cwd });
+
+  return !stdout;
 }
 
 module.exports = {
   ...require('../../src/git'),
   getLastCommitMessage,
   getTagsOnLastCommit,
-  getCurrentCommit,
+  doesTagExist,
+  isGitClean,
 };

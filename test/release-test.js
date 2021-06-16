@@ -10,6 +10,9 @@ const { gitInit } = require('git-fixtures');
 const {
   getLastCommitMessage,
   getTagsOnLastCommit,
+  getCurrentCommit,
+  doesTagExist,
+  isGitClean,
 } = require('./helpers/git');
 const { EOL } = require('os');
 const readWorkspaces = require('./helpers/read-workspaces');
@@ -429,6 +432,51 @@ describe(_release, function() {
       'my-app@0.0.0',
       'root@0.0.0',
     ]);
+  });
+
+  it('can clean up after a failed push', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'package.json': stringifyJson({
+            'private': true,
+            'name': 'my-app',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'name': 'root',
+        'version': '0.0.0',
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    let previousCommit = await getCurrentCommit(tmpPath);
+
+    let pushOverride = this.stub().rejects(new Error('test push failed'));
+
+    let promise = release({
+      shouldPush: true,
+      pushOverride,
+      shouldCleanUpAfterFailedPush: true,
+    });
+
+    await expect(promise).to.eventually.be.rejectedWith('test push failed');
+
+    let currentCommit = await getCurrentCommit(tmpPath);
+
+    expect(currentCommit).to.equal(previousCommit);
+
+    expect(await isGitClean(tmpPath)).to.be.true;
+
+    expect(await doesTagExist('my-app@1.0.1')).to.be.false;
   });
 
   it('bumps in-range versions', async function() {
