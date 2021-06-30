@@ -1,6 +1,7 @@
 'use strict';
 
 const execa = require('execa');
+const debug = require('./debug')('git');
 
 let cache = {};
 
@@ -8,22 +9,30 @@ function getCacheKey(args, cwd) {
   return [cwd, ...args].join();
 }
 
-async function git(args, {
-  cwd,
-  cached,
-}) {
+async function git(args, options) {
+  let {
+    cwd,
+    cached,
+  } = options;
+
+  let stdout;
+
   let cacheKey = getCacheKey(args, cwd);
 
   if (cached && cacheKey in cache) {
-    return cache[cacheKey];
-  }
+    stdout = cache[cacheKey];
+  } else {
+    debug(args, options);
 
-  let { stdout } = await execa('git', args, {
-    cwd,
-  });
+    stdout = (await execa('git', args, {
+      cwd,
+    })).stdout;
 
-  if (cached) {
-    cache[cacheKey] = stdout;
+    if (cached) {
+      cache[cacheKey] = stdout;
+    }
+
+    debug(stdout);
   }
 
   return stdout;
