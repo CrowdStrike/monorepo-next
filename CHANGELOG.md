@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.2.0](https://github.com/CrowdStrike/monorepo-next/compare/v6.1.0...v6.2.0) (2021-07-01)
+
+
+### Features
+
+* add debug logging to git ([1f3bdca](https://github.com/CrowdStrike/monorepo-next/commit/1f3bdcabda8065d9bcadb0d8df8fbf88b5aa05fc))
+
 ## [6.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v6.0.0...v6.1.0) (2021-06-16)
 
 
