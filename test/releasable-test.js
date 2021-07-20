@@ -194,6 +194,16 @@ describe(function() {
       ]);
     });
 
+    it('throws when changed files includes a dir', async function() {
+      let promise = getChangedReleasableFiles({
+        changedFiles: [
+          'package-a/dir1/',
+        ],
+      });
+
+      await expect(promise).to.eventually.be.rejectedWith(`expected 'package-a/dir1/' to be a file, but it is a directory`);
+    });
+
     describe('shouldExcludeDevChanges', function() {
       let shouldExcludeDevChanges = true;
 

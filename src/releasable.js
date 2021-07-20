@@ -132,6 +132,12 @@ async function getChangedReleasableFiles({
 }) {
   changedFiles = new Set(changedFiles);
 
+  for (let changedFile of changedFiles) {
+    if (changedFile.endsWith(path.sep)) {
+      throw new Error(`expected '${changedFile}' to be a file, but it is a directory`);
+    }
+  }
+
   let changedPublishedFiles = await _getChangedReleasableFiles({
     cwd: packageCwd,
     changedFiles: map(changedFiles, file => path.relative(packageCwd, path.join(workspacesCwd, file))),
