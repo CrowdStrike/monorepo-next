@@ -11,6 +11,7 @@ const { gitInit } = require('git-fixtures');
 const { getCurrentCommit } = require('./helpers/git');
 const { replaceJsonFile } = require('../src/fs');
 const path = require('path');
+const fs = { ...require('fs'), ...require('fs').promises };
 
 describe(buildChangeGraph, function() {
   this.timeout(5e3);
@@ -145,6 +146,56 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/package-a/index.js',
+        ],
+        dag: this.match({
+          packageName: '@scope/package-a',
+        }),
+      },
+    ]));
+  });
+
+  it('handles a dirty directory rename (trailing / shows up in git status)', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+          'dir1': {
+            'test.txt': 'testing',
+          },
+        },
+      },
+      'package.json': stringifyJson({
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+
+    await fs.rename(
+      path.join(tmpPath, 'packages/package-a/dir1'),
+      path.join(tmpPath, 'packages/package-a/dir2'),
+    );
+
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+    expect(packagesWithChanges).to.match(this.match([
+      {
+        changedFiles: [
+          'packages/package-a/dir1/test.txt',
+          'packages/package-a/dir2/test.txt',
+        ],
+        changedReleasableFiles: [
+          'packages/package-a/dir1/test.txt',
+          'packages/package-a/dir2/test.txt',
         ],
         dag: this.match({
           packageName: '@scope/package-a',
