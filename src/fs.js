@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = { ...require('fs'), ...require('fs').promises };
-const { EOL } = require('os');
+const { stringify } = require('./json');
 
 async function replaceFile(path, callback) {
   let oldContents = await fs.readFile(path, 'utf8');
@@ -24,7 +24,7 @@ async function replaceJsonFile(path, callback) {
       newJson = oldJson;
     }
 
-    let newContents = JSON.stringify(newJson, null, 2) + EOL;
+    let newContents = stringify(newJson);
 
     return newContents;
   });

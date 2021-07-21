@@ -41,7 +41,7 @@ describe(function() {
 
       expect(changedReleasableFiles).to.deep.equal([
         'package-a/include.js',
-      ]);
+      ].map(path.normalize));
     });
 
     it('works with npmignore', async function() {
@@ -66,7 +66,7 @@ describe(function() {
 
       expect(changedReleasableFiles).to.deep.equal([
         'package-a/include.js',
-      ]);
+      ].map(path.normalize));
     });
 
     it('works with gitignore', async function() {
@@ -91,7 +91,7 @@ describe(function() {
 
       expect(changedReleasableFiles).to.deep.equal([
         'package-a/include.js',
-      ]);
+      ].map(path.normalize));
     });
 
     it('works without ignoring', async function() {
@@ -116,7 +116,7 @@ describe(function() {
       expect(changedReleasableFiles).to.deep.equal([
         'package-a/exclude.js',
         'package-a/include.js',
-      ]);
+      ].map(path.normalize));
     });
 
     it('injected and changed files are included', async function() {
@@ -145,7 +145,7 @@ describe(function() {
         'package-a/.gitignore',
         'package-a/.npmignore',
         'package-a/package.json',
-      ]);
+      ].map(path.normalize));
     });
 
     it('injected but unchanged files are excluded', async function() {
@@ -191,7 +191,7 @@ describe(function() {
 
       expect(changedReleasableFiles).to.deep.equal([
         'package-a/.npmignore',
-      ]);
+      ].map(path.normalize));
     });
 
     it('throws when changed files includes a dir', async function() {
@@ -276,7 +276,7 @@ describe(function() {
 
         expect(changedReleasableFiles).to.deep.equal([
           'package-a/package.json',
-        ]);
+        ].map(path.normalize));
       });
     });
   });
