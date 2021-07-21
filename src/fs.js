@@ -1,17 +1,14 @@
 'use strict';
 
-const fs = require('fs');
-const { promisify } = require('util');
+const fs = { ...require('fs'), ...require('fs').promises };
 const { EOL } = require('os');
-const readFile = promisify(fs.readFile);
-const writeFile = promisify(fs.writeFile);
 
 async function replaceFile(path, callback) {
-  let oldContents = await readFile(path, 'utf8');
+  let oldContents = await fs.readFile(path, 'utf8');
 
   let newContents = await callback(oldContents);
 
-  await writeFile(path, newContents);
+  await fs.writeFile(path, newContents);
 
   return newContents;
 }

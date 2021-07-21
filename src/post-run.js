@@ -1,16 +1,14 @@
 'use strict';
 
-const { promisify } = require('util');
 const execa = require('execa');
-const fs = require('fs');
-const access = promisify(fs.access);
+const fs = { ...require('fs'), ...require('fs').promises };
 
 async function postRun({
   cwd = process.cwd(),
 } = {}) {
   let exists;
   try {
-    await access(`${cwd}/yarn.lock`, fs.constants.F_OK);
+    await fs.access(`${cwd}/yarn.lock`, fs.constants.F_OK);
     exists = true;
   } catch (err) {}
 

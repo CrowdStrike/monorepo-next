@@ -3,12 +3,7 @@
 const packlist = require('npm-packlist');
 const path = require('path');
 const { createTmpDir } = require('./tmp');
-const fs = require('fs');
-const { promisify } = require('util');
-const copyFile = promisify(fs.copyFile);
-const writeFile = promisify(fs.writeFile);
-const mkdir = promisify(fs.mkdir);
-const readFile = promisify(fs.readFile);
+const fs = { ...require('fs'), ...require('fs').promises };
 const {
   union,
   intersection,
@@ -36,10 +31,10 @@ async function prepareTmpPackage({
     let from = path.join(cwd, fileName);
     let to = path.join(tmpDir, fileName);
 
-    await mkdir(path.dirname(to), { recursive: true });
+    await fs.mkdir(path.dirname(to), { recursive: true });
 
     try {
-      await copyFile(from, to);
+      await fs.copyFile(from, to);
     } catch (err) {
       if (err.code !== 'ENOENT') {
         throw err;
@@ -54,9 +49,9 @@ async function prepareTmpPackage({
 
     let filePath = path.join(tmpDir, file);
 
-    await mkdir(path.dirname(filePath), { recursive: true });
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
 
-    await writeFile(filePath, '');
+    await fs.writeFile(filePath, '');
   }
 }
 
@@ -113,7 +108,7 @@ async function isPackageJsonChangeReleasable({
   tagCommit,
   workspacesCwd,
 }) {
-  let newPackageJson = JSON.parse(await readFile(path.join(workspacesCwd, relativePackageJsonPath)));
+  let newPackageJson = JSON.parse(await fs.readFile(path.join(workspacesCwd, relativePackageJsonPath)));
 
   let oldPackageJson = JSON.parse(await getFileAtCommit(relativePackageJsonPath, tagCommit, workspacesCwd));
 
