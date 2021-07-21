@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.2.2](https://github.com/CrowdStrike/monorepo-next/compare/v6.2.1...v6.2.2) (2021-07-21)
+
+
+### Bug Fixes
+
+* assert for unexpected dirs ([292a72c](https://github.com/CrowdStrike/monorepo-next/commit/292a72c0c85a17c806da62e20b623377c57b1dbd))
+* strip dirs from git status ([163b37e](https://github.com/CrowdStrike/monorepo-next/commit/163b37ed6ac6ec3f2b84ba8d5abb5ee1eae1f0be))
+
 ### [6.2.1](https://github.com/CrowdStrike/monorepo-next/compare/v6.2.0...v6.2.1) (2021-07-14)
 
 
