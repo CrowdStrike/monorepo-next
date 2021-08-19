@@ -57,14 +57,18 @@ async function changedFiles({
       continue;
     }
 
-    for (let file of _changedFiles) {
-      if (exts.length && exts.some(ext => file.endsWith(`.${ext}`))) {
-        changedFiles.push(file);
-        continue;
-      }
+    if (exts.length === 0 && globs.length === 0) {
+      changedFiles.push(... _changedFiles);
+    } else {
+      for (let file of _changedFiles) {
+        if (exts.length && exts.some(ext => file.endsWith(`.${ext}`))) {
+          changedFiles.push(file);
+          continue;
+        }
 
-      if (globs.length && globs.some(glob => glob.test(file))) {
-        changedFiles.push(file);
+        if (globs.length && globs.some(glob => glob.test(file))) {
+          changedFiles.push(file);
+        }
       }
     }
   }
