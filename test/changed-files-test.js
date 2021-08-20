@@ -184,30 +184,6 @@ describe(changedFiles, function() {
     ]);
   });
 
-  it('globs top level vs nested', async function() {
-    fixturify.writeSync(tmpPath, {
-      'packages': {
-        'package-a': {
-          '.my-config.json': 'test',
-        },
-      },
-      '.my-config.json': 'test',
-    });
-
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-
-    let _changedFiles = await changedFiles({
-      cwd: tmpPath,
-      silent: true,
-      globs: ['.my-config.json'],
-    });
-
-    expect(_changedFiles).to.deep.equal([
-      '.my-config.json',
-    ]);
-  });
-
   it('multiple globs', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -230,56 +206,6 @@ describe(changedFiles, function() {
     expect(_changedFiles).to.deep.equal([
       'packages/package-a/.config-foo.json',
       '.config-bar.yaml',
-    ]);
-  });
-
-  it('globs brace expansion', async function() {
-    fixturify.writeSync(tmpPath, {
-      'packages': {
-        'package-a': {
-          '.config.json': 'test',
-          '.config.yaml': 'test',
-        },
-      },
-    });
-
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-
-    let _changedFiles = await changedFiles({
-      cwd: tmpPath,
-      silent: true,
-      globs: ['**/.config.+(json|yaml)'],
-    });
-
-    expect(_changedFiles).to.deep.equal([
-      'packages/package-a/.config.json',
-      'packages/package-a/.config.yaml',
-    ]);
-  });
-
-  it('globs star matches', async function() {
-    fixturify.writeSync(tmpPath, {
-      'packages': {
-        'package-a': {
-          '.config.json': 'test',
-          '.config.yaml': 'test',
-        },
-      },
-    });
-
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-
-    let _changedFiles = await changedFiles({
-      cwd: tmpPath,
-      silent: true,
-      globs: ['**/.config.*'],
-    });
-
-    expect(_changedFiles).to.deep.equal([
-      'packages/package-a/.config.json',
-      'packages/package-a/.config.yaml',
     ]);
   });
 
