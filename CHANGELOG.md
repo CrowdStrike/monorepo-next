@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.3.0](https://github.com/CrowdStrike/monorepo-next/compare/v6.2.2...v6.3.0) (2021-08-20)
+
+
+### Features
+
+* globs for changedFiles ([e67e7ca](https://github.com/CrowdStrike/monorepo-next/commit/e67e7ca99d25c3b789b803e41484b48ce0e9af83))
+
+
+### Bug Fixes
+
+* case for missing globs & exts ([c29d23b](https://github.com/CrowdStrike/monorepo-next/commit/c29d23b57e693d332553a6a567248d5c41bac14c))
+* make the changedFiles code easier to reason about ([2963ab3](https://github.com/CrowdStrike/monorepo-next/commit/2963ab31ee7595a2242498add54c74e89772ae64))
+* refactor globs to use globs ([5b60cd6](https://github.com/CrowdStrike/monorepo-next/commit/5b60cd621172f0efdd9cfa23ad767553cfab32b7))
+* remove duplicated tests ([b5d1347](https://github.com/CrowdStrike/monorepo-next/commit/b5d13479217dbbd95184eeeb4c5add52b3b992f2))
+
 ### [6.2.2](https://github.com/CrowdStrike/monorepo-next/compare/v6.2.1...v6.2.2) (2021-07-21)
 
 
