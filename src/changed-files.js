@@ -57,18 +57,19 @@ async function changedFiles({
       continue;
     }
 
-    if (exts.length === 0 && globs.length === 0) {
-      changedFiles.push(... _changedFiles);
-    } else {
-      for (let file of _changedFiles) {
-        if (exts.length && exts.some(ext => file.endsWith(`.${ext}`))) {
-          changedFiles.push(file);
-          continue;
-        }
+    for (let file of _changedFiles) {
+      let isMatch = false;
 
-        if (globs.length && globs.some(glob => glob.test(file))) {
-          changedFiles.push(file);
-        }
+      if (!exts.length && !globs.length) {
+        isMatch = true;
+      } else if (exts.some(ext => file.endsWith(`.${ext}`))) {
+        isMatch = true;
+      } else if (globs.some(glob => glob.test(file))) {
+        isMatch = true;
+      }
+
+      if (isMatch) {
+        changedFiles.push(file);
       }
     }
   }
