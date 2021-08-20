@@ -156,6 +156,91 @@ describe(changedFiles, function() {
     ]);
   });
 
+  it('filters globs only', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'changed.txt': 'test',
+          '.my-config.json': 'test',
+        },
+        'changed-without-config-1.txt': 'test',
+      },
+      'changed-without-config-2.txt': 'test',
+      '.my-config.json': 'test',
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+      globs: ['**/.my-config.json'],
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'packages/package-a/.my-config.json',
+      '.my-config.json',
+    ]);
+  });
+
+  it('multiple globs', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          '.config-foo.json': 'test',
+        },
+      },
+      '.config-bar.yaml': 'test',
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+      globs: ['**/.config-foo.json', '**/.config-bar.yaml'],
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'packages/package-a/.config-foo.json',
+      '.config-bar.yaml',
+    ]);
+  });
+
+  it('filters globs and exts', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'changed.txt': 'test',
+          '.my-config.json': 'test',
+        },
+        'changed-without-config-1.txt': 'test',
+        'non-matching-file-1.json': 'test',
+      },
+      'changed-without-config-2.txt': 'test',
+      'non-matching-file-2.json': 'test',
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+      globs: ['**/.my-config.json'],
+      exts: ['txt'],
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'packages/package-a/.my-config.json',
+      'packages/package-a/changed.txt',
+      'changed-without-config-2.txt',
+      'packages/changed-without-config-1.txt',
+    ]);
+  });
+
   it('accepts an arbitrary commit to calculate difference', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {

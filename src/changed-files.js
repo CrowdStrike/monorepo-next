@@ -7,6 +7,7 @@ const fs = { ...require('fs'), ...require('fs').promises };
 const {
   getWorkspaceCwd,
 } = require('./git');
+const minimatch = require('minimatch');
 
 const { builder } = require('../bin/commands/changed-files');
 
@@ -25,6 +26,7 @@ async function changedFiles({
   cached,
   packages = [],
   exts = [],
+  globs = [],
 } = {}) {
   let workspaceCwd = await getWorkspaceCwd(cwd);
 
@@ -57,11 +59,19 @@ async function changedFiles({
     }
 
     for (let file of _changedFiles) {
-      if (exts.length && exts.every(ext => !file.endsWith(`.${ext}`))) {
-        continue;
+      let isMatch = false;
+
+      if (!exts.length && !globs.length) {
+        isMatch = true;
+      } else if (exts.some(ext => file.endsWith(`.${ext}`))) {
+        isMatch = true;
+      } else if (globs.some(glob => minimatch(file, glob))) {
+        isMatch = true;
       }
 
-      changedFiles.push(file);
+      if (isMatch) {
+        changedFiles.push(file);
+      }
     }
   }
 
