@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.3.1](https://github.com/CrowdStrike/monorepo-next/compare/v6.3.0...v6.3.1) (2021-08-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency npm-packlist to v3 ([8b43e29](https://github.com/CrowdStrike/monorepo-next/commit/8b43e2945829562d1bd1f577549980a27a2f70ce))
+
 ## [6.3.0](https://github.com/CrowdStrike/monorepo-next/compare/v6.2.2...v6.3.0) (2021-08-20)
 
 
