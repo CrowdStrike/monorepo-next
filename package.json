@@ -65,7 +65,7 @@
     "glob": "^7.1.4",
     "inquirer": "^8.0.0",
     "minimatch": "^3.0.4",
-    "npm-packlist": "^2.1.4",
+    "npm-packlist": "^3.0.0",
     "rfc6902": "^4.0.2",
     "semver": "7.3.5",
     "standard-version": "9.3.1",
