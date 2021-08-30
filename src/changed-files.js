@@ -79,6 +79,3 @@ async function changedFiles({
 }
 
 module.exports = changedFiles;
-Object.assign(module.exports, {
-  arePathsTheSame,
-});
