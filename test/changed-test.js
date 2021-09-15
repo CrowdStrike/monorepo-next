@@ -112,9 +112,9 @@ describe(changed, function() {
     });
 
     expect(_changed).to.deep.equal([
-      'package-a',
+      '@scope/package-a',
       'my-app-1',
-      'package-b',
+      '@scope/package-b',
       'root',
     ]);
   });
@@ -196,9 +196,9 @@ describe(changed, function() {
 
     expect(_changed).to.deep.equal([
       'my-app-2',
-      'package-a',
+      '@scope/package-a',
       'my-app-1',
-      'package-b',
+      '@scope/package-b',
       'root',
     ]);
   });
@@ -227,10 +227,10 @@ describe(changed, function() {
     });
 
     expect(cachedChanged).to.deep.equal([
-      'package-a',
+      '@scope/package-a',
       'root',
       'my-app-1',
-      'package-b',
+      '@scope/package-b',
     ]);
 
     let commit = await getCurrentCommit(tmpPath);
@@ -253,10 +253,10 @@ describe(changed, function() {
     });
 
     expect(_changed).to.deep.equal([
-      'package-a',
+      '@scope/package-a',
       'root',
       'my-app-1',
-      'package-b',
+      '@scope/package-b',
     ]);
 
     _changed = await changed({
@@ -277,10 +277,10 @@ describe(changed, function() {
 
     expect(_changed).to.deep.equal([
       'my-app-2',
-      'package-a',
+      '@scope/package-a',
       'root',
       'my-app-1',
-      'package-b',
+      '@scope/package-b',
     ]);
   });
 });

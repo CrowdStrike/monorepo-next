@@ -2,11 +2,9 @@
 
 const buildDepGraph = require('./build-dep-graph');
 const buildChangeGraph = require('./build-change-graph');
-const path = require('path');
 const {
   getWorkspaceCwd,
 } = require('./git');
-const { arePathsTheSame } = require('./changed-files');
 
 const { builder } = require('../bin/commands/changed');
 
@@ -33,13 +31,7 @@ async function changed({
     cached,
   });
 
-  let _changed = [];
-
-  for (let { dag } of packagesWithChanges) {
-    let name = await arePathsTheSame(dag.cwd, workspaceCwd) ? dag.packageName : path.basename(dag.cwd);
-
-    _changed.push(name);
-  }
+  let _changed = packagesWithChanges.map(({ dag }) => dag.packageName);
 
   return _changed;
 }
