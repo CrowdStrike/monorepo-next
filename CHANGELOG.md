@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v6.3.1...v7.0.0) (2021-09-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* this only affects changed and nothing else
+
+### Features
+
+* return only list of changed package names ([75840e9](https://github.com/CrowdStrike/monorepo-next/commit/75840e91501530ed1e4098893aad051f243e45ce))
+
 ### [6.3.1](https://github.com/CrowdStrike/monorepo-next/compare/v6.3.0...v6.3.1) (2021-08-23)
 
 
