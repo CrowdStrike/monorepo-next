@@ -14,6 +14,7 @@ async function changed({
   shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
   fromCommit,
   fromCommitIfNewer,
+  toCommit,
   sinceBranch,
   cached,
 } = {}) {
@@ -27,6 +28,7 @@ async function changed({
     shouldExcludeDevChanges,
     fromCommit,
     fromCommitIfNewer,
+    toCommit,
     sinceBranch,
     cached,
   });

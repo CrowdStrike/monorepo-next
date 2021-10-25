@@ -119,7 +119,7 @@ describe(changed, function() {
     ]);
   });
 
-  it('accepts an arbitrary commit to calculate difference', async function() {
+  it('accepts an arbitrary from commit to calculate difference', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {
         'my-app-1': {
@@ -152,6 +152,42 @@ describe(changed, function() {
 
     expect(_changed).to.deep.equal([
       'my-app-2',
+    ]);
+  });
+
+  it('accepts an arbitrary to commit to calculate difference', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app-1': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let commit = await getCurrentCommit(tmpPath);
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app-2': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let _changed = await changed({
+      cwd: tmpPath,
+      silent: true,
+      toCommit: commit,
+    });
+
+    expect(_changed).to.deep.equal([
+      'my-app-1',
     ]);
   });
 

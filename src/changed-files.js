@@ -22,6 +22,7 @@ async function changedFiles({
   shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
   fromCommit,
   fromCommitIfNewer,
+  toCommit,
   sinceBranch,
   cached,
   packages = [],
@@ -38,6 +39,7 @@ async function changedFiles({
     shouldExcludeDevChanges,
     fromCommit,
     fromCommitIfNewer,
+    toCommit,
     sinceBranch,
     cached,
   });
