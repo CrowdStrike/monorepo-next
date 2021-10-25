@@ -16,21 +16,21 @@ const {
 } = require('./set');
 
 async function getPackageChangedFiles({
-  tagCommit,
+  fromCommit,
   currentCommit,
   packageCwd,
   options,
 }) {
-  let isAncestor = await isCommitAncestorOf(tagCommit, currentCommit, options);
+  let isAncestor = await isCommitAncestorOf(fromCommit, currentCommit, options);
 
   let olderCommit;
   let newerCommit;
   if (isAncestor) {
-    olderCommit = tagCommit;
+    olderCommit = fromCommit;
     newerCommit = currentCommit;
   } else {
     olderCommit = currentCommit;
-    newerCommit = tagCommit;
+    newerCommit = fromCommit;
   }
 
   let committedChanges = await git(['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], options);
@@ -78,9 +78,9 @@ async function buildChangeGraph({
       continue;
     }
 
-    let tagCommit;
+    let _fromCommit;
     if (fromCommit) {
-      tagCommit = fromCommit;
+      _fromCommit = fromCommit;
     } else if (sinceBranch) {
       if (!sinceBranchCommit) {
         sinceBranchCommit = await getCommonAncestor(currentCommit, sinceBranch, {
@@ -88,9 +88,9 @@ async function buildChangeGraph({
           cached,
         });
       }
-      tagCommit = sinceBranchCommit;
+      _fromCommit = sinceBranchCommit;
     } else {
-      tagCommit = await getCommitSinceLastRelease(_package, {
+      _fromCommit = await getCommitSinceLastRelease(_package, {
         cwd: workspaceMeta.cwd,
         cached,
       });
@@ -101,7 +101,7 @@ async function buildChangeGraph({
         isNewerThanTagCommit,
         isInSameBranch,
       ] = await Promise.all([
-        isCommitAncestorOf(tagCommit, fromCommitIfNewer, {
+        isCommitAncestorOf(_fromCommit, fromCommitIfNewer, {
           cwd: workspaceMeta.cwd,
           cached,
         }),
@@ -112,12 +112,12 @@ async function buildChangeGraph({
       ]);
 
       if (isNewerThanTagCommit && isInSameBranch) {
-        tagCommit = fromCommitIfNewer;
+        _fromCommit = fromCommitIfNewer;
       }
     }
 
     let changedFiles = await getPackageChangedFiles({
-      tagCommit,
+      fromCommit: _fromCommit,
       currentCommit,
       packageCwd: _package.cwd,
       options: {
@@ -146,7 +146,7 @@ async function buildChangeGraph({
       packageCwd: _package.cwd,
       workspacesCwd: workspaceMeta.cwd,
       shouldExcludeDevChanges,
-      tagCommit,
+      fromCommit: _fromCommit,
     });
 
     if (shouldOnlyIncludeReleasable && !changedReleasableFiles.length) {

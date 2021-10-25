@@ -105,12 +105,12 @@ async function _getChangedReleasableFiles({
 
 async function isPackageJsonChangeReleasable({
   relativePackageJsonPath,
-  tagCommit,
+  fromCommit,
   workspacesCwd,
 }) {
   let newPackageJson = JSON.parse(await fs.readFile(path.join(workspacesCwd, relativePackageJsonPath)));
 
-  let oldPackageJson = JSON.parse(await getFileAtCommit(relativePackageJsonPath, tagCommit, workspacesCwd));
+  let oldPackageJson = JSON.parse(await getFileAtCommit(relativePackageJsonPath, fromCommit, workspacesCwd));
 
   let patch = createPatch(oldPackageJson, newPackageJson);
 
@@ -128,7 +128,7 @@ async function getChangedReleasableFiles({
   packageCwd,
   workspacesCwd,
   shouldExcludeDevChanges,
-  tagCommit,
+  fromCommit,
 }) {
   changedFiles = new Set(changedFiles);
 
@@ -153,7 +153,7 @@ async function getChangedReleasableFiles({
     if (changedPublishedFiles.has(relativePackageJsonPath)) {
       let _isPackageJsonChangeReleasable = await isPackageJsonChangeReleasable({
         relativePackageJsonPath,
-        tagCommit,
+        fromCommit,
         workspacesCwd,
       });
 

@@ -240,7 +240,7 @@ describe(function() {
           packageCwd: path.join(this.tmpPath, 'package-a'),
           workspacesCwd: this.tmpPath,
           shouldExcludeDevChanges,
-          tagCommit: commit,
+          fromCommit: commit,
         });
 
         expect(changedReleasableFiles).to.deep.equal([]);
