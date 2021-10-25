@@ -17,19 +17,19 @@ const {
 
 async function getPackageChangedFiles({
   fromCommit,
-  currentCommit,
+  toCommit,
   packageCwd,
   options,
 }) {
-  let isAncestor = await isCommitAncestorOf(fromCommit, currentCommit, options);
+  let isAncestor = await isCommitAncestorOf(fromCommit, toCommit, options);
 
   let olderCommit;
   let newerCommit;
   if (isAncestor) {
     olderCommit = fromCommit;
-    newerCommit = currentCommit;
+    newerCommit = toCommit;
   } else {
-    olderCommit = currentCommit;
+    olderCommit = toCommit;
     newerCommit = fromCommit;
   }
 
@@ -70,7 +70,7 @@ async function buildChangeGraph({
   cached,
 }) {
   let packagesWithChanges = {};
-  let currentCommit = 'HEAD';
+  let toCommit = 'HEAD';
   let sinceBranchCommit;
 
   for (let _package of collectPackages(workspaceMeta)) {
@@ -83,7 +83,7 @@ async function buildChangeGraph({
       _fromCommit = fromCommit;
     } else if (sinceBranch) {
       if (!sinceBranchCommit) {
-        sinceBranchCommit = await getCommonAncestor(currentCommit, sinceBranch, {
+        sinceBranchCommit = await getCommonAncestor(toCommit, sinceBranch, {
           cwd: workspaceMeta.cwd,
           cached,
         });
@@ -105,7 +105,7 @@ async function buildChangeGraph({
           cwd: workspaceMeta.cwd,
           cached,
         }),
-        isCommitAncestorOf(fromCommitIfNewer, currentCommit, {
+        isCommitAncestorOf(fromCommitIfNewer, toCommit, {
           cwd: workspaceMeta.cwd,
           cached,
         }),
@@ -118,7 +118,7 @@ async function buildChangeGraph({
 
     let changedFiles = await getPackageChangedFiles({
       fromCommit: _fromCommit,
-      currentCommit,
+      toCommit,
       packageCwd: _package.cwd,
       options: {
         cwd: workspaceMeta.cwd,
