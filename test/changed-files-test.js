@@ -241,7 +241,7 @@ describe(changedFiles, function() {
     ]);
   });
 
-  it('accepts an arbitrary commit to calculate difference', async function() {
+  it('accepts an arbitrary from commit to calculate difference', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -274,6 +274,42 @@ describe(changedFiles, function() {
 
     expect(_changedFiles).to.deep.equal([
       'packages/my-app-1/changed.txt',
+    ]);
+  });
+
+  it('accepts an arbitrary to commit to calculate difference', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let commit = await getCurrentCommit(tmpPath);
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app-1': {
+          'changed.txt': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+      toCommit: commit,
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'packages/package-a/changed.txt',
     ]);
   });
 

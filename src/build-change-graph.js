@@ -66,11 +66,11 @@ async function buildChangeGraph({
   shouldExcludeDevChanges,
   fromCommit,
   fromCommitIfNewer,
+  toCommit = 'HEAD',
   sinceBranch,
   cached,
 }) {
   let packagesWithChanges = {};
-  let toCommit = 'HEAD';
   let sinceBranchCommit;
 
   for (let _package of collectPackages(workspaceMeta)) {

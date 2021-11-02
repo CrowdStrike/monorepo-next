@@ -318,7 +318,7 @@ describe(buildChangeGraph, function() {
     ]));
   });
 
-  it('accepts an arbitrary commit to calculate difference', async function() {
+  it('accepts an arbitrary from commit to calculate difference', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -365,6 +365,61 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/package-a/index.js',
+        ],
+        dag: this.match({
+          packageName: '@scope/package-a',
+        }),
+      },
+    ]));
+  });
+
+  it('accepts an arbitrary to commit to calculate difference', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let commit = await getCurrentCommit(tmpPath);
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'index.js': 'console.log()',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+    let packagesWithChanges = await buildChangeGraph({
+      workspaceMeta,
+      toCommit: commit,
+    });
+
+    expect(packagesWithChanges).to.match(this.match([
+      {
+        changedFiles: [
+          'packages/package-a/package.json',
+        ],
+        changedReleasableFiles: [
+          'packages/package-a/package.json',
         ],
         dag: this.match({
           packageName: '@scope/package-a',
