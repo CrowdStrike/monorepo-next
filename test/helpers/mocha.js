@@ -16,15 +16,6 @@ function setUpSinon() {
   });
 }
 
-function setUpTmpDir() {
-  const { createTmpDir } = require('../../src/tmp');
-
-  global.beforeEach(async function() {
-    this.tmpPath = await createTmpDir();
-  });
-}
-
 Object.assign(module.exports, {
   setUpSinon,
-  setUpTmpDir,
 });
