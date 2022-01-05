@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.1.1](https://github.com/CrowdStrike/monorepo-next/compare/v7.1.0...v7.1.1) (2022-01-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency conventional-changelog to v3.1.25 ([a65bf5f](https://github.com/CrowdStrike/monorepo-next/commit/a65bf5f5281287922d2f806b2d326ebd8418a5cb))
+
 ## [7.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v7.0.1...v7.1.0) (2021-11-02)
 
 
