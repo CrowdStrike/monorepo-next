@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.1.2](https://github.com/CrowdStrike/monorepo-next/compare/v7.1.1...v7.1.2) (2022-01-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency rfc6902 to v5 ([2259dfa](https://github.com/CrowdStrike/monorepo-next/commit/2259dfaa3f2661672e4efcab4ee59aa1eb07c056))
+
 ### [7.1.1](https://github.com/CrowdStrike/monorepo-next/compare/v7.1.0...v7.1.1) (2022-01-05)
 
 
