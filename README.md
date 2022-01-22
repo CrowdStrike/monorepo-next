@@ -120,6 +120,7 @@ Options:
   --bump-files
   [array] [default: ["package.json","bower.json","manifest.json","package-lock.j
                                                     son","npm-shrinkwrap.json"]]
+  --default-branch                                  [string] [default: "master"]
 
 next run
 

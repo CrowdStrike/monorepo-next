@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.2.0](https://github.com/CrowdStrike/monorepo-next/compare/v7.1.2...v7.2.0) (2022-01-22)
+
+
+### Features
+
+* add release `--default-branch` option ([b4dc55d](https://github.com/CrowdStrike/monorepo-next/commit/b4dc55d14d336255f677dd767bea5d1841c847a8))
+
 ### [7.1.2](https://github.com/CrowdStrike/monorepo-next/compare/v7.1.1...v7.1.2) (2022-01-05)
 
 
