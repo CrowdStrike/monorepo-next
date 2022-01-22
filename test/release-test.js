@@ -434,7 +434,7 @@ describe(_release, function() {
     ]);
   });
 
-  it('prevents release on non-master branch', async function() {
+  it('prevents release on non-default branch', async function() {
     await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
     await execa('git', ['tag', 'root@0.0.0'], { cwd: tmpPath });
 
@@ -492,6 +492,133 @@ describe(_release, function() {
     let tags = await getTagsOnLastCommit(tmpPath);
 
     expect(tags).to.deep.equal([]);
+  });
+
+  describe('defaultBranch', function () {
+    it('works', async function() {
+      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+      await execa('git', ['tag', 'root@0.0.0'], { cwd: tmpPath });
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'name': 'root',
+          'version': '0.0.0',
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+      await execa('git', ['checkout', '-b', 'test-branch'], { cwd: tmpPath });
+
+      await release({
+        defaultBranch: 'test-branch',
+      });
+
+      let workspace = readWorkspaces(tmpPath);
+
+      expect(workspace).to.deep.equal({
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.1',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'name': 'root',
+          'version': '0.0.1',
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      let lastCommitMessage = await getLastCommitMessage(tmpPath);
+
+      expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.0.1,root@0.0.1');
+
+      let tags = await getTagsOnLastCommit(tmpPath);
+
+      expect(tags).to.deep.equal([
+        '@scope/package-a@1.0.1',
+        'root@0.0.1',
+      ]);
+    });
+
+    it('prevents release on non-default branch', async function() {
+      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+      await execa('git', ['tag', 'root@0.0.0'], { cwd: tmpPath });
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'name': 'root',
+          'version': '0.0.0',
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+      await release({
+        defaultBranch: 'test-branch',
+      });
+
+      let workspace = readWorkspaces(tmpPath);
+
+      expect(workspace).to.deep.equal({
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'name': 'root',
+          'version': '0.0.0',
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      let lastCommitMessage = await getLastCommitMessage(tmpPath);
+
+      expect(lastCommitMessage).to.equal('fix: foo');
+
+      let tags = await getTagsOnLastCommit(tmpPath);
+
+      expect(tags).to.deep.equal([]);
+    });
   });
 
   it('can clean up after a failed push', async function() {

@@ -30,6 +30,7 @@ async function release({
   scripts = builder['scripts'].default,
   packageFiles = builder['package-files'].default,
   bumpFiles = builder['bump-files'].default,
+  defaultBranch = builder['default-branch'].default,
   versionOverride,
   preCommitCallback = () => {},
   prePushCallback = () => {},
@@ -38,7 +39,7 @@ async function release({
   publishOverride,
 } = {}) {
   let currentBranch = await getCurrentBranch(cwd);
-  if (currentBranch !== 'master') {
+  if (currentBranch !== defaultBranch) {
     return;
   }
 
