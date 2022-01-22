@@ -41,12 +41,16 @@ module.exports = {
       default: defaults.scripts,
     },
     'package-files': {
-      default: defaults.packageFiles,
       type: 'array',
+      default: defaults.packageFiles,
     },
     'bump-files': {
-      default: defaults.bumpFiles,
       type: 'array',
+      default: defaults.bumpFiles,
+    },
+    'default-branch': {
+      type: 'string',
+      default: 'master',
     },
   },
   async handler(argv) {
