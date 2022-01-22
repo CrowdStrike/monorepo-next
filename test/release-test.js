@@ -434,6 +434,66 @@ describe(_release, function() {
     ]);
   });
 
+  it('prevents release on non-master branch', async function() {
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await execa('git', ['tag', 'root@0.0.0'], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'name': 'root',
+        'version': '0.0.0',
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    await execa('git', ['checkout', '-b', 'test-branch'], { cwd: tmpPath });
+
+    await release();
+
+    let workspace = readWorkspaces(tmpPath);
+
+    expect(workspace).to.deep.equal({
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'name': 'root',
+        'version': '0.0.0',
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    let lastCommitMessage = await getLastCommitMessage(tmpPath);
+
+    expect(lastCommitMessage).to.equal('fix: foo');
+
+    let tags = await getTagsOnLastCommit(tmpPath);
+
+    expect(tags).to.deep.equal([]);
+  });
+
   it('can clean up after a failed push', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {
