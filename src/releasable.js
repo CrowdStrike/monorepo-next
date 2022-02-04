@@ -4,11 +4,7 @@ const packlist = require('npm-packlist');
 const path = require('path');
 const { createTmpDir } = require('./tmp');
 const fs = { ...require('fs'), ...require('fs').promises };
-const {
-  union,
-  intersection,
-  map,
-} = require('./set');
+const Set = require('superset');
 const { createPatch } = require('rfc6902');
 const {
   getFileAtCommit,
@@ -92,13 +88,9 @@ async function _getChangedReleasableFiles({
     }
   }
 
-  changedPublishedFilesNew = intersection(
-    union(
-      changedPublishedFilesOld,
-      filesContributingToReleasability,
-    ),
-    changedFiles,
-  );
+  changedPublishedFilesNew = changedPublishedFilesOld
+    .union(filesContributingToReleasability)
+    .intersect(changedFiles);
 
   return changedPublishedFilesNew;
 }
@@ -140,12 +132,12 @@ async function getChangedReleasableFiles({
 
   let changedPublishedFiles = await _getChangedReleasableFiles({
     cwd: packageCwd,
-    changedFiles: map(changedFiles, file => path.relative(packageCwd, path.join(workspacesCwd, file))),
+    changedFiles: changedFiles.map(file => path.relative(packageCwd, path.join(workspacesCwd, file))),
   });
 
   let relative = path.relative(workspacesCwd, packageCwd);
 
-  changedPublishedFiles = map(changedPublishedFiles, file => path.join(relative, file));
+  changedPublishedFiles = changedPublishedFiles.map(file => path.join(relative, file));
 
   if (shouldExcludeDevChanges) {
     let relativePackageJsonPath = path.join(relative, 'package.json');
@@ -163,7 +155,7 @@ async function getChangedReleasableFiles({
     }
   }
 
-  return Array.from(changedPublishedFiles);
+  return Array.from(changedPublishedFiles).sort();
 }
 
 module.exports = {

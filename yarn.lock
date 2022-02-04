@@ -4154,6 +4154,11 @@ strip-json-comments@3.1.1, strip-json-comments@^3.1.0, strip-json-comments@^3.1.
   resolved "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-3.1.1.tgz#31f1281b3832630434831c310c01cccda8cbe006"
   integrity sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==
 
+superset@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/superset/-/superset-2.0.1.tgz#5a03af60e3d5fd7c4b75c7fca81425322f8ba59e"
+  integrity sha512-QYY2NvizVPRS9IXmgyEptW+61iwZR7r6TkpIUkAilQbRvVwv/FzHTGj89lFA7HmQ9trWnY+/GRowUsFpU9/4YQ==
+
 supports-color@8.1.1:
   version "8.1.1"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-8.1.1.tgz#cd6fc17e28500cff56c1b86c0a7fd4a54a73005c"
