@@ -64,7 +64,7 @@
     "execa": "^5.0.0",
     "glob": "^7.1.4",
     "inquirer": "^8.0.0",
-    "minimatch": "^3.0.4",
+    "minimatch": "^4.0.0",
     "npm-packlist": "^3.0.0",
     "rfc6902": "^5.0.0",
     "semver": "7.3.5",
