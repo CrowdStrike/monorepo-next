@@ -31,6 +31,7 @@ describe(buildDAG, function() {
       isPackage: true,
       cwd: matchPath('/workspace/packages/package-a'),
       packageName: '@scope/package-a',
+      version: '1.0.0',
       branch: [],
       isCycle: false,
       dependents: [
