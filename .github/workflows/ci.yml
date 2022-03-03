@@ -18,7 +18,7 @@ jobs:
     # grab default branch to calculate branch point to know when to stop linting
     - if: ${{ github.base_ref }}
       run: git branch ${{ github.base_ref }} origin/${{ github.base_ref }}
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v3
 
     - run: yarn install --frozen-lockfile
     - run: yarn lint:git
@@ -30,7 +30,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v3
 
     - run: yarn install --frozen-lockfile
     - run: yarn lint:md
@@ -51,7 +51,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node }}
 
@@ -69,7 +69,7 @@ jobs:
       with:
         ref: ${{ github.head_ref }}
         token: ${{ secrets.GitHubToken }}
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v3
 
     - uses: kellyselden/ember-cli-update-action@v3
       with:
