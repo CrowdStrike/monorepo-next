@@ -153,7 +153,7 @@ async function buildChangeGraph({
 
     let dag = buildDAG(workspaceMeta, _package.packageName);
 
-    packagesWithChanges[dag.packageName] = {
+    packagesWithChanges[_package.packageName] = {
       changedFiles: newFiles,
       changedReleasableFiles,
       dag,
