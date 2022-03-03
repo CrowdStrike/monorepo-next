@@ -30,7 +30,7 @@ async function run({
   let stderr = '';
 
   for (let { dag } of packagesWithChanges) {
-    let cp = execa('yarn', args, { cwd: dag.cwd });
+    let cp = execa('yarn', args, { cwd: dag.node.cwd });
 
     if (!silent) {
       cp.stdout.pipe(process.stdout);

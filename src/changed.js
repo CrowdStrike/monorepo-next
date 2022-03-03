@@ -33,7 +33,7 @@ async function changed({
     cached,
   });
 
-  let _changed = packagesWithChanges.map(({ dag }) => dag.packageName);
+  let _changed = packagesWithChanges.map(({ dag }) => dag.node.packageName);
 
   return _changed;
 }

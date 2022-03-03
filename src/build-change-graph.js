@@ -41,19 +41,19 @@ async function getPackageChangedFiles({
 }
 
 function crawlDag(dag, packagesWithChanges) {
-  for (let node of dag.dependents) {
-    if (packagesWithChanges[node.packageName]) {
+  for (let group of dag.node.dependents) {
+    if (packagesWithChanges[group.node.packageName]) {
       continue;
     }
 
-    packagesWithChanges[node.packageName] = {
+    packagesWithChanges[group.node.packageName] = {
       changedFiles: [],
       changedReleasableFiles: [],
-      dag: node,
+      dag: group,
     };
 
-    if (node.dependencyType !== 'devDependencies') {
-      crawlDag(node, packagesWithChanges);
+    if (group.dependencyType !== 'devDependencies') {
+      crawlDag(group, packagesWithChanges);
     }
   }
 }

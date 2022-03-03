@@ -70,7 +70,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/index.js',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -148,7 +150,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/index.js',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -198,7 +202,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/dir2/test.txt',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -239,7 +245,9 @@ describe(buildChangeGraph, function() {
           'index.js',
         ],
         dag: this.match({
-          packageName: 'workspace-root',
+          node: {
+            packageName: 'workspace-root',
+          },
         }),
       },
     ]));
@@ -312,7 +320,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/package.json',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -367,7 +377,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/index.js',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -422,7 +434,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/package.json',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -478,7 +492,9 @@ describe(buildChangeGraph, function() {
             'packages/package-a/index.js',
           ],
           dag: this.match({
-            packageName: '@scope/package-a',
+            node: {
+              packageName: '@scope/package-a',
+            },
           }),
         },
       ]));
@@ -586,7 +602,9 @@ describe(buildChangeGraph, function() {
             'packages/package-a/index.js',
           ],
           dag: this.match({
-            packageName: '@scope/package-a',
+            node: {
+              packageName: '@scope/package-a',
+            },
           }),
         },
       ]));
@@ -640,7 +658,9 @@ describe(buildChangeGraph, function() {
             'packages/package-a/index.js',
           ],
           dag: this.match({
-            packageName: '@scope/package-a',
+            node: {
+              packageName: '@scope/package-a',
+            },
           }),
         },
       ]));
@@ -700,7 +720,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/index.js',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -753,7 +775,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/package.json',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -772,7 +796,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/index.js',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -835,7 +861,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/changed.txt',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -867,7 +895,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/changed.txt',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -887,7 +917,9 @@ describe(buildChangeGraph, function() {
           'packages/my-app-1/changed.txt',
         ],
         dag: this.match({
-          packageName: 'my-app-1',
+          node: {
+            packageName: 'my-app-1',
+          },
         }),
       },
     ]));
@@ -905,7 +937,9 @@ describe(buildChangeGraph, function() {
           'packages/my-app-1/changed.txt',
         ],
         dag: this.match({
-          packageName: 'my-app-1',
+          node: {
+            packageName: 'my-app-1',
+          },
         }),
       },
       {
@@ -916,7 +950,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/changed.txt',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -980,7 +1016,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/changed.txt',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -1013,7 +1051,9 @@ describe(buildChangeGraph, function() {
           'packages/my-app-1/changed.txt',
         ],
         dag: this.match({
-          packageName: 'my-app-1',
+          node: {
+            packageName: 'my-app-1',
+          },
         }),
       },
     ]));
@@ -1033,7 +1073,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/changed.txt',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -1054,7 +1096,9 @@ describe(buildChangeGraph, function() {
           'packages/my-app-1/package.json',
         ],
         dag: this.match({
-          packageName: 'my-app-1',
+          node: {
+            packageName: 'my-app-1',
+          },
         }),
       },
       {
@@ -1067,7 +1111,9 @@ describe(buildChangeGraph, function() {
           'packages/package-a/package.json',
         ],
         dag: this.match({
-          packageName: '@scope/package-a',
+          node: {
+            packageName: '@scope/package-a',
+          },
         }),
       },
     ]));
@@ -1266,7 +1312,9 @@ describe(buildChangeGraph, function() {
           ],
           changedReleasableFiles: [],
           dag: this.match({
-            packageName: '@scope/package-a',
+            node: {
+              packageName: '@scope/package-a',
+            },
           }),
         },
       ]));
@@ -1325,7 +1373,9 @@ describe(buildChangeGraph, function() {
             'packages/package-a/index.js',
           ],
           dag: this.match({
-            packageName: '@scope/package-a',
+            node: {
+              packageName: '@scope/package-a',
+            },
           }),
         },
       ]));
@@ -1376,7 +1426,9 @@ describe(buildChangeGraph, function() {
           ],
           changedReleasableFiles: [],
           dag: this.match({
-            packageName: '@scope/package-a',
+            node: {
+              packageName: '@scope/package-a',
+            },
           }),
         },
       ]));

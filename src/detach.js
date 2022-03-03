@@ -53,12 +53,12 @@ async function detach({
     // don't mutate package.json until after DAG is built
     myPackageJson.version = `${major}.${minor}.${patch}-detached`;
 
-    if (dag.dependents.length) {
+    if (dag.node.dependents.length) {
       // include space as to never match a similarly named package
       let workspaceKey = 'Workspace Root';
 
-      let choices = dag.dependents.map(dependent => {
-        return dependent.packageName || path.basename(dependent.cwd);
+      let choices = dag.node.dependents.map(dependent => {
+        return dependent.node.packageName || path.basename(dependent.node.cwd);
       });
 
       let { answers } = await inquirer.prompt([{
@@ -72,18 +72,18 @@ async function detach({
         // switch to key/value instead of array?
         let isPackage = answer !== workspaceKey;
 
-        return dag.dependents.find(dependent => {
-          return isPackage ? dependent.packageName === answer : !dependent.isPackage;
+        return dag.node.dependents.find(dependent => {
+          return isPackage ? dependent.node.packageName === answer : !dependent.node.isPackage;
         });
       });
 
       // prevent loops
       const attach = require('./attach');
 
-      for (let node of dependents) {
+      for (let group of dependents) {
         await attach({
           package: path.basename(cwd),
-          cwd: node.cwd,
+          cwd: group.node.cwd,
         });
       }
     }

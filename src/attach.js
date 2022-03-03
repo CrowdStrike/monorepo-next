@@ -4,6 +4,7 @@ const path = require('path');
 const writeJson = require('./json').write;
 const buildDepGraph = require('./build-dep-graph');
 const buildDAG = require('./build-dag');
+const { isCycle } = buildDAG;
 const dependencyTypes = require('./dependency-types');
 const {
   getWorkspaceCwd,
@@ -29,16 +30,16 @@ async function detachDependents(dag) {
   // prevent loops
   const detach = require('./detach');
 
-  for (let node of dag.dependents) {
+  for (let group of dag.node.dependents) {
     await detach({
-      package: path.basename(dag.cwd),
-      cwd: node.cwd,
+      package: path.basename(dag.node.cwd),
+      cwd: group.node.cwd,
     });
 
-    if (node.isPackage) {
+    if (group.node.isPackage) {
       await attach({
-        cwd: node.cwd,
-        dag: node,
+        cwd: group.node.cwd,
+        dag: group,
       });
     }
   }
@@ -83,7 +84,7 @@ async function attach({
     // don't mutate package.json until after DAG is built
     myPackageJson.version = matches[1];
 
-    if (!dag.isCycle) {
+    if (!isCycle(dag)) {
       await detachDependents(dag);
     }
   }

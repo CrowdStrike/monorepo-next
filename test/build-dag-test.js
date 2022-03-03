@@ -28,80 +28,92 @@ describe(buildDAG, function() {
     let dag = buildDAG(await buildDepGraph({ workspaceCwd: cwd }), _package);
 
     expect(dag).to.match(this.match({
-      isPackage: true,
-      cwd: matchPath('/workspace/packages/package-a'),
-      packageName: '@scope/package-a',
-      version: '1.0.0',
-      branch: [],
-      isCycle: false,
-      dependents: [
-        {
-          isPackage: true,
-          cwd: matchPath('/workspace/packages/package-b'),
-          packageName: '@scope/package-b',
-          version: '2.0.0',
-          dependencyType: 'dependencies',
-          dependencyRange: '^1.0.0',
-          branch: [
-            '@scope/package-a',
-          ],
-          isCycle: false,
-          dependents: [
-            {
-              isPackage: true,
-              cwd: matchPath('/workspace/packages/package-a'),
-              packageName: '@scope/package-a',
-              version: '1.0.0',
-              dependencyType: 'devDependencies',
-              dependencyRange: '^2.0.0',
-              branch: [
-                '@scope/package-a',
-                '@scope/package-b',
-              ],
-              isCycle: true,
+      parent: undefined,
+      node: {
+        isPackage: true,
+        cwd: matchPath('/workspace/packages/package-a'),
+        packageName: '@scope/package-a',
+        version: '1.0.0',
+        dependents: [
+          this.match({
+            parent: {
+              node: {
+                packageName: '@scope/package-a',
+              },
             },
-            {
+            dependencyType: 'dependencies',
+            dependencyRange: '^1.0.0',
+            node: {
+              isPackage: true,
+              cwd: matchPath('/workspace/packages/package-b'),
+              packageName: '@scope/package-b',
+              version: '2.0.0',
+              dependents: [
+                this.match({
+                  parent: {
+                    node: {
+                      packageName: '@scope/package-b',
+                    },
+                  },
+                  dependencyType: 'devDependencies',
+                  dependencyRange: '^2.0.0',
+                  node: {
+                    isPackage: true,
+                    cwd: matchPath('/workspace/packages/package-a'),
+                    packageName: '@scope/package-a',
+                    version: '1.0.0',
+                  },
+                }),
+                this.match({
+                  parent: {
+                    node: {
+                      packageName: '@scope/package-b',
+                    },
+                  },
+                  dependencyType: 'dependencies',
+                  dependencyRange: '^2.0.0',
+                  node: {
+                    isPackage: true,
+                    cwd: matchPath('/workspace/packages/package-c'),
+                    packageName: '@scope/package-c',
+                    version: '3.0.0',
+                  },
+                }),
+              ],
+            },
+          }),
+          this.match({
+            parent: {
+              node: {
+                packageName: '@scope/package-a',
+              },
+            },
+            dependencyType: 'optionalDependencies',
+            dependencyRange: '^1.0.0',
+            node: {
               isPackage: true,
               cwd: matchPath('/workspace/packages/package-c'),
               packageName: '@scope/package-c',
               version: '3.0.0',
-              dependencyType: 'dependencies',
-              dependencyRange: '^2.0.0',
-              branch: [
-                '@scope/package-a',
-                '@scope/package-b',
-              ],
-              isCycle: false,
-              dependents: [],
             },
-          ],
-        },
-        {
-          isPackage: true,
-          cwd: matchPath('/workspace/packages/package-c'),
-          packageName: '@scope/package-c',
-          version: '3.0.0',
-          dependencyType: 'optionalDependencies',
-          dependencyRange: '^1.0.0',
-          branch: [
-            '@scope/package-a',
-          ],
-          isCycle: false,
-          dependents: [],
-        },
-        {
-          isPackage: false,
-          cwd: matchPath('/workspace'),
-          packageName: 'Workspace Root',
-          version: undefined,
-          dependencyType: 'devDependencies',
-          dependencyRange: '^1.0.0',
-          branch: [
-            '@scope/package-a',
-          ],
-          dependents: [],
-        },
-      ],
+          }),
+          this.match({
+            parent: {
+              node: {
+                packageName: '@scope/package-a',
+              },
+            },
+            dependencyType: 'devDependencies',
+            dependencyRange: '^1.0.0',
+            node: {
+              isPackage: false,
+              cwd: matchPath('/workspace'),
+              packageName: 'Workspace Root',
+              version: undefined,
+            },
+          }),
+        ],
+      },
     }));
   });
 
@@ -111,81 +123,92 @@ describe(buildDAG, function() {
     let dag = buildDAG(await buildDepGraph({ workspaceCwd: cwd }), _package);
 
     expect(dag).to.match(this.match({
-      isPackage: true,
-      cwd: matchPath('/workspace/packages/package-b'),
-      packageName: '@scope/package-b',
-      version: '2.0.0',
-      branch: [],
-      isCycle: false,
-      dependents: [
-        {
-          isPackage: true,
-          cwd: matchPath('/workspace/packages/package-a'),
-          packageName: '@scope/package-a',
-          version: '1.0.0',
-          dependencyType: 'devDependencies',
-          dependencyRange: '^2.0.0',
-          branch: [
-            '@scope/package-b',
-          ],
-          isCycle: false,
-          dependents: [
-            {
-              isPackage: true,
-              cwd: matchPath('/workspace/packages/package-b'),
-              packageName: '@scope/package-b',
-              version: '2.0.0',
-              dependencyType: 'dependencies',
-              dependencyRange: '^1.0.0',
-              branch: [
-                '@scope/package-b',
-                '@scope/package-a',
-              ],
-              isCycle: true,
+      parent: undefined,
+      node: {
+        isPackage: true,
+        cwd: matchPath('/workspace/packages/package-b'),
+        packageName: '@scope/package-b',
+        version: '2.0.0',
+        dependents: [
+          this.match({
+            parent: {
+              node: {
+                packageName: '@scope/package-b',
+              },
             },
-            {
+            dependencyType: 'devDependencies',
+            dependencyRange: '^2.0.0',
+            node: {
+              isPackage: true,
+              cwd: matchPath('/workspace/packages/package-a'),
+              packageName: '@scope/package-a',
+              version: '1.0.0',
+              dependents: [
+                this.match({
+                  parent: {
+                    node: {
+                      packageName: '@scope/package-a',
+                    },
+                  },
+                  dependencyType: 'dependencies',
+                  dependencyRange: '^1.0.0',
+                  node: {
+                    isPackage: true,
+                    cwd: matchPath('/workspace/packages/package-b'),
+                    packageName: '@scope/package-b',
+                    version: '2.0.0',
+                  },
+                }),
+                this.match({
+                  parent: {
+                    node: {
+                      packageName: '@scope/package-a',
+                    },
+                  },
+                  dependencyType: 'optionalDependencies',
+                  dependencyRange: '^1.0.0',
+                  node: {
+                    isPackage: true,
+                    cwd: matchPath('/workspace/packages/package-c'),
+                    packageName: '@scope/package-c',
+                    version: '3.0.0',
+                  },
+                }),
+                this.match({
+                  parent: {
+                    node: {
+                      packageName: '@scope/package-a',
+                    },
+                  },
+                  dependencyType: 'devDependencies',
+                  dependencyRange: '^1.0.0',
+                  node: {
+                    isPackage: false,
+                    cwd: matchPath('/workspace'),
+                    packageName: 'Workspace Root',
+                    version: undefined,
+                  },
+                }),
+              ],
+            },
+          }),
+          this.match({
+            parent: {
+              node: {
+                packageName: '@scope/package-b',
+              },
+            },
+            dependencyType: 'dependencies',
+            dependencyRange: '^2.0.0',
+            node: {
               isPackage: true,
               cwd: matchPath('/workspace/packages/package-c'),
               packageName: '@scope/package-c',
               version: '3.0.0',
-              dependencyType: 'optionalDependencies',
-              dependencyRange: '^1.0.0',
-              branch: [
-                '@scope/package-b',
-                '@scope/package-a',
-              ],
-              isCycle: false,
-              dependents: [],
             },
-            {
-              isPackage: false,
-              cwd: matchPath('/workspace'),
-              packageName: 'Workspace Root',
-              version: undefined,
-              dependencyType: 'devDependencies',
-              dependencyRange: '^1.0.0',
-              branch: [
-                '@scope/package-b',
-                '@scope/package-a',
-              ],
-              dependents: [],
-            },
-          ],
-        },
-        {
-          isPackage: true,
-          cwd: matchPath('/workspace/packages/package-c'),
-          packageName: '@scope/package-c',
-          version: '3.0.0',
-          dependencyType: 'dependencies',
-          dependencyRange: '^2.0.0',
-          branch: [
-            '@scope/package-b',
-          ],
-          isCycle: false,
-          dependents: [],
-        },
-      ],
+          }),
+        ],
+      },
     }));
   });
 
@@ -195,13 +218,14 @@ describe(buildDAG, function() {
     let dag = buildDAG(await buildDepGraph({ workspaceCwd: cwd }), _package);
 
     expect(dag).to.match(this.match({
-      isPackage: true,
-      cwd: matchPath('/workspace/packages/package-c'),
-      packageName: '@scope/package-c',
-      version: '3.0.0',
-      branch: [],
-      isCycle: false,
-      dependents: [],
+      parent: undefined,
+      node: {
+        isPackage: true,
+        cwd: matchPath('/workspace/packages/package-c'),
+        packageName: '@scope/package-c',
+        version: '3.0.0',
+        dependents: [],
+      },
     }));
   });
 
@@ -230,27 +254,31 @@ describe(buildDAG, function() {
 
     let dag = buildDAG(await buildDepGraph({ workspaceCwd: tmpPath }), packageName);
 
-    expect(dag).to.deep.equal({
-      isPackage: true,
-      cwd: path.join(tmpPath, 'packages/package-a'),
-      packageName,
-      version: '1.0.0',
-      branch: [],
-      isCycle: false,
-      dependents: [
-        {
-          isPackage: false,
-          cwd: tmpPath,
-          packageName: 'Workspace Root',
-          version: undefined,
-          dependencyType: 'devDependencies',
-          dependencyRange: '',
-          branch: [
-            packageName,
-          ],
-          dependents: [],
-        },
-      ],
-    });
+    expect(dag).to.match(this.match({
+      parent: undefined,
+      node: {
+        isPackage: true,
+        cwd: path.join(tmpPath, 'packages/package-a'),
+        packageName,
+        version: '1.0.0',
+        dependents: [
+          this.match({
+            parent: {
+              node: {
+                packageName,
+              },
+            },
+            dependencyType: 'devDependencies',
+            dependencyRange: '',
+            node: {
+              isPackage: false,
+              cwd: tmpPath,
+              packageName: 'Workspace Root',
+              version: undefined,
+            },
+          }),
+        ],
+      },
+    }));
   });
 });

@@ -9,6 +9,7 @@ const {
 const { trackNewVersion } = require('./version');
 const semver = require('semver');
 const dependencyTypes = require('./dependency-types');
+const { isCycle } = require('./build-dag');
 
 const defaultReleaseType = 'patch';
 
@@ -54,7 +55,7 @@ async function init({
     isPackage,
     packageName: name,
     cwd,
-  } = dag;
+  } = dag.node;
 
   let packageJsonPath = path.join(cwd, 'package.json');
 
@@ -116,12 +117,12 @@ async function secondPass({
       dag,
       parent,
     }) {
-      let doesPackageHaveChanges = !!releaseTrees[dag.packageName];
+      let doesPackageHaveChanges = !!releaseTrees[dag.node.packageName];
       if (!doesPackageHaveChanges) {
         let isDevDep = dag.dependencyType === 'devDependencies';
         let shouldVersionBump = !shouldExcludeDevChanges || !isDevDep;
 
-        if (dag.isPackage && shouldInheritGreaterReleaseType && !isDevDep && shouldBumpInRangeDependencies) {
+        if (dag.node.isPackage && shouldInheritGreaterReleaseType && !isDevDep && shouldBumpInRangeDependencies) {
           await init({ dag, releaseTrees, releaseType: parent.releaseType });
         } else if (!isReleaseTypeInRange(parent.oldVersion, parent.releaseType, dag.dependencyRange)) {
           await init({ dag, releaseTrees, releaseType: defaultReleaseType, shouldVersionBump });
@@ -136,14 +137,14 @@ async function secondPass({
         }
       }
 
-      for (let node of dag.dependents) {
-        if (node.isCycle) {
+      for (let group of dag.node.dependents) {
+        if (isCycle(group)) {
           continue;
         }
 
         await crawlDag({
-          dag: node,
-          parent: releaseTrees[dag.packageName],
+          dag: group,
+          parent: releaseTrees[dag.node.packageName],
         });
       }
     })({
@@ -166,7 +167,7 @@ function thirdPass({
       dag,
       parent,
     }) {
-      let current = releaseTrees[dag.packageName];
+      let current = releaseTrees[dag.node.packageName];
 
       if (!current) {
         return;
@@ -182,13 +183,13 @@ function thirdPass({
 
       current.releaseType = currentReleaseType;
 
-      for (let node of dag.dependents) {
-        if (!node.isPackage || node.isCycle) {
+      for (let group of dag.node.dependents) {
+        if (!group.node.isPackage || isCycle(group)) {
           continue;
         }
 
         crawlDag({
-          dag: node,
+          dag: group,
           parent: current,
         });
       }
@@ -212,7 +213,7 @@ function fourthPass({
       dag,
       parent,
     }) {
-      let current = releaseTrees[dag.packageName];
+      let current = releaseTrees[dag.node.packageName];
 
       if (!current) {
         return;
@@ -247,13 +248,13 @@ function fourthPass({
         });
       }
 
-      for (let node of dag.dependents) {
-        if (node.isCycle) {
+      for (let group of dag.node.dependents) {
+        if (isCycle(group)) {
           continue;
         }
 
         crawlDag({
-          dag: node,
+          dag: group,
           parent: current,
         });
       }
