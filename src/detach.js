@@ -68,7 +68,7 @@ async function detach({
         choices,
       }]);
 
-      let dependencts = answers.map(answer => {
+      let dependents = answers.map(answer => {
         // switch to key/value instead of array?
         let isPackage = answer !== workspaceKey;
 
@@ -80,7 +80,7 @@ async function detach({
       // prevent loops
       const attach = require('./attach');
 
-      for (let node of dependencts) {
+      for (let node of dependents) {
         await attach({
           package: path.basename(cwd),
           cwd: node.cwd,
