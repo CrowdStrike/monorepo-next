@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.2.3](https://github.com/CrowdStrike/monorepo-next/compare/v7.2.2...v7.2.3) (2022-03-04)
+
+
+### Bug Fixes
+
+* test missing version ([5fdfb1d](https://github.com/CrowdStrike/monorepo-next/commit/5fdfb1dce3f21f3592fbb03df969569b8914e984))
+
 ### [7.2.2](https://github.com/CrowdStrike/monorepo-next/compare/v7.2.1...v7.2.2) (2022-02-15)
 
 
