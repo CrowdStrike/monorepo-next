@@ -51,6 +51,7 @@ async function init({
   shouldVersionBump = true,
 }) {
   let {
+    isPackage,
     packageName: name,
     cwd,
   } = dag;
@@ -72,7 +73,7 @@ async function init({
   }
 
   let canBumpVersion = !!(version && name);
-  let canPublish = dag.isPackage;
+  let canPublish = isPackage;
   let shouldBumpVersion = canBumpVersion && shouldVersionBump;
   let shouldPublish = canPublish && shouldBumpVersion;
 
