@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.0](https://github.com/CrowdStrike/monorepo-next/compare/v7.2.4...v7.3.0) (2022-03-04)
+
+
+### Features
+
+* short-circuit buildDAG ([3ee1e03](https://github.com/CrowdStrike/monorepo-next/commit/3ee1e03d621d1b8a27eeaffe68e5c68ca82a52bb))
+
 ### [7.2.4](https://github.com/CrowdStrike/monorepo-next/compare/v7.2.3...v7.2.4) (2022-03-04)
 
 
