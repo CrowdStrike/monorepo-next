@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.2.4](https://github.com/CrowdStrike/monorepo-next/compare/v7.2.3...v7.2.4) (2022-03-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency npm-packlist to v4 ([0737ce2](https://github.com/CrowdStrike/monorepo-next/commit/0737ce2ae8467dc2c89aff86d57e41b5409e8907))
+
 ### [7.2.3](https://github.com/CrowdStrike/monorepo-next/compare/v7.2.2...v7.2.3) (2022-03-04)
 
 
