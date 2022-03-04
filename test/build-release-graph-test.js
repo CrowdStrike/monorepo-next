@@ -69,7 +69,7 @@ describe(buildReleaseGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-      return dag.packageName && dag.version;
+      return dag.node.packageName && dag.node.version;
     });
 
     let shouldBumpInRangeDependencies = true;
@@ -157,7 +157,7 @@ describe(buildReleaseGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-      return dag.packageName && dag.version;
+      return dag.node.packageName && dag.node.version;
     });
 
     let shouldBumpInRangeDependencies = false;
@@ -230,7 +230,7 @@ describe(buildReleaseGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-      return dag.packageName && dag.version;
+      return dag.node.packageName && dag.node.version;
     });
 
     let shouldBumpInRangeDependencies = false;
@@ -318,7 +318,7 @@ describe(buildReleaseGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-      return dag.packageName && dag.version;
+      return dag.node.packageName && dag.node.version;
     });
 
     let shouldBumpInRangeDependencies = true;
@@ -406,7 +406,7 @@ describe(buildReleaseGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-      return dag.packageName && dag.version;
+      return dag.node.packageName && dag.node.version;
     });
 
     let shouldBumpInRangeDependencies = false;
@@ -479,7 +479,7 @@ describe(buildReleaseGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-      return dag.packageName && dag.version;
+      return dag.node.packageName && dag.node.version;
     });
 
     let shouldBumpInRangeDependencies = false;
@@ -568,7 +568,7 @@ describe(buildReleaseGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-      return dag.packageName && dag.version;
+      return dag.node.packageName && dag.node.version;
     });
 
     let shouldBumpInRangeDependencies = true;
@@ -656,7 +656,7 @@ describe(buildReleaseGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-      return dag.packageName && dag.version;
+      return dag.node.packageName && dag.node.version;
     });
 
     let shouldBumpInRangeDependencies = true;
@@ -729,7 +729,7 @@ describe(buildReleaseGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-      return dag.packageName && dag.version;
+      return dag.node.packageName && dag.node.version;
     });
 
     let shouldBumpInRangeDependencies = false;
@@ -828,7 +828,7 @@ describe(buildReleaseGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-      return dag.packageName && dag.version;
+      return dag.node.packageName && dag.node.version;
     });
 
     let shouldBumpInRangeDependencies = true;
@@ -946,7 +946,7 @@ describe(buildReleaseGraph, function() {
       let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
       packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-        return dag.packageName && dag.version;
+        return dag.node.packageName && dag.node.version;
       });
 
       let releaseTrees = await buildReleaseGraph({
@@ -1043,7 +1043,7 @@ describe(buildReleaseGraph, function() {
       let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
       packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-        return dag.packageName && dag.version;
+        return dag.node.packageName && dag.node.version;
       });
 
       let releaseTrees = await buildReleaseGraph({
@@ -1140,7 +1140,7 @@ describe(buildReleaseGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-      return dag.packageName && dag.version;
+      return dag.node.packageName && dag.node.version;
     });
 
     let shouldBumpInRangeDependencies = true;
@@ -1207,7 +1207,7 @@ describe(buildReleaseGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-      return dag.packageName && dag.version;
+      return dag.node.packageName && dag.node.version;
     });
 
     let getReleaseType = this.spy(buildReleaseGraph, 'getReleaseType');

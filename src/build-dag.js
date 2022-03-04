@@ -14,8 +14,15 @@ function doesDependOnPackage(_package, packageName) {
   }
 }
 
-function thirdPass(workspaceMeta, dag) {
-  let currentPackageName = dag.packageName;
+function thirdPass({
+  workspaceMeta,
+  group,
+  branch,
+  visitedNodes,
+}) {
+  let currentPackageName = group.node.packageName;
+
+  visitedNodes[currentPackageName] = group.node;
 
   for (let _package of collectPackages(workspaceMeta)) {
     if (_package.packageName === currentPackageName) {
@@ -28,19 +35,61 @@ function thirdPass(workspaceMeta, dag) {
     } = doesDependOnPackage(_package, currentPackageName) || {};
 
     if (dependencyType) {
-      let node = createPackageNode({
+      let parent = group;
+
+      let visitedNode = visitedNodes[_package.packageName];
+
+      if (visitedNode) {
+        group.node.dependents.push({
+          parent,
+          dependencyType,
+          dependencyRange,
+          node: visitedNode,
+        });
+
+        continue;
+      }
+
+      let {
+        newGroup,
+        newBranch,
+      } = createPackageNode({
         workspaceMeta,
         packageName: _package.packageName,
         dependencyType,
         dependencyRange,
-        dag,
+        parent,
+        branch,
       });
-      dag.dependents.push(node);
-      if (node.isPackage && !node.isCycle) {
-        thirdPass(workspaceMeta, node);
+
+      group.node.dependents.push(newGroup);
+
+      if (group.node.isPackage && !isCycle(newGroup)) {
+        thirdPass({
+          workspaceMeta,
+          group: newGroup,
+          branch: newBranch,
+          visitedNodes,
+        });
       }
     }
   }
+}
+
+function isCycle(group) {
+  let current = group;
+
+  do {
+    current = current.parent;
+
+    if (!current) {
+      return false;
+    }
+
+    if (current.node === group.node) {
+      return true;
+    }
+  } while (true);
 }
 
 function createPackageNode({
@@ -48,37 +97,60 @@ function createPackageNode({
   packageName,
   dependencyType,
   dependencyRange,
-  dag,
+  parent,
+  branch,
 }) {
   let _package = workspaceMeta.packages[packageName];
+
   let node = {
     isPackage: !!(_package && !_package.isPrivate),
     cwd: _package ? _package.cwd : workspaceMeta.cwd,
     packageName,
     version: _package ? _package.version : workspaceMeta.version,
-    ...dependencyType ? { dependencyType } : {},
-    ...typeof dependencyRange === 'string' ? { dependencyRange } : {},
-    branch: [...dag.branch, dag.packageName].filter(Boolean),
-    ..._package ? { isCycle: dag.branch.includes(packageName) } : {},
   };
-  if (!node.isCycle) {
+
+  let group = {
+    parent,
+    dependencyType,
+    dependencyRange,
+    node,
+  };
+
+  if (!isCycle(group)) {
     node.dependents = [];
   }
-  return node;
+
+  let newBranch = [...branch, packageName].filter(Boolean);
+
+  return {
+    newGroup: group,
+    newBranch,
+  };
 }
 
 function buildDAG(workspaceMeta, packageName) {
-  let dag = createPackageNode({
+  let {
+    newGroup,
+    newBranch,
+  } = createPackageNode({
     workspaceMeta,
     packageName,
-    dag: {
-      branch: [],
-    },
+    branch: [],
   });
 
-  thirdPass(workspaceMeta, dag);
+  let visitedNodes = {};
 
-  return dag;
+  thirdPass({
+    workspaceMeta,
+    group: newGroup,
+    branch: newBranch,
+    visitedNodes,
+  });
+
+  return newGroup;
 }
 
 module.exports = buildDAG;
+Object.assign(module.exports, {
+  isCycle,
+});

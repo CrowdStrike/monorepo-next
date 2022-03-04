@@ -53,7 +53,7 @@ async function release({
   });
 
   packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
-    return dag.packageName && dag.version;
+    return dag.node.packageName && dag.node.version;
   });
 
   if (!packagesWithChanges.some(({ changedReleasableFiles }) => changedReleasableFiles.length)) {

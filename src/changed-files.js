@@ -52,11 +52,11 @@ async function changedFiles({
     changedFiles: _changedFiles,
     dag,
   } of packagesWithChanges) {
-    if (packages.length && !packages.includes(path.basename(dag.cwd))) {
+    if (packages.length && !packages.includes(path.basename(dag.node.cwd))) {
       continue;
     }
 
-    if (isPackageCwd && !await arePathsTheSame(dag.cwd, cwd)) {
+    if (isPackageCwd && !await arePathsTheSame(dag.node.cwd, cwd)) {
       continue;
     }
 
