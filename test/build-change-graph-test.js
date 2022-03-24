@@ -14,7 +14,7 @@ const path = require('path');
 const fs = { ...require('fs'), ...require('fs').promises };
 
 describe(buildChangeGraph, function() {
-  this.timeout(5e3);
+  // this.timeout(5e3);
 
   // eslint-disable-next-line mocha/no-setup-in-describe
   setUpSinon();

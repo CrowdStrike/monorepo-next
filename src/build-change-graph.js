@@ -12,6 +12,7 @@ const { collectPackages } = require('./build-dep-graph');
 const minimatch = require('minimatch');
 const { getChangedReleasableFiles } = require('./releasable');
 const Set = require('superset');
+const path = require('path');
 
 async function getPackageChangedFiles({
   fromCommit,
@@ -31,10 +32,14 @@ async function getPackageChangedFiles({
     newerCommit = fromCommit;
   }
 
-  let committedChanges = await git(['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], options);
+  let packageDir = path.relative(options.cwd, packageCwd);
+
+  let committedChanges = await git(['diff', '--name-only', `${olderCommit}...${newerCommit}`], options);
   committedChanges = getLinesFromOutput(committedChanges);
-  let dirtyChanges = await git(['status', '--porcelain', packageCwd, '-u'], options);
+  committedChanges = committedChanges.filter(file => !path.relative(packageDir, file).startsWith('..'));
+  let dirtyChanges = await git(['status', '--porcelain', '-u'], options);
   dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
+  dirtyChanges = dirtyChanges.filter(file => !path.relative(packageDir, file).startsWith('..'));
   let changedFiles = Array.from(new Set(committedChanges).union(dirtyChanges));
 
   return changedFiles;
