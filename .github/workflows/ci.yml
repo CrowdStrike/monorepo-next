@@ -45,7 +45,7 @@ jobs:
         - ubuntu-latest
         - macos-latest
         node:
-        - 12
+        - 14
 
     runs-on: ${{ matrix.os }}
 
