@@ -68,7 +68,7 @@
     "npm-packlist": "^4.0.0",
     "rfc6902": "^5.0.0",
     "semver": "7.3.7",
-    "standard-version": "9.3.2",
+    "standard-version": "9.5.0",
     "superset": "^2.0.1",
     "tmp": "0.2.1",
     "yargs": "^17.0.0"
