@@ -4040,10 +4040,10 @@ sprintf-js@~1.0.2:
   resolved "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
-standard-node-template@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/standard-node-template/-/standard-node-template-2.0.0.tgz#79ebc6781735dfd7f6bfdc4f117bd6fdf963c230"
-  integrity sha512-ZlSqPMYtkd9s4zWEZq6CJH/dkE3u8gUwKYIhJ+o7ZlWBG2wsJPMhS8gvRQiLMtO0pD1htfYTLNBLvzcTwdxcBw==
+standard-node-template@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/standard-node-template/-/standard-node-template-2.1.0.tgz#e83db2ad1bcc849a3d898a571feb3f34ac80fbbd"
+  integrity sha512-5MBzpWbFMFqJON5jUGDIy4ey6CVZlkG/IiXycQIzCwqIwzhY0rWFrviTcJgSzMLcMskolYZJeaKWnigYuL+2Pw==
 
 standard-version@9.3.2:
   version "9.3.2"
