@@ -1282,7 +1282,7 @@ describe(_release, function() {
     await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
     await (await import('execa')).execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
-    let spy = this.spy(execa, 'command');
+    let spy = this.spy(_release, 'execaCommand');
 
     let precommit = 'echo foo&& echo bar';
 

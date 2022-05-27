@@ -134,7 +134,7 @@ async function release({
   async function handleLifecycleScript(lifecycle) {
     let script = scripts[lifecycle];
     if (script) {
-      await (await import('execa')).execaCommand(script, {
+      await release.execaCommand(script, {
         shell: true,
       });
     }
@@ -254,3 +254,9 @@ async function publish({ cwd }) {
 }
 
 module.exports = release;
+
+Object.assign(release, {
+  async execaCommand() {
+    return await (await import('execa')).execaCommand(...arguments);
+  },
+});
