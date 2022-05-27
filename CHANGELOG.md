@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [8.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v7.3.0...v8.0.0) (2022-05-27)
+
+
+### Bug Fixes
+
+* use `execa` instead of `execa.command` ([038acd8](https://github.com/CrowdStrike/monorepo-next/commit/038acd8619f2ec6e6132d94cbbe8e8f466fa4662))
+* **deps:** update dependency glob to v8 ([4aaa5fe](https://github.com/CrowdStrike/monorepo-next/commit/4aaa5fea264ce16067c42d21102881db02ee50f8))
+* **deps:** update dependency npm-packlist to v5 ([40d782d](https://github.com/CrowdStrike/monorepo-next/commit/40d782de1a72c5e8994564eed8bdfe8a0bb7fc72))
+* **deps:** update dependency semver to v7.3.7 ([b8bdccb](https://github.com/CrowdStrike/monorepo-next/commit/b8bdccb952a7ac0cddfe948200997109a67e57c7))
+* **deps:** update dependency standard-version to v9.5.0 ([930eb20](https://github.com/CrowdStrike/monorepo-next/commit/930eb20da14f4cf84ec71cfe445cf0ca8dc942f3))
+
 ## [7.3.0](https://github.com/CrowdStrike/monorepo-next/compare/v7.2.4...v7.3.0) (2022-03-04)
 
 
