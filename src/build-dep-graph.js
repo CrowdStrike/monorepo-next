@@ -85,7 +85,7 @@ async function buildDepGraph({
 
   let _1dFilesArray;
   if (!workspaces) {
-    _1dFilesArray = (await execa.command('pnpm recursive exec -- node -e "console.log(process.cwd())"', { cwd: workspaceCwd })).stdout
+    _1dFilesArray = (await execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], { cwd: workspaceCwd })).stdout
       .split(/\r?\n/)
       .map(workspace => path.relative(workspaceCwd, workspace));
 
