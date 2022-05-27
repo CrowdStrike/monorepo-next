@@ -5,7 +5,6 @@ const { expect } = require('./helpers/chai');
 const run = require('../src/run');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 
 describe(run, function() {
@@ -18,7 +17,7 @@ describe(run, function() {
   });
 
   it('works', async function() {
-    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -104,14 +103,14 @@ describe(run, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
-    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/package-c@1.0.0'], { cwd: tmpPath });
-    await execa('git', ['tag', 'my-app-1@0.0.0'], { cwd: tmpPath });
-    await execa('git', ['tag', 'my-app-2@0.0.0'], { cwd: tmpPath });
-    await execa('git', ['tag', 'root@0.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', '@scope/package-c@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', 'my-app-1@0.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', 'my-app-2@0.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', 'root@0.0.0'], { cwd: tmpPath });
 
     let {
       stdout,

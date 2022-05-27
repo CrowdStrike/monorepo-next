@@ -1,6 +1,5 @@
 'use strict';
 
-const execa = require('execa');
 const buildDepGraph = require('./build-dep-graph');
 const buildChangeGraph = require('./build-change-graph');
 const {
@@ -30,7 +29,7 @@ async function run({
   let stderr = '';
 
   for (let { dag } of packagesWithChanges) {
-    let cp = execa('yarn', args, { cwd: dag.node.cwd });
+    let cp = (await import('execa')).execa('yarn', args, { cwd: dag.node.cwd });
 
     if (!silent) {
       cp.stdout.pipe(process.stdout);

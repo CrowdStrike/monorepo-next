@@ -1,7 +1,6 @@
 'use strict';
 
 const path = require('path');
-const execa = require('execa');
 const {
   read: readJson,
   write: writeJson,
@@ -135,7 +134,7 @@ async function release({
   async function handleLifecycleScript(lifecycle) {
     let script = scripts[lifecycle];
     if (script) {
-      await execa.command(script, {
+      await (await import('execa')).execaCommand(script, {
         shell: true,
       });
     }
@@ -147,7 +146,7 @@ async function release({
 
   let commitMessage = `chore(release): ${tags.join()}`;
 
-  await execa('git', ['add', '-A'], { cwd: workspaceCwd });
+  await (await import('execa')).execa('git', ['add', '-A'], { cwd: workspaceCwd });
 
   await preCommitCallback();
 
@@ -155,14 +154,14 @@ async function release({
 
   let previousCommit = await getCurrentCommit(workspaceCwd);
 
-  await execa('git', ['commit', '-m', commitMessage], { cwd: workspaceCwd });
+  await (await import('execa')).execa('git', ['commit', '-m', commitMessage], { cwd: workspaceCwd });
 
   await handleLifecycleScript('postcommit');
 
   await handleLifecycleScript('pretag');
 
   for (let tag of tags) {
-    await execa('git', ['tag', '-a', tag, '-m', tag], { cwd: workspaceCwd });
+    await (await import('execa')).execa('git', ['tag', '-a', tag, '-m', tag], { cwd: workspaceCwd });
   }
 
   await handleLifecycleScript('posttag');
@@ -185,10 +184,10 @@ async function release({
       }
     } catch (err) {
       if (shouldCleanUpAfterFailedPush) {
-        await execa('git', ['tag', '-d', ...tags], { cwd: workspaceCwd });
+        await (await import('execa')).execa('git', ['tag', '-d', ...tags], { cwd: workspaceCwd });
       }
 
-      await execa('git', ['reset', '--hard', previousCommit], { cwd: workspaceCwd });
+      await (await import('execa')).execa('git', ['reset', '--hard', previousCommit], { cwd: workspaceCwd });
 
       throw err;
     }
@@ -219,7 +218,7 @@ async function release({
 }
 
 async function push({ cwd }) {
-  let remoteUrl = (await execa('git', ['config', '--get', 'remote.origin.url'], { cwd })).stdout;
+  let remoteUrl = (await (await import('execa')).execa('git', ['config', '--get', 'remote.origin.url'], { cwd })).stdout;
 
   // https://stackoverflow.com/a/55586434
   let doesntSupportAtomic = remoteUrl.includes('https://');
@@ -228,9 +227,9 @@ async function push({ cwd }) {
 
   try {
     if (doesntSupportAtomic) {
-      await execa('git', ['push'], { cwd });
+      await (await import('execa')).execa('git', ['push'], { cwd });
     } else {
-      await execa('git', ['push', '--follow-tags', '--atomic'], { cwd });
+      await (await import('execa')).execa('git', ['push', '--follow-tags', '--atomic'], { cwd });
     }
 
     success = true;
@@ -246,12 +245,12 @@ async function push({ cwd }) {
   if (doesntSupportAtomic && success) {
     // only push tags after the commit
     // and hard error if there is a tag collision
-    await execa('git', ['push', '--follow-tags'], { cwd });
+    await (await import('execa')).execa('git', ['push', '--follow-tags'], { cwd });
   }
 }
 
 async function publish({ cwd }) {
-  await execa('npm', ['publish'], { cwd });
+  await (await import('execa')).execa('npm', ['publish'], { cwd });
 }
 
 module.exports = release;

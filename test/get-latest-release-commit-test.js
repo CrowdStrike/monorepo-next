@@ -5,7 +5,6 @@ const { expect } = require('./helpers/chai');
 const getLatestReleaseCommit = require('../src/get-latest-release-commit');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 const {
   getCurrentCommit,
@@ -36,9 +35,9 @@ describe(getLatestReleaseCommit, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/my-app@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', '@scope/my-app@1.0.0'], { cwd: tmpPath });
 
     let commit = await getCurrentCommit(tmpPath);
 
@@ -70,8 +69,8 @@ describe(getLatestReleaseCommit, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
 
     let latestReleaseCommit = await getLatestReleaseCommit({
       cwd: tmpPath,
@@ -99,9 +98,9 @@ describe(getLatestReleaseCommit, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/my-app@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', '@scope/my-app@1.0.0'], { cwd: tmpPath });
 
     let commit = await getCurrentCommit(tmpPath);
 

@@ -5,7 +5,6 @@ const { promisify } = require('util');
 const glob = promisify(require('glob'));
 const semver = require('semver');
 const dependencyTypes = require('./dependency-types');
-const execa = require('execa');
 const readJson = require('./json').read;
 
 function copyDeps(left, right) {
@@ -85,7 +84,7 @@ async function buildDepGraph({
 
   let _1dFilesArray;
   if (!workspaces) {
-    _1dFilesArray = (await execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], { cwd: workspaceCwd })).stdout
+    _1dFilesArray = (await (await import('execa')).execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], { cwd: workspaceCwd })).stdout
       .split(/\r?\n/)
       .map(workspace => path.relative(workspaceCwd, workspace));
 

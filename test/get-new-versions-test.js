@@ -5,7 +5,6 @@ const { expect } = require('./helpers/chai');
 const getNewVersions = require('../src/get-new-versions');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 
 describe(getNewVersions, function() {
@@ -35,8 +34,8 @@ describe(getNewVersions, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let newVersions = await getNewVersions({
       cwd: tmpPath,
@@ -74,8 +73,8 @@ describe(getNewVersions, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let newVersions = await getNewVersions({
       cwd: tmpPath,

@@ -1,6 +1,5 @@
 'use strict';
 
-const execa = require('execa');
 const debug = require('./debug')('git');
 
 let cache = {};
@@ -24,7 +23,7 @@ async function git(args, options) {
   } else {
     debug(args, options);
 
-    stdout = (await execa('git', args, {
+    stdout = (await (await import('execa')).execa('git', args, {
       cwd,
     })).stdout;
 

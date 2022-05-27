@@ -5,7 +5,6 @@ const { expect } = require('./helpers/chai');
 const getChangelog = require('../src/get-changelog');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 const path = require('path');
 const {
@@ -43,17 +42,17 @@ describe(getChangelog, function() {
       packageName = json.name;
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
 
     try {
-      await execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'chore: release'], { cwd: tmpPath });
     } catch (err) {
       if (!firstVersion || !err.message.includes('nothing to commit, working tree clean')) {
         throw err;
       }
     }
 
-    await execa('git', ['tag', `${packageName}@${newVersion}`], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', `${packageName}@${newVersion}`], { cwd: tmpPath });
   }
 
   it('works pre tag', async function() {
@@ -87,8 +86,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     process.chdir(path.join(tmpPath, 'packages/my-app'));
 
@@ -132,8 +131,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     await fakeVersion({
       packageDir: 'packages/my-app',
@@ -193,8 +192,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     process.chdir(path.join(tmpPath, 'packages/my-app'));
 
@@ -223,8 +222,8 @@ describe(getChangelog, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: old-release'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'fix: old-release'], { cwd: tmpPath });
 
     await fakeVersion({
       packageDir: 'packages/my-app',
@@ -239,8 +238,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     await fakeVersion({
       packageDir: 'packages/my-app',
@@ -291,8 +290,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: ignored change'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'fix: ignored change'], { cwd: tmpPath });
 
     let commit = await getCurrentCommit(tmpPath);
 
@@ -304,8 +303,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: included change'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'fix: included change'], { cwd: tmpPath });
 
     process.chdir(path.join(tmpPath, 'packages/my-app'));
 
@@ -363,8 +362,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     process.chdir(path.join(tmpPath, 'packages/my-app'));
 
@@ -394,8 +393,8 @@ describe(getChangelog, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: old-release'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'fix: old-release'], { cwd: tmpPath });
 
     await fakeVersion({
       packageDir: 'packages/my-app',
@@ -412,8 +411,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     await fakeVersion({
       packageDir: 'packages/my-app',
@@ -422,7 +421,7 @@ describe(getChangelog, function() {
 
     let newCommit = await getCurrentCommit(tmpPath);
 
-    await execa('git', ['reset', '--hard', oldCommit], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['reset', '--hard', oldCommit], { cwd: tmpPath });
 
     process.chdir(path.join(tmpPath, 'packages/my-app'));
 
@@ -466,8 +465,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
 
     await fakeVersion({
       packageDir: 'packages/my-app',
@@ -482,8 +481,8 @@ describe(getChangelog, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: bar'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'fix: bar'], { cwd: tmpPath });
 
     await fakeVersion({
       packageDir: 'packages/my-app',

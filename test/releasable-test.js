@@ -8,7 +8,6 @@ const {
 } = require('../src/releasable');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 const { getCurrentCommit } = require('./helpers/git');
 const { replaceJsonFile } = require('../src/fs');
@@ -224,8 +223,8 @@ describe(function() {
           },
         });
 
-        await execa('git', ['add', '.'], { cwd: this.tmpPath });
-        await execa('git', ['commit', '-m', 'old file'], { cwd: this.tmpPath });
+        await (await import('execa')).execa('git', ['add', '.'], { cwd: this.tmpPath });
+        await (await import('execa')).execa('git', ['commit', '-m', 'old file'], { cwd: this.tmpPath });
 
         await replaceJsonFile(path.join(this.tmpPath, 'package-a/package.json'), json => {
           json.devDependencies['external-package'] = '2.0.0';
@@ -259,8 +258,8 @@ describe(function() {
           },
         });
 
-        await execa('git', ['add', '.'], { cwd: this.tmpPath });
-        await execa('git', ['commit', '-m', 'old file'], { cwd: this.tmpPath });
+        await (await import('execa')).execa('git', ['add', '.'], { cwd: this.tmpPath });
+        await (await import('execa')).execa('git', ['commit', '-m', 'old file'], { cwd: this.tmpPath });
 
         await replaceJsonFile(path.join(this.tmpPath, 'package-a/package.json'), json => {
           json.devDependencies['external-package'] = '2.0.0';

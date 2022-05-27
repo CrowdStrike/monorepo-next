@@ -6,7 +6,6 @@ const buildDepGraph = require('../src/build-dep-graph');
 const buildChangeGraph = require('../src/build-change-graph');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 const { getCurrentCommit } = require('./helpers/git');
 const { replaceJsonFile } = require('../src/fs');
@@ -42,9 +41,9 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -54,8 +53,8 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -95,11 +94,11 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
-    await execa('git', ['commit', '--allow-empty', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '--allow-empty', '-m', 'test'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -125,9 +124,9 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -178,9 +177,9 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
     await fs.rename(
       path.join(tmpPath, 'packages/package-a/dir1'),
@@ -221,16 +220,16 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-    await execa('git', ['tag', 'workspace-root@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', 'workspace-root@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'index.js': 'console.log()',
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -264,8 +263,8 @@ describe(buildChangeGraph, function() {
       'index.js': 'console.log()',
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -291,8 +290,8 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -302,8 +301,8 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -345,8 +344,8 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let commit = await getCurrentCommit(tmpPath);
 
@@ -358,8 +357,8 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -402,8 +401,8 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let commit = await getCurrentCommit(tmpPath);
 
@@ -415,8 +414,8 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -460,8 +459,8 @@ describe(buildChangeGraph, function() {
         }),
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
       let commit = await getCurrentCommit(tmpPath);
 
@@ -473,8 +472,8 @@ describe(buildChangeGraph, function() {
         },
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
       let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -519,9 +518,9 @@ describe(buildChangeGraph, function() {
         }),
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
       let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -550,9 +549,9 @@ describe(buildChangeGraph, function() {
         }),
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
       let oldCommit = await getCurrentCommit(tmpPath);
 
@@ -564,13 +563,13 @@ describe(buildChangeGraph, function() {
         },
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
       let newCommit = await getCurrentCommit(tmpPath);
 
-      await execa('git', ['checkout', '-b', 'test-branch', oldCommit], { cwd: tmpPath });
-      await execa('git', ['commit', '--allow-empty', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['checkout', '-b', 'test-branch', oldCommit], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '--allow-empty', '-m', 'test'], { cwd: tmpPath });
 
       let orphanCommit = await getCurrentCommit(tmpPath);
 
@@ -582,9 +581,9 @@ describe(buildChangeGraph, function() {
         },
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-      await execa('git', ['checkout', newCommit], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['checkout', newCommit], { cwd: tmpPath });
 
       let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -627,9 +626,9 @@ describe(buildChangeGraph, function() {
         }),
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
       fixturify.writeSync(tmpPath, {
         'packages': {
@@ -639,8 +638,8 @@ describe(buildChangeGraph, function() {
         },
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
       let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -684,8 +683,8 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let oldCommit = await getCurrentCommit(tmpPath);
 
@@ -697,12 +696,12 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let commit = await getCurrentCommit(tmpPath);
 
-    await execa('git', ['reset', '--hard', oldCommit], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['reset', '--hard', oldCommit], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -745,9 +744,9 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-    await execa('git', ['checkout', '-b', 'test-branch'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['checkout', '-b', 'test-branch'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -757,8 +756,8 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -829,10 +828,10 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
-    await execa('git', ['tag', 'my-app-1@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', 'my-app-1@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -842,8 +841,8 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -878,8 +877,8 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     packagesWithChanges = await buildChangeGraph({
       workspaceMeta,
@@ -983,8 +982,8 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let firstCommit = await getCurrentCommit(tmpPath);
 
@@ -996,8 +995,8 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -1033,8 +1032,8 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     packagesWithChanges = await buildChangeGraph({
       workspaceMeta,
@@ -1138,10 +1137,10 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
-    await execa('git', ['tag', 'root@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', 'root@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -1151,8 +1150,8 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -1184,9 +1183,9 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-    await execa('git', ['tag', 'root@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', 'root@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -1196,9 +1195,9 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -1230,10 +1229,10 @@ describe(buildChangeGraph, function() {
       }),
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
-    await execa('git', ['tag', 'root@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['tag', 'root@1.0.0'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -1243,8 +1242,8 @@ describe(buildChangeGraph, function() {
       },
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+    await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -1285,10 +1284,10 @@ describe(buildChangeGraph, function() {
         }),
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
-      await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
 
       fixturify.writeSync(tmpPath, {
         'packages': {
@@ -1298,8 +1297,8 @@ describe(buildChangeGraph, function() {
         },
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
       let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -1345,9 +1344,9 @@ describe(buildChangeGraph, function() {
         }),
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
       fixturify.writeSync(tmpPath, {
         'packages': {
@@ -1357,8 +1356,8 @@ describe(buildChangeGraph, function() {
         },
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
       let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -1401,16 +1400,16 @@ describe(buildChangeGraph, function() {
         }),
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
 
       await replaceJsonFile(path.join(tmpPath, 'packages/package-a/package.json'), json => {
         json.devDependencies['external-package'] = '2.0.0';
       });
 
-      await execa('git', ['add', '.'], { cwd: tmpPath });
-      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['add', '.'], { cwd: tmpPath });
+      await (await import('execa')).execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
       let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 

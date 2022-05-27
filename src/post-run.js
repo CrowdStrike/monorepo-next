@@ -1,6 +1,5 @@
 'use strict';
 
-const execa = require('execa');
 const fs = { ...require('fs'), ...require('fs').promises };
 
 async function postRun({
@@ -13,7 +12,7 @@ async function postRun({
   } catch (err) {}
 
   if (exists) {
-    await execa('yarn', { cwd });
+    await (await import('execa')).execa('yarn', { cwd });
   }
 }
 
