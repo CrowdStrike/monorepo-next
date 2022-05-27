@@ -2,9 +2,20 @@
 
 module.exports = {
   root: true,
+  parserOptions: {
+    ecmaVersion: 2020,
+  },
   extends: [
     'crowdstrike-node',
   ],
+  rules: {
+    'node/no-unsupported-features/es-syntax': ['error', {
+      'ignores': [
+        // remove once https://github.com/mysticatea/eslint-plugin-node/issues/250 is fixed
+        'dynamicImport',
+      ],
+    }],
+  },
   overrides: [
     {
       files: 'test/**/package.json',
