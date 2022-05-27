@@ -22,6 +22,7 @@ module.exports = {
       extends: 'plugin:mocha/recommended',
       rules: {
         'mocha/no-exclusive-tests': 'error',
+        'mocha/no-empty-description': 'off',
         'mocha/no-hooks-for-single-case': 'off',
       },
     },
