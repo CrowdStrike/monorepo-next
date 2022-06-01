@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.0.4](https://github.com/CrowdStrike/monorepo-next/compare/v8.0.3...v8.0.4) (2022-06-01)
+
+
+### Bug Fixes
+
+* make `releaseType` set after the fact ([dc2814e](https://github.com/CrowdStrike/monorepo-next/commit/dc2814ec126a2bee663d6af83e38257a083ab020))
+* make `shouldVersionBump` a Symbol method ([314c5d8](https://github.com/CrowdStrike/monorepo-next/commit/314c5d8d769685d0b2b1eb6eb13983b4a50af628))
+* remove `group.node.isPackage` check ([5edb2b9](https://github.com/CrowdStrike/monorepo-next/commit/5edb2b979463abecb78dc16492922b940883d000))
+
 ### [8.0.3](https://github.com/CrowdStrike/monorepo-next/compare/v8.0.2...v8.0.3) (2022-06-01)
 
 
