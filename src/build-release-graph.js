@@ -45,11 +45,11 @@ function isReleaseTypeInRange(version, type, range) {
   return semver.satisfies(semver.inc(version, type), range);
 }
 
+let shouldVersionBumpSymbol = Symbol('shouldVersionBump');
+
 async function init({
   dag,
   releaseTrees,
-  releaseType,
-  shouldVersionBump = true,
 }) {
   let {
     isPackage,
@@ -69,23 +69,30 @@ async function init({
     }
   }
 
-  if (!releaseType) {
-    releaseType = await module.exports.getReleaseType(name, cwd);
-  }
-
   let canBumpVersion = !!(version && name);
   let canPublish = isPackage;
-  let shouldBumpVersion = canBumpVersion && shouldVersionBump;
-  let shouldPublish = canPublish && shouldBumpVersion;
 
-  return releaseTrees[name] = {
+  let shouldVersionBump = false;
+
+  let releaseTree = {
     oldVersion: version,
-    releaseType,
+    releaseType: defaultReleaseType,
     cwd,
     name,
-    shouldBumpVersion,
-    shouldPublish,
+    [shouldVersionBumpSymbol]() {
+      shouldVersionBump = true;
+    },
+    get shouldBumpVersion() {
+      return canBumpVersion && shouldVersionBump;
+    },
+    get shouldPublish() {
+      return canPublish && this.shouldBumpVersion;
+    },
   };
+
+  releaseTrees[name] = releaseTree;
+
+  return releaseTree;
 }
 
 async function firstPass({
@@ -97,7 +104,14 @@ async function firstPass({
       continue;
     }
 
-    await init({ dag, releaseTrees });
+    let {
+      packageName: name,
+      cwd,
+    } = dag.node;
+
+    let releaseTree = await init({ dag, releaseTrees });
+
+    releaseTree.releaseType = await module.exports.getReleaseType(name, cwd);
   }
 }
 
@@ -120,20 +134,18 @@ async function secondPass({
       let doesPackageHaveChanges = !!releaseTrees[dag.node.packageName];
       if (!doesPackageHaveChanges) {
         let isDevDep = dag.dependencyType === 'devDependencies';
-        let shouldVersionBump = !shouldExcludeDevChanges || !isDevDep;
 
         if (dag.node.isPackage && shouldInheritGreaterReleaseType && !isDevDep && shouldBumpInRangeDependencies) {
-          // We use `defaultReleaseType` here instead of `parent.releaseType` because
-          // it doesn't matter, and it is less confusing. It gets overwritten with the correct
-          // value based on all dependencies later.
-          await init({ dag, releaseTrees, releaseType: defaultReleaseType });
+          await init({ dag, releaseTrees });
         } else if (!isReleaseTypeInRange(parent.oldVersion, parent.releaseType, dag.dependencyRange)) {
-          await init({ dag, releaseTrees, releaseType: defaultReleaseType, shouldVersionBump });
+          await init({ dag, releaseTrees });
         } else if (shouldBumpInRangeDependencies) {
-          await init({ dag, releaseTrees, releaseType: defaultReleaseType, shouldVersionBump });
+          await init({ dag, releaseTrees });
         } else {
           return;
         }
+
+        let shouldVersionBump = !(shouldExcludeDevChanges && isDevDep);
 
         if (!shouldVersionBump) {
           return;
@@ -160,6 +172,7 @@ function thirdPass({
   releaseTrees,
   packagesWithChanges,
   shouldInheritGreaterReleaseType,
+  shouldExcludeDevChanges,
 }) {
   for (let { dag, changedReleasableFiles } of packagesWithChanges) {
     if (!changedReleasableFiles.length) {
@@ -176,18 +189,24 @@ function thirdPass({
         return;
       }
 
+      let isDevDep = dag.dependencyType === 'devDependencies';
       let currentReleaseType = current.releaseType;
-
       let incomingReleaseType = parent ? parent.releaseType : currentReleaseType;
 
-      if (shouldInheritGreaterReleaseType && dag.dependencyType !== 'devDependencies' && isReleaseTypeLessThan(currentReleaseType, incomingReleaseType)) {
+      if (shouldInheritGreaterReleaseType && !isDevDep && isReleaseTypeLessThan(currentReleaseType, incomingReleaseType)) {
         currentReleaseType = incomingReleaseType;
       }
 
       current.releaseType = currentReleaseType;
 
+      let shouldVersionBump = !(shouldExcludeDevChanges && isDevDep);
+
+      if (shouldVersionBump) {
+        current[shouldVersionBumpSymbol]();
+      }
+
       for (let group of dag.node.dependents) {
-        if (!group.node.isPackage || isCycle(group)) {
+        if (isCycle(group)) {
           continue;
         }
 
@@ -293,6 +312,7 @@ async function buildReleaseGraph({
     releaseTrees,
     packagesWithChanges,
     shouldInheritGreaterReleaseType,
+    shouldExcludeDevChanges,
   });
 
   // dependents have now inherited release type
