@@ -70,16 +70,18 @@ async function init({
 
   let canBumpVersion = !!(version && name);
   let canPublish = isPackage;
-  let shouldBumpVersion = canBumpVersion && shouldVersionBump;
-  let shouldPublish = canPublish && shouldBumpVersion;
 
   let releaseTree = {
     oldVersion: version,
     releaseType: defaultReleaseType,
     cwd,
     name,
-    shouldBumpVersion,
-    shouldPublish,
+    get shouldBumpVersion() {
+      return canBumpVersion && shouldVersionBump;
+    },
+    get shouldPublish() {
+      return canPublish && this.shouldBumpVersion;
+    },
   };
 
   releaseTrees[name] = releaseTree;
