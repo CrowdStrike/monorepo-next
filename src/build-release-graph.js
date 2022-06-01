@@ -221,11 +221,11 @@ function fourthPass({
 
       for (let type of dependencyTypes) {
         if (!current[type]) {
-          current[type] = [];
+          current[type] = {};
         }
       }
 
-      if (parent && !current[dag.dependencyType].some(({ name }) => name === parent.name)) {
+      if (parent && !current[dag.dependencyType][parent.name]) {
         let { name } = parent;
 
         let oldRange = dag.dependencyRange;
@@ -242,10 +242,7 @@ function fourthPass({
           });
         }
 
-        current[dag.dependencyType].push({
-          name,
-          newRange,
-        });
+        current[dag.dependencyType][name] = newRange;
       }
 
       for (let group of dag.node.dependents) {
