@@ -82,7 +82,7 @@ async function release({
     for (let type of dependencyTypes) {
       let deps = releaseTree[type];
 
-      for (let { name, newRange } of deps) {
+      for (let [name, newRange] of Object.entries(deps)) {
         packageJson[type][name] = newRange;
       }
     }

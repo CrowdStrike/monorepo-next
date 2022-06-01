@@ -89,9 +89,9 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {},
       },
       {
         name: '@scope/package-b',
@@ -100,14 +100,11 @@ describe(buildReleaseGraph, function() {
         releaseType: 'patch',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [
-          {
-            name: '@scope/package-a',
-            newRange: '^1.1.0',
-          },
-        ],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {
+          '@scope/package-a': '^1.1.0',
+        },
+        devDependencies: {},
+        optionalDependencies: {},
       },
     ]));
   });
@@ -177,9 +174,9 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {},
       },
     ]));
   });
@@ -250,9 +247,9 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {},
       },
       {
         name: '@scope/package-b',
@@ -261,14 +258,11 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [
-          {
-            name: '@scope/package-a',
-            newRange: '^1.0.0',
-          },
-        ],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {
+          '@scope/package-a': '^1.0.0',
+        },
+        devDependencies: {},
+        optionalDependencies: {},
       },
     ]));
   });
@@ -338,9 +332,9 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {},
       },
       {
         name: '@scope/package-b',
@@ -349,14 +343,11 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [
-          {
-            name: '@scope/package-a',
-            newRange: '^1.1.0',
-          },
-        ],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {
+          '@scope/package-a': '^1.1.0',
+        },
+        devDependencies: {},
+        optionalDependencies: {},
       },
     ]));
   });
@@ -426,9 +417,9 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {},
       },
     ]));
   });
@@ -499,9 +490,9 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {},
       },
       {
         name: '@scope/package-b',
@@ -510,14 +501,11 @@ describe(buildReleaseGraph, function() {
         releaseType: 'patch',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [
-          {
-            name: '@scope/package-a',
-            newRange: '^1.0.0',
-          },
-        ],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {
+          '@scope/package-a': '^1.0.0',
+        },
+        devDependencies: {},
+        optionalDependencies: {},
       },
     ]));
   });
@@ -588,9 +576,9 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {},
       },
       {
         name: '@scope/package-b',
@@ -599,14 +587,11 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [
-          {
-            name: '@scope/package-a',
-            newRange: '^1.1.0',
-          },
-        ],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {
+          '@scope/package-a': '^1.1.0',
+        },
+        devDependencies: {},
+        optionalDependencies: {},
       },
     ]));
   });
@@ -676,9 +661,9 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {},
       },
     ]));
   });
@@ -749,9 +734,9 @@ describe(buildReleaseGraph, function() {
         releaseType: 'major',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {},
       },
       {
         name: '@scope/package-b',
@@ -760,14 +745,11 @@ describe(buildReleaseGraph, function() {
         releaseType: 'patch',
         shouldBumpVersion: true,
         shouldPublish: false,
-        dependencies: [
-          {
-            name: '@scope/package-a',
-            newRange: '^2.0.0',
-          },
-        ],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {
+          '@scope/package-a': '^2.0.0',
+        },
+        devDependencies: {},
+        optionalDependencies: {},
       },
     ]));
   });
@@ -848,9 +830,9 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {},
       },
       {
         name: '@scope/package-c',
@@ -859,14 +841,11 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [
-          {
-            name: '@scope/package-a',
-            newRange: '^1.1.0',
-          },
-        ],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {
+          '@scope/package-a': '^1.1.0',
+        },
       },
       {
         name: '@scope/package-b',
@@ -875,14 +854,11 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [
-          {
-            name: '@scope/package-a',
-            newRange: '^1.1.0',
-          },
-        ],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {
+          '@scope/package-a': '^1.1.0',
+        },
       },
     ]));
   });
@@ -962,9 +938,9 @@ describe(buildReleaseGraph, function() {
           releaseType: 'minor',
           shouldBumpVersion: true,
           shouldPublish: true,
-          dependencies: [],
-          devDependencies: [],
-          optionalDependencies: [],
+          dependencies: {},
+          devDependencies: {},
+          optionalDependencies: {},
         },
         {
           name: '@scope/package-b',
@@ -973,14 +949,11 @@ describe(buildReleaseGraph, function() {
           releaseType: 'patch',
           shouldBumpVersion: false,
           shouldPublish: false,
-          dependencies: [],
-          devDependencies: [
-            {
-              name: '@scope/package-a',
-              newRange: '1.1.0',
-            },
-          ],
-          optionalDependencies: [],
+          dependencies: {},
+          devDependencies: {
+            '@scope/package-a': '1.1.0',
+          },
+          optionalDependencies: {},
         },
       ]));
     });
@@ -1059,9 +1032,9 @@ describe(buildReleaseGraph, function() {
           releaseType: 'minor',
           shouldBumpVersion: true,
           shouldPublish: true,
-          dependencies: [],
-          devDependencies: [],
-          optionalDependencies: [],
+          dependencies: {},
+          devDependencies: {},
+          optionalDependencies: {},
         },
         {
           name: '@scope/package-b',
@@ -1070,14 +1043,11 @@ describe(buildReleaseGraph, function() {
           releaseType: 'patch',
           shouldBumpVersion: true,
           shouldPublish: true,
-          dependencies: [],
-          devDependencies: [
-            {
-              name: '@scope/package-a',
-              newRange: '1.1.0',
-            },
-          ],
-          optionalDependencies: [],
+          dependencies: {},
+          devDependencies: {
+            '@scope/package-a': '1.1.0',
+          },
+          optionalDependencies: {},
         },
         {
           name: '@scope/package-c',
@@ -1086,14 +1056,11 @@ describe(buildReleaseGraph, function() {
           releaseType: 'patch',
           shouldBumpVersion: true,
           shouldPublish: true,
-          dependencies: [],
-          devDependencies: [
-            {
-              name: '@scope/package-b',
-              newRange: '1.0.1',
-            },
-          ],
-          optionalDependencies: [],
+          dependencies: {},
+          devDependencies: {
+            '@scope/package-b': '1.0.1',
+          },
+          optionalDependencies: {},
         },
       ]));
     });
@@ -1231,9 +1198,9 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {},
       },
       {
         name: '@scope/package-b',
@@ -1242,14 +1209,11 @@ describe(buildReleaseGraph, function() {
         releaseType: 'patch',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [
-          {
-            name: '@scope/package-a',
-            newRange: '1.1.0',
-          },
-        ],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {
+          '@scope/package-a': '1.1.0',
+        },
+        devDependencies: {},
+        optionalDependencies: {},
       },
     ]));
   });
@@ -1329,9 +1293,9 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {},
+        devDependencies: {},
+        optionalDependencies: {},
       },
       {
         name: '@scope/package-b',
@@ -1340,14 +1304,11 @@ describe(buildReleaseGraph, function() {
         releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [
-          {
-            name: '@scope/package-a',
-            newRange: '^1.1.0',
-          },
-        ],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {
+          '@scope/package-a': '^1.1.0',
+        },
+        devDependencies: {},
+        optionalDependencies: {},
       },
       {
         name: '@scope/package-c',
@@ -1356,14 +1317,11 @@ describe(buildReleaseGraph, function() {
         releaseType: 'patch',
         shouldBumpVersion: true,
         shouldPublish: true,
-        dependencies: [
-          {
-            name: '@scope/package-b',
-            newRange: '^1.1.0',
-          },
-        ],
-        devDependencies: [],
-        optionalDependencies: [],
+        dependencies: {
+          '@scope/package-b': '^1.1.0',
+        },
+        devDependencies: {},
+        optionalDependencies: {},
       },
     ]));
   });
