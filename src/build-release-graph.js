@@ -48,7 +48,6 @@ function isReleaseTypeInRange(version, type, range) {
 async function init({
   dag,
   releaseTrees,
-  releaseType,
   shouldVersionBump = true,
 }) {
   let {
@@ -69,10 +68,6 @@ async function init({
     }
   }
 
-  if (!releaseType) {
-    releaseType = await module.exports.getReleaseType(name, cwd);
-  }
-
   let canBumpVersion = !!(version && name);
   let canPublish = isPackage;
   let shouldBumpVersion = canBumpVersion && shouldVersionBump;
@@ -80,7 +75,7 @@ async function init({
 
   let releaseTree = {
     oldVersion: version,
-    releaseType,
+    releaseType: defaultReleaseType,
     cwd,
     name,
     shouldBumpVersion,
@@ -101,7 +96,14 @@ async function firstPass({
       continue;
     }
 
-    await init({ dag, releaseTrees });
+    let {
+      packageName: name,
+      cwd,
+    } = dag.node;
+
+    let releaseTree = await init({ dag, releaseTrees });
+
+    releaseTree.releaseType = await module.exports.getReleaseType(name, cwd);
   }
 }
 
@@ -127,14 +129,11 @@ async function secondPass({
         let shouldVersionBump = !(shouldExcludeDevChanges && isDevDep);
 
         if (dag.node.isPackage && shouldInheritGreaterReleaseType && !isDevDep && shouldBumpInRangeDependencies) {
-          // We use `defaultReleaseType` here instead of `parent.releaseType` because
-          // it doesn't matter, and it is less confusing. It gets overwritten with the correct
-          // value based on all dependencies later.
-          await init({ dag, releaseTrees, releaseType: defaultReleaseType });
+          await init({ dag, releaseTrees });
         } else if (!isReleaseTypeInRange(parent.oldVersion, parent.releaseType, dag.dependencyRange)) {
-          await init({ dag, releaseTrees, releaseType: defaultReleaseType, shouldVersionBump });
+          await init({ dag, releaseTrees, shouldVersionBump });
         } else if (shouldBumpInRangeDependencies) {
-          await init({ dag, releaseTrees, releaseType: defaultReleaseType, shouldVersionBump });
+          await init({ dag, releaseTrees, shouldVersionBump });
         } else {
           return;
         }
