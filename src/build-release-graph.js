@@ -78,7 +78,7 @@ async function init({
   let shouldBumpVersion = canBumpVersion && shouldVersionBump;
   let shouldPublish = canPublish && shouldBumpVersion;
 
-  return releaseTrees[name] = {
+  let releaseTree = {
     oldVersion: version,
     releaseType,
     cwd,
@@ -86,6 +86,10 @@ async function init({
     shouldBumpVersion,
     shouldPublish,
   };
+
+  releaseTrees[name] = releaseTree;
+
+  return releaseTree;
 }
 
 async function firstPass({
