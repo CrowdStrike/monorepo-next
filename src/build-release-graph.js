@@ -225,7 +225,7 @@ function fourthPass({
         }
       }
 
-      if (parent) {
+      if (parent && !current[dag.dependencyType].some(({ name }) => name === parent.name)) {
         let { name } = parent;
 
         let oldRange = dag.dependencyRange;
