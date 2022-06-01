@@ -206,7 +206,7 @@ function thirdPass({
       }
 
       for (let group of dag.node.dependents) {
-        if (!group.node.isPackage || isCycle(group)) {
+        if (isCycle(group)) {
           continue;
         }
 
