@@ -194,7 +194,7 @@ function thirdPass({
       parent,
     }) {
       if (visitedNodes.has(dag.node.packageName)) {
-        return;
+        // return;
       }
 
       visitedNodes.add(dag.node.packageName);
@@ -254,7 +254,7 @@ function fourthPass({
       parent,
     }) {
       if (visitedNodes.has(dag.node.packageName)) {
-        return;
+        // return;
       }
 
       visitedNodes.add(dag.node.packageName);
