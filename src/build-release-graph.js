@@ -123,7 +123,10 @@ async function secondPass({
         let shouldVersionBump = !shouldExcludeDevChanges || !isDevDep;
 
         if (dag.node.isPackage && shouldInheritGreaterReleaseType && !isDevDep && shouldBumpInRangeDependencies) {
-          await init({ dag, releaseTrees, releaseType: parent.releaseType });
+          // We use `defaultReleaseType` here instead of `parent.releaseType` because
+          // it doesn't matter, and it is less confusing. It gets overwritten with the correct
+          // value based on all dependencies later.
+          await init({ dag, releaseTrees, releaseType: defaultReleaseType });
         } else if (!isReleaseTypeInRange(parent.oldVersion, parent.releaseType, dag.dependencyRange)) {
           await init({ dag, releaseTrees, releaseType: defaultReleaseType, shouldVersionBump });
         } else if (shouldBumpInRangeDependencies) {
