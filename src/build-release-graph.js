@@ -120,7 +120,7 @@ async function secondPass({
       let doesPackageHaveChanges = !!releaseTrees[dag.node.packageName];
       if (!doesPackageHaveChanges) {
         let isDevDep = dag.dependencyType === 'devDependencies';
-        let shouldVersionBump = !shouldExcludeDevChanges || !isDevDep;
+        let shouldVersionBump = !(shouldExcludeDevChanges && isDevDep);
 
         if (dag.node.isPackage && shouldInheritGreaterReleaseType && !isDevDep && shouldBumpInRangeDependencies) {
           // We use `defaultReleaseType` here instead of `parent.releaseType` because
