@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [8.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v8.0.4...v8.1.0) (2022-06-02)
+
+
+### Features
+
+* early exit some crawlDag calls ([74c783a](https://github.com/CrowdStrike/monorepo-next/commit/74c783a8691d6acce455faa5f59a96de2b8455cd))
+
 ### [8.0.4](https://github.com/CrowdStrike/monorepo-next/compare/v8.0.3...v8.0.4) (2022-06-01)
 
 
