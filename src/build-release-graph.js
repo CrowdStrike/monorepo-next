@@ -122,6 +122,8 @@ async function secondPass({
   shouldInheritGreaterReleaseType,
   shouldExcludeDevChanges,
 }) {
+  let visitedNodes = new Set();
+
   for (let { dag, changedReleasableFiles } of packagesWithChanges) {
     if (!changedReleasableFiles.length) {
       continue;
@@ -131,6 +133,12 @@ async function secondPass({
       dag,
       parent,
     }) {
+      if (visitedNodes.has(dag.node.packageName)) {
+        return;
+      }
+
+      visitedNodes.add(dag.node.packageName);
+
       let doesPackageHaveChanges = !!releaseTrees[dag.node.packageName];
       if (!doesPackageHaveChanges) {
         let isDevDep = dag.dependencyType === 'devDependencies';
