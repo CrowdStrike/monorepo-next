@@ -6,7 +6,10 @@ const glob = promisify(require('glob'));
 const semver = require('semver');
 const dependencyTypes = require('./dependency-types');
 const execa = require('execa');
+const fs = require('fs');
 const readJson = require('./json').read;
+// eslint-disable-next-line node/no-unpublished-require
+const jsYaml = require('js-yaml');
 
 function copyDeps(left, right) {
   for (let dependencyType of dependencyTypes) {
@@ -84,15 +87,8 @@ async function buildDepGraph({
   let packagesGlobs;
 
   let _1dFilesArray;
-  if (!workspaces) {
-    _1dFilesArray = (await execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], { cwd: workspaceCwd })).stdout
-      .split(/\r?\n/)
-      .map(workspace => path.relative(workspaceCwd, workspace));
 
-    packagesGlobs = [];
-  } else {
-    packagesGlobs = workspaces.packages || workspaces;
-
+  async function filesArray() {
     let _2dFilesArray = await Promise.all(packagesGlobs.map(packagesGlob => {
       return glob(packagesGlob, {
         cwd: workspaceCwd,
@@ -100,6 +96,28 @@ async function buildDepGraph({
     }));
 
     _1dFilesArray = Array.prototype.concat.apply([], _2dFilesArray);
+  }
+
+  if (!workspaces) {
+    if (fs.existsSync(path.join(workspaceCwd, 'pnpm-workspace.yaml'))) {
+      workspaces = jsYaml.load(
+        fs.readFileSync(path.join(workspaceCwd, 'pnpm-workspace.yaml'), { encoding: 'utf-8'}),
+      );
+
+      packagesGlobs = workspaces.packages;
+
+      await filesArray();
+    } else {
+      _1dFilesArray = (await execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], { cwd: workspaceCwd })).stdout
+        .split(/\r?\n/)
+        .map(workspace => path.relative(workspaceCwd, workspace));
+
+      packagesGlobs = [];
+    }
+  } else {
+    packagesGlobs = workspaces.packages || workspaces;
+
+    await filesArray();
   }
 
   let uniqueFiles = [...new Set(_1dFilesArray)];
