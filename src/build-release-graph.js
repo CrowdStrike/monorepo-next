@@ -10,6 +10,7 @@ const { trackNewVersion } = require('./version');
 const semver = require('semver');
 const dependencyTypes = require('./dependency-types');
 const { isCycle } = require('./build-dag');
+const { loadPackageConfig } = require('./config');
 
 const defaultReleaseType = 'patch';
 
@@ -138,6 +139,12 @@ async function secondPass({
       }
 
       visitedNodes.add(dag.node.packageName);
+
+      let nextConfig = loadPackageConfig(dag.node.cwd);
+
+      if (!nextConfig.shouldBumpVersion) {
+        return;
+      }
 
       let doesPackageHaveChanges = !!releaseTrees[dag.node.packageName];
       if (!doesPackageHaveChanges) {

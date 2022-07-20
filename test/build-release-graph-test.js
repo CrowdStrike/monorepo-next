@@ -13,7 +13,7 @@ const { gitInit } = require('git-fixtures');
 const path = require('path');
 
 describe(buildReleaseGraph, function() {
-  this.timeout(5e3);
+  // this.timeout(5e3);
 
   // eslint-disable-next-line mocha/no-setup-in-describe
   setUpSinon();
@@ -1662,6 +1662,81 @@ describe(buildReleaseGraph, function() {
         devDependencies: {
           '@scope/package-a': '^2.0.0',
         },
+        optionalDependencies: {},
+      },
+    ]));
+  });
+
+  it('respects config shouldBumpVersion when a dep updates', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '0.0.0',
+            'devDependencies': {
+              '@scope/package-b': '^1.0.0',
+            },
+          }),
+          'monorepo-next.config.js': `module.exports = ${stringifyJson({
+            shouldBumpVersion: false,
+          })}`,
+        },
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-b@1.0.0'], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-b': {
+          'foo': '',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+    packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
+      return dag.node.packageName && dag.node.version;
+    });
+
+    let shouldBumpInRangeDependencies = true;
+
+    let releaseTrees = await buildReleaseGraph({
+      packagesWithChanges,
+      shouldBumpInRangeDependencies,
+    });
+
+    expect(releaseTrees).to.match(this.match([
+      {
+        name: '@scope/package-b',
+        cwd: matchPath('/packages/package-b'),
+        oldVersion: '1.0.0',
+        releaseType: 'minor',
+        shouldBumpVersion: true,
+        shouldPublish: true,
+        dependencies: {},
+        devDependencies: {},
         optionalDependencies: {},
       },
     ]));
