@@ -12,6 +12,7 @@ const { collectPackages } = require('./build-dep-graph');
 const minimatch = require('minimatch');
 const { getChangedReleasableFiles } = require('./releasable');
 const Set = require('superset');
+const { loadPackageConfig } = require('./config');
 
 async function getPackageChangedFiles({
   fromCommit,
@@ -73,6 +74,12 @@ async function buildChangeGraph({
 
   for (let _package of collectPackages(workspaceMeta)) {
     if (!_package.packageName || !_package.version) {
+      continue;
+    }
+
+    let nextConfig = loadPackageConfig(_package.cwd);
+
+    if (!nextConfig.shouldBumpVersion) {
       continue;
     }
 

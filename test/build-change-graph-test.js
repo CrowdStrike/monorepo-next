@@ -1434,4 +1434,27 @@ describe(buildChangeGraph, function() {
       ]));
     });
   });
+
+  it('respects config shouldBumpVersion', async function() {
+    fixturify.writeSync(tmpPath, {
+      'package.json': stringifyJson({
+        'version': '0.0.0',
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+      'monorepo-next.config.js': `module.exports = ${stringifyJson({
+        shouldBumpVersion: false,
+      })}`,
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+    expect(packagesWithChanges).to.be.empty;
+  });
 });

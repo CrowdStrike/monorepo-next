@@ -4,6 +4,15 @@
 
 Detach monorepo packages from normal linking. Work on breaking changes while gradually updating consumers.
 
+Each package can have a `monorepo-next.config.js` with the following options:
+
+```js
+module.exports = {
+  // Set this to false to opt-out of change detection and versioning.
+  shouldBumpVersion: true,
+}
+```
+
 <!-- CODEGEN_CLI_HELP -->
 
 ```
