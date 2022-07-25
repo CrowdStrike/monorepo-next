@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.3.1](https://github.com/CrowdStrike/monorepo-next/compare/v8.3.0...v8.3.1) (2022-07-25)
+
+
+### Bug Fixes
+
+* remove now unused `packagesGlobs` ([4207fb5](https://github.com/CrowdStrike/monorepo-next/commit/4207fb5ee8bf27d39c5fbb7c13899a79ef5e542f))
+
 ## [8.3.0](https://github.com/CrowdStrike/monorepo-next/compare/v8.2.0...v8.3.0) (2022-07-22)
 
 
