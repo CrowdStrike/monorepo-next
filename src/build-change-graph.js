@@ -9,10 +9,11 @@ const {
   getCommitSinceLastRelease,
 } = require('./git');
 const { collectPackages } = require('./build-dep-graph');
-const minimatch = require('minimatch');
+const { isSubDir } = require('./path');
 const { getChangedReleasableFiles } = require('./releasable');
 const Set = require('superset');
 const { loadPackageConfig } = require('./config');
+const path = require('path');
 
 async function getPackageChangedFiles({
   fromCommit,
@@ -71,6 +72,10 @@ async function buildChangeGraph({
 }) {
   let packagesWithChanges = {};
   let sinceBranchCommit;
+
+  let packagePaths = Object.values(workspaceMeta.packages).map(({ cwd }) => {
+    return path.relative(workspaceMeta.cwd, cwd);
+  });
 
   for (let _package of collectPackages(workspaceMeta)) {
     if (!_package.packageName || !_package.version) {
@@ -136,8 +141,8 @@ async function buildChangeGraph({
     // remove package changes from the workspace root's changed files
     if (_package.cwd === workspaceMeta.cwd) {
       newFiles = newFiles.filter(file => {
-        return !workspaceMeta.packagesGlobs.some(glob => {
-          return minimatch(file, `${glob}/**`, { dot: true });
+        return !packagePaths.some((packagePath) => {
+          return isSubDir(packagePath, file);
         });
       });
     }
