@@ -1,12 +1,10 @@
 'use strict';
 
 const path = require('path');
-const { promisify } = require('util');
-const glob = promisify(require('glob'));
 const semver = require('semver');
 const dependencyTypes = require('./dependency-types');
-const execa = require('execa');
 const readJson = require('./json').read;
+const getWorkspacesPaths = require('./get-workspaces-paths');
 
 function copyDeps(left, right) {
   for (let dependencyType of dependencyTypes) {
@@ -79,28 +77,9 @@ async function buildDepGraph({
 }) {
   let workspacePackageJson = await readJson(path.join(workspaceCwd, 'package.json'));
 
-  let { workspaces } = workspacePackageJson;
+  let workspaces = await getWorkspacesPaths({ workspaceCwd });
 
-  let _1dFilesArray;
-  if (!workspaces) {
-    _1dFilesArray = (await execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], { cwd: workspaceCwd })).stdout
-      .split(/\r?\n/)
-      .map(workspace => path.relative(workspaceCwd, workspace));
-  } else {
-    let packagesGlobs = workspaces.packages || workspaces;
-
-    let _2dFilesArray = await Promise.all(packagesGlobs.map(packagesGlob => {
-      return glob(packagesGlob, {
-        cwd: workspaceCwd,
-      });
-    }));
-
-    _1dFilesArray = Array.prototype.concat.apply([], _2dFilesArray);
-  }
-
-  let uniqueFiles = [...new Set(_1dFilesArray)];
-
-  let packageDirs = uniqueFiles.map(file => path.join(workspaceCwd, file));
+  let packageDirs = workspaces.map(dir => path.join(workspaceCwd, dir));
 
   let workspaceMeta = {
     cwd: workspaceCwd,
