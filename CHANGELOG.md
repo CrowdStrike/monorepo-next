@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [8.4.0](https://github.com/CrowdStrike/monorepo-next/compare/v8.3.1...v8.4.0) (2022-07-26)
+
+
+### Features
+
+* add getWorkspacesPaths to monorepo-next ([26caefe](https://github.com/CrowdStrike/monorepo-next/commit/26caefebdd0793ad90906c7a61b2b7d089a4f88c))
+
 ### [8.3.1](https://github.com/CrowdStrike/monorepo-next/compare/v8.3.0...v8.3.1) (2022-07-25)
 
 
