@@ -31,6 +31,7 @@ async function release({
   packageFiles = builder['package-files'].default,
   bumpFiles = builder['bump-files'].default,
   defaultBranch = builder['default-branch'].default,
+  repositoryUrl = builder['repository-url'].default,
   versionOverride,
   preCommitCallback = () => {},
   prePushCallback = () => {},
@@ -168,7 +169,7 @@ async function release({
   await handleLifecycleScript('posttag');
 
   async function originalPush() {
-    await push({ cwd: workspaceCwd });
+    await push({ cwd: workspaceCwd, repositoryUrl });
   }
 
   if (shouldPush) {
@@ -218,8 +219,14 @@ async function release({
   }
 }
 
-async function push({ cwd }) {
-  let remoteUrl = (await execa('git', ['config', '--get', 'remote.origin.url'], { cwd })).stdout;
+async function push({ cwd, repositoryUrl }) {
+  let remoteUrl;
+
+  if (repositoryUrl) {
+    remoteUrl = repositoryUrl;
+  } else {
+    remoteUrl = (await execa('git', ['config', '--get', 'remote.origin.url'], { cwd })).stdout;
+  }
 
   // https://stackoverflow.com/a/55586434
   let doesntSupportAtomic = remoteUrl.includes('https://');
@@ -228,9 +235,9 @@ async function push({ cwd }) {
 
   try {
     if (doesntSupportAtomic) {
-      await execa('git', ['push'], { cwd });
+      await execa('git', ['push', remoteUrl], { cwd });
     } else {
-      await execa('git', ['push', '--follow-tags', '--atomic'], { cwd });
+      await execa('git', ['push', remoteUrl, '--follow-tags', '--atomic'], { cwd });
     }
 
     success = true;
@@ -246,7 +253,7 @@ async function push({ cwd }) {
   if (doesntSupportAtomic && success) {
     // only push tags after the commit
     // and hard error if there is a tag collision
-    await execa('git', ['push', '--follow-tags'], { cwd });
+    await execa('git', ['push', remoteUrl, '--follow-tags'], { cwd });
   }
 }
 

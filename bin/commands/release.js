@@ -52,6 +52,10 @@ module.exports = {
       type: 'string',
       default: 'master',
     },
+    'repository-url': {
+      describe: '(optional) if you pass repository-url, it will be used for git push', 
+      type: 'string',
+    },
   },
   async handler(argv) {
     const release = require('../../src/release');
