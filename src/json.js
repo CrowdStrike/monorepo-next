@@ -11,6 +11,10 @@ async function read(path) {
   return JSON.parse(await fs.readFile(path, 'utf8'));
 }
 
+function readSync(path) {
+  return JSON.parse(fs.readFileSync(path, 'utf8'));
+}
+
 async function write(path, json) {
   await fs.writeFile(path, stringify(json));
 }
@@ -18,5 +22,6 @@ async function write(path, json) {
 module.exports = {
   stringify,
   read,
+  readSync,
   write,
 };
