@@ -44,6 +44,7 @@ const defaultWorkspace = {
     },
   },
   'package.json': stringifyJson({
+    'private': true,
     'workspaces': [
       'packages/*',
     ],
@@ -126,6 +127,7 @@ describe(detach, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -193,6 +195,7 @@ describe(detach, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -248,6 +251,7 @@ describe(detach, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],

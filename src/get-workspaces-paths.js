@@ -1,8 +1,6 @@
 'use strict';
 
 const execa = require('execa');
-const { promisify } = require('util');
-const glob = promisify(require('glob'));
 const path = require('path');
 const readJson = require('./json').read;
 
@@ -13,27 +11,22 @@ async function getWorkspacesPaths({
 
   let { workspaces } = workspacePackageJson;
 
-  let _1dFilesArray;
-
   if (!workspaces) {
-    _1dFilesArray = (await execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], { cwd: workspaceCwd })).stdout
+    workspaces = (await execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], { cwd: workspaceCwd })).stdout
       .split(/\r?\n/)
       .map(workspace => path.relative(workspaceCwd, workspace));
-
   } else {
-    let packagesGlobs = workspaces.packages || workspaces;
-    
-    let _2dFilesArray = await Promise.all(packagesGlobs.map(packagesGlob => {
-      return glob(packagesGlob, {
+    let jsonString = (
+      await execa('yarn', ['--silent', 'workspaces', 'info'], {
         cwd: workspaceCwd,
-      });
-    }));
+      })
+    ).stdout;
+  
+    let workspacesJson = JSON.parse(jsonString);
     
-    _1dFilesArray = Array.prototype.concat.apply([], _2dFilesArray);
+    workspaces = Object.values(workspacesJson).map(({ location }) => location);
   }
-    
-  workspaces = [...new Set(_1dFilesArray)];
-    
+
   return workspaces;
 }
 
