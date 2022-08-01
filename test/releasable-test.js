@@ -207,6 +207,34 @@ describe(function() {
       await expect(promise).to.eventually.be.rejectedWith(`expected 'package-a/dir1/' to be a file, but it is a directory`);
     });
 
+    it('handles a dir of files converted to a single file where the dir was', async function() {
+      fixturify.writeSync(this.tmpPath, {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': 'package-a',
+            'version': '1.0.0',
+            'files': ['foo'],
+          }),
+          'foo': {
+            'bar.js': '',
+          },
+        },
+      });
+
+      let changedReleasableFiles = await getChangedReleasableFiles({
+        changedFiles: [
+          'package-a/foo',
+          'package-a/foo/bar.js',
+        ],
+        packageCwd: path.join(this.tmpPath, 'package-a'),
+        workspacesCwd: this.tmpPath,
+      });
+
+      expect(changedReleasableFiles).to.deep.equal([
+        'package-a/foo/bar.js',
+      ]);
+    });
+
     describe('shouldExcludeDevChanges', function() {
       let shouldExcludeDevChanges = true;
 

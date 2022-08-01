@@ -66,6 +66,8 @@ async function prepareTmpPackage({
 
   let remainingFiles = changedFiles.diff(filesContributingToReleasability);
 
+  remainingFiles = removeSubDirs(remainingFiles);
+
   for (let file of remainingFiles) {
     let filePath = path.join(tmpDir, file);
 
