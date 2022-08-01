@@ -75,8 +75,9 @@ describe(_release, function() {
         },
         'my-app': {
           'package.json': stringifyJson({
-            'private': true,
             'name': 'my-app',
+            'private': true,
+            'version': '1.0.0',
             'devDependencies': {
               '@scope/package-a': '^1.0.0 || 1.0.0-detached',
               '@scope/package-b': '^2.0.0',
@@ -151,8 +152,9 @@ describe(_release, function() {
         },
         'my-app': {
           'package.json': stringifyJson({
-            'private': true,
             'name': 'my-app',
+            'private': true,
+            'version': '1.0.1',
             'devDependencies': {
               '@scope/package-a': '^2.0.0',
               '@scope/package-b': '^2.0.0',
@@ -176,7 +178,7 @@ describe(_release, function() {
 
     let lastCommitMessage = await getLastCommitMessage(tmpPath);
 
-    expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@2.0.0,@scope/package-b@3.0.0,@scope/package-c@3.0.1');
+    expect(lastCommitMessage).to.equal('chore(release): my-app@1.0.1,@scope/package-a@2.0.0,@scope/package-b@3.0.0,@scope/package-c@3.0.1');
 
     let tags = await getTagsOnLastCommit(tmpPath);
 
@@ -184,6 +186,7 @@ describe(_release, function() {
       '@scope/package-a@2.0.0',
       '@scope/package-b@3.0.0',
       '@scope/package-c@3.0.1',
+      'my-app@1.0.1',
     ]);
   });
 
