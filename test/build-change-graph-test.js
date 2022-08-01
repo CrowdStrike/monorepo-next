@@ -36,6 +36,7 @@ describe(buildChangeGraph, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -89,6 +90,7 @@ describe(buildChangeGraph, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -119,6 +121,7 @@ describe(buildChangeGraph, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -172,6 +175,7 @@ describe(buildChangeGraph, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -214,6 +218,7 @@ describe(buildChangeGraph, function() {
     fixturify.writeSync(tmpPath, {
       'package.json': stringifyJson({
         'name': 'workspace-root',
+        'private': true,
         'version': '1.0.0',
         'workspaces': [
           'packages/*',
@@ -257,6 +262,7 @@ describe(buildChangeGraph, function() {
     fixturify.writeSync(tmpPath, {
       'package.json': stringifyJson({
         'name': 'workspace-root',
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -285,6 +291,7 @@ describe(buildChangeGraph, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -339,6 +346,7 @@ describe(buildChangeGraph, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -396,6 +404,7 @@ describe(buildChangeGraph, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -454,6 +463,7 @@ describe(buildChangeGraph, function() {
           },
         },
         'package.json': stringifyJson({
+          'private': true,
           'workspaces': [
             'packages/*',
           ],
@@ -513,6 +523,7 @@ describe(buildChangeGraph, function() {
           },
         },
         'package.json': stringifyJson({
+          'private': true,
           'workspaces': [
             'packages/*',
           ],
@@ -544,6 +555,7 @@ describe(buildChangeGraph, function() {
           },
         },
         'package.json': stringifyJson({
+          'private': true,
           'workspaces': [
             'packages/*',
           ],
@@ -621,6 +633,7 @@ describe(buildChangeGraph, function() {
           },
         },
         'package.json': stringifyJson({
+          'private': true,
           'workspaces': [
             'packages/*',
           ],
@@ -678,6 +691,7 @@ describe(buildChangeGraph, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -739,6 +753,7 @@ describe(buildChangeGraph, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -823,6 +838,7 @@ describe(buildChangeGraph, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -977,6 +993,7 @@ describe(buildChangeGraph, function() {
         },
       },
       'package.json': stringifyJson({
+        'private': true,
         'workspaces': [
           'packages/*',
         ],
@@ -1131,6 +1148,7 @@ describe(buildChangeGraph, function() {
       },
       'package.json': stringifyJson({
         'name': 'root',
+        'private': true,
         'version': '1.0.0',
         'workspaces': [
           'packages/*',
@@ -1177,6 +1195,7 @@ describe(buildChangeGraph, function() {
       },
       'package.json': stringifyJson({
         'name': 'root',
+        'private': true,
         'version': '1.0.0',
         'workspaces': [
           'packages/*',
@@ -1223,6 +1242,7 @@ describe(buildChangeGraph, function() {
       },
       'package.json': stringifyJson({
         'name': 'root',
+        'private': true,
         'version': '1.0.0',
         'workspaces': [
           'packages/*',
@@ -1279,6 +1299,7 @@ describe(buildChangeGraph, function() {
           },
         },
         'package.json': stringifyJson({
+          'private': true,
           'workspaces': [
             'packages/*',
           ],
@@ -1339,6 +1360,7 @@ describe(buildChangeGraph, function() {
           },
         },
         'package.json': stringifyJson({
+          'private': true,
           'workspaces': [
             'packages/*',
           ],
@@ -1395,6 +1417,7 @@ describe(buildChangeGraph, function() {
           },
         },
         'package.json': stringifyJson({
+          'private': true,
           'workspaces': [
             'packages/*',
           ],
@@ -1438,6 +1461,7 @@ describe(buildChangeGraph, function() {
   it('respects config shouldBumpVersion', async function() {
     fixturify.writeSync(tmpPath, {
       'package.json': stringifyJson({
+        'private': true,
         'version': '0.0.0',
         'workspaces': [
           'packages/*',
