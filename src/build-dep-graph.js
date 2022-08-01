@@ -4,7 +4,7 @@ const path = require('path');
 const semver = require('semver');
 const dependencyTypes = require('./dependency-types');
 const readJson = require('./json').read;
-const getWorkspacesPaths = require('./get-workspaces-paths');
+const { getWorkspacesPaths } = require('./get-workspaces-paths');
 
 function copyDeps(left, right) {
   for (let dependencyType of dependencyTypes) {
