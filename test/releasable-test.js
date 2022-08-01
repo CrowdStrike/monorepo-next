@@ -5,6 +5,7 @@ const { expect } = require('./helpers/chai');
 const {
   getChangedReleasableFiles,
   packageJsonDevChangeRegex,
+  relativePathRegex,
 } = require('../src/releasable');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
@@ -289,6 +290,27 @@ describe(function() {
       expect(packageJsonDevChangeRegex.test('/publishConfig/foo')).to.be.ok;
       expect(packageJsonDevChangeRegex.test('/dependencies')).to.not.be.ok;
       expect(packageJsonDevChangeRegex.test('/dependencies/foo')).to.not.be.ok;
+    });
+  });
+
+  describe('relativePathRegex', function() {
+    it('works', function() {
+      for (let str of [
+        '..',
+        '../',
+        '..\\',
+      ]) {
+        expect(str).to.match(relativePathRegex);
+      }
+
+      for (let str of [
+        '..foo',
+      ]) {
+        // not.match appears to be broken
+        // expect(str).to.not.match(relativePathRegex);
+
+        expect(relativePathRegex.test(str)).to.not.be.ok;
+      }
     });
   });
 });

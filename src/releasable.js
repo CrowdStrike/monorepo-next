@@ -18,6 +18,8 @@ const filesContributingToReleasability = new Set([
 
 const packageJsonDevChangeRegex = /^\/(?:devDependencies|publishConfig)(?:\/|$)/m;
 
+const relativePathRegex = /^\.{2}(?:\/|\\|$)/;
+
 async function prepareTmpPackage({
   cwd,
   tmpDir,
@@ -161,4 +163,5 @@ async function getChangedReleasableFiles({
 module.exports = {
   getChangedReleasableFiles,
   packageJsonDevChangeRegex,
+  relativePathRegex,
 };
