@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.4.1](https://github.com/CrowdStrike/monorepo-next/compare/v8.4.0...v8.4.1) (2022-08-01)
+
+
+### Bug Fixes
+
+* add `private: true` to support yarn workspaces ([c6410ed](https://github.com/CrowdStrike/monorepo-next/commit/c6410ed70402d36c896f963c55dc084288920b27))
+* fix failing test when using `yarn workspaces list` command to read workspaces ([73dc089](https://github.com/CrowdStrike/monorepo-next/commit/73dc089fa1383d4d441b9fdbb006325834194148))
+
 ## [8.4.0](https://github.com/CrowdStrike/monorepo-next/compare/v8.3.1...v8.4.0) (2022-07-26)
 
 
