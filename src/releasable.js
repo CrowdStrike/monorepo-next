@@ -20,6 +20,30 @@ const packageJsonDevChangeRegex = /^\/(?:devDependencies|publishConfig)(?:\/|$)/
 
 const relativePathRegex = /^\.{2}(?:\/|\\|$)/;
 
+function removeSubDirs(files) {
+  let remainingFiles = new Set(files);
+
+  for (let file of remainingFiles) {
+    let isSubDir = remainingFiles.some(nextFile => {
+      if (file === nextFile) {
+        return false;
+      }
+
+      let relative = path.relative(file, nextFile);
+
+      let isSubDir = !relativePathRegex.test(relative);
+
+      return isSubDir;
+    });
+
+    if (isSubDir) {
+      remainingFiles.delete(file);
+    }
+  }
+
+  return remainingFiles;
+}
+
 async function prepareTmpPackage({
   cwd,
   tmpDir,
@@ -163,5 +187,6 @@ async function getChangedReleasableFiles({
 module.exports = {
   getChangedReleasableFiles,
   packageJsonDevChangeRegex,
+  removeSubDirs,
   relativePathRegex,
 };

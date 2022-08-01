@@ -5,6 +5,7 @@ const { expect } = require('./helpers/chai');
 const {
   getChangedReleasableFiles,
   packageJsonDevChangeRegex,
+  removeSubDirs,
   relativePathRegex,
 } = require('../src/releasable');
 const fixturify = require('fixturify');
@@ -14,6 +15,7 @@ const { gitInit } = require('git-fixtures');
 const { getCurrentCommit } = require('./helpers/git');
 const { replaceJsonFile } = require('../src/fs');
 const path = require('path');
+const Set = require('superset');
 
 describe(function() {
   // eslint-disable-next-line mocha/no-setup-in-describe
@@ -290,6 +292,66 @@ describe(function() {
       expect(packageJsonDevChangeRegex.test('/publishConfig/foo')).to.be.ok;
       expect(packageJsonDevChangeRegex.test('/dependencies')).to.not.be.ok;
       expect(packageJsonDevChangeRegex.test('/dependencies/foo')).to.not.be.ok;
+    });
+  });
+
+  describe(removeSubDirs, function() {
+    it('works when dir is first', function() {
+      let files = new Set([
+        'foo',
+        'foo/bar.js',
+      ]);
+      let expected = new Set([
+        'foo/bar.js',
+      ]);
+
+      let actual = removeSubDirs(files);
+
+      expect(actual).to.deep.equal(expected);
+    });
+
+    it('works when dir is last', function() {
+      let files = new Set([
+        'foo/bar.js',
+        'foo',
+      ]);
+      let expected = new Set([
+        'foo/bar.js',
+      ]);
+
+      let actual = removeSubDirs(files);
+
+      expect(actual).to.deep.equal(expected);
+    });
+
+    it('works when no sub dir', function() {
+      let files = new Set([
+        'foo/bar.js',
+        'foo/baz.js',
+      ]);
+      let expected = new Set([
+        'foo/bar.js',
+        'foo/baz.js',
+      ]);
+
+      let actual = removeSubDirs(files);
+
+      expect(actual).to.deep.equal(expected);
+    });
+
+    it('works when different dirs', function() {
+      let files = new Set([
+        'foo/baz.js',
+        'bar/baz.js',
+      ]);
+      let expected = new Set([
+        'foo/baz.js',
+        'bar/baz.js',
+      ]);
+
+      let actual = removeSubDirs(files);
+
+      expect(actual).to.deep.equal(expected);
     });
   });
 
