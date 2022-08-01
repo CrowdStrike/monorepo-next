@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [8.5.0](https://github.com/CrowdStrike/monorepo-next/compare/v8.4.1...v8.5.0) (2022-08-01)
+
+
+### Features
+
+* add feature to return workspaces synchronous ([c214187](https://github.com/CrowdStrike/monorepo-next/commit/c21418750c9829083e7d2b2d508663803fdc1102))
+
 ### [8.4.1](https://github.com/CrowdStrike/monorepo-next/compare/v8.4.0...v8.4.1) (2022-08-01)
 
 
