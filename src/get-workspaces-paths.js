@@ -1,6 +1,10 @@
 'use strict';
 
 const execa = require('execa');
+const fs = require('fs-extra');
+const { promisify } = require('util');
+const glob = promisify(require('glob'));
+const jsYaml = require('js-yaml');
 const path = require('path');
 const readJson = require('./json').read;
 const readJsonSync = require('./json').readSync;
@@ -31,26 +35,91 @@ function processYarn({ stdout }) {
   return workspaces;
 }
 
+function processPnpmYaml(buffer) {
+  // read packagesGlobs excluding packagesGLobs starting with !
+  // https://pnpm.io/pnpm-workspace_yaml
+  let packagesGlobs = jsYaml.load(buffer).packages.filter((packagesGlob) => !packagesGlob.startsWith('!'));
+
+  return packagesGlobs;
+}
+
+function processGlobs(cwd, _2dFilesArray, pnpmGlobs) {
+  let _1dFilesArray = Array.prototype.concat.apply([], _2dFilesArray);
+
+  let packagePaths = [...new Set(_1dFilesArray)];
+
+  let neededKeys = ['name', 'version'];
+
+  let workspaces = packagePaths.filter(packagePath => {
+    if (fs.existsSync(path.join(cwd, packagePath, 'package.json'))) {
+      let packageJson = readJsonSync(path.join(cwd, packagePath, 'package.json'));
+
+      if (pnpmGlobs) {
+        return packagePath;
+      } else {
+        // for yarn, not a valid package if name and version are missing in package.json
+        if (neededKeys.every(key => Object.keys(packageJson).includes(key))) {
+          return packagePath;
+        }
+      }
+    }
+  });
+
+  return workspaces;
+}
+
 async function getWorkspacesPaths({
   cwd,
+  shouldSpawn = false,
 }) {
   let workspacePackageJson = await readJson(path.join(cwd, 'package.json'));
 
   let { workspaces } = workspacePackageJson;
 
+  let packagesGlobs;
+
   if (!workspaces) {
-    workspaces = processPnpm(
-      await execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], {
+    if (shouldSpawn) {
+      workspaces = processPnpm(
+        await execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], {
+          cwd,
+        }),
         cwd,
-      }),
-      cwd,
-    );
+      );
+    } else {
+      let pnpmGlobs = true;
+
+      packagesGlobs = processPnpmYaml(
+        await fs.readFile(path.join(cwd, 'pnpm-workspace.yaml')));
+
+      let _2dFilesArray = await Promise.all(packagesGlobs.map(packagesGlob => {
+        return glob(packagesGlob, {
+          cwd,
+        });
+      }));
+
+      workspaces = processGlobs(cwd, _2dFilesArray, pnpmGlobs);
+    }
   } else {
-    workspaces = processYarn(
-      await execa('yarn', ['--silent', 'workspaces', 'info'], {
-        cwd,
-      }),
-    );
+    if (shouldSpawn) {
+      workspaces = processYarn(
+        await execa('yarn', ['--silent', 'workspaces', 'info'], {
+          cwd,
+        }),
+      );
+    } else {
+      let pnpmGlobs = false;
+
+      packagesGlobs = workspaces.packages || workspaces;
+
+      let _2dFilesArray = await Promise.all(packagesGlobs.map(packagesGlob => {
+        return glob(packagesGlob, {
+          cwd,
+        });
+      }));
+
+      workspaces = processGlobs(cwd, _2dFilesArray, pnpmGlobs);
+    }
   }
 
   return workspaces;
@@ -58,24 +127,56 @@ async function getWorkspacesPaths({
 
 function getWorkspacesPathsSync({
   cwd,
+  shouldSpawn = false,
 }) {
   let workspacePackageJson = readJsonSync(path.join(cwd, 'package.json'));
 
   let { workspaces } = workspacePackageJson;
 
+  let packagesGlobs;
+
   if (!workspaces) {
-    workspaces = processPnpm(
-      execa.sync('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], {
+    if (shouldSpawn) {
+      workspaces = processPnpm(
+        execa.sync('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], {
+          cwd,
+        }),
         cwd,
-      }),
-      cwd,
-    );
+      );
+    } else {
+      let pnpmGlobs = true;
+
+      packagesGlobs = processPnpmYaml(
+        fs.readFileSync(path.join(cwd, 'pnpm-workspace.yaml')));
+
+      let _2dFilesArray = packagesGlobs.map(packagesGlob => {
+        return glob.sync(packagesGlob, {
+          cwd,
+        });
+      });
+
+      workspaces = processGlobs(cwd, _2dFilesArray, pnpmGlobs);
+    }
   } else {
-    workspaces = processYarn(
-      execa.sync('yarn', ['--silent', 'workspaces', 'info'], {
-        cwd,
-      }),
-    );
+    if (shouldSpawn) {
+      workspaces = processYarn(
+        execa.sync('yarn', ['--silent', 'workspaces', 'info'], {
+          cwd,
+        }),
+      );
+    } else {
+      let pnpmGlobs = false;
+
+      let packagesGlobs = workspaces.packages || workspaces;
+
+      let _2dFilesArray = packagesGlobs.map(packagesGlob => {
+        return glob.sync(packagesGlob, {
+          cwd,
+        });
+      });
+
+      workspaces = processGlobs(cwd, _2dFilesArray, pnpmGlobs);
+    }
   }
 
   return workspaces;
