@@ -18,6 +18,32 @@ const filesContributingToReleasability = new Set([
 
 const packageJsonDevChangeRegex = /^\/(?:devDependencies|publishConfig)(?:\/|$)/m;
 
+const relativePathRegex = /^\.{2}(?:\/|\\|$)/;
+
+function removeSubDirs(files) {
+  let remainingFiles = new Set(files);
+
+  for (let file of remainingFiles) {
+    let isSubDir = remainingFiles.some(nextFile => {
+      if (file === nextFile) {
+        return false;
+      }
+
+      let relative = path.relative(file, nextFile);
+
+      let isSubDir = !relativePathRegex.test(relative);
+
+      return isSubDir;
+    });
+
+    if (isSubDir) {
+      remainingFiles.delete(file);
+    }
+  }
+
+  return remainingFiles;
+}
+
 async function prepareTmpPackage({
   cwd,
   tmpDir,
@@ -38,11 +64,11 @@ async function prepareTmpPackage({
     }
   }
 
-  for (let file of changedFiles) {
-    if (filesContributingToReleasability.has(file)) {
-      continue;
-    }
+  let remainingFiles = changedFiles.diff(filesContributingToReleasability);
 
+  remainingFiles = removeSubDirs(remainingFiles);
+
+  for (let file of remainingFiles) {
     let filePath = path.join(tmpDir, file);
 
     await fs.mkdir(path.dirname(filePath), { recursive: true });
@@ -161,4 +187,6 @@ async function getChangedReleasableFiles({
 module.exports = {
   getChangedReleasableFiles,
   packageJsonDevChangeRegex,
+  removeSubDirs,
+  relativePathRegex,
 };

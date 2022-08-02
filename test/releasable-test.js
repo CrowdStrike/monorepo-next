@@ -5,6 +5,8 @@ const { expect } = require('./helpers/chai');
 const {
   getChangedReleasableFiles,
   packageJsonDevChangeRegex,
+  removeSubDirs,
+  relativePathRegex,
 } = require('../src/releasable');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
@@ -13,6 +15,7 @@ const { gitInit } = require('git-fixtures');
 const { getCurrentCommit } = require('./helpers/git');
 const { replaceJsonFile } = require('../src/fs');
 const path = require('path');
+const Set = require('superset');
 
 describe(function() {
   // eslint-disable-next-line mocha/no-setup-in-describe
@@ -204,6 +207,34 @@ describe(function() {
       await expect(promise).to.eventually.be.rejectedWith(`expected 'package-a/dir1/' to be a file, but it is a directory`);
     });
 
+    it('handles a dir of files converted to a single file where the dir was', async function() {
+      fixturify.writeSync(this.tmpPath, {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': 'package-a',
+            'version': '1.0.0',
+            'files': ['foo'],
+          }),
+          'foo': {
+            'bar.js': '',
+          },
+        },
+      });
+
+      let changedReleasableFiles = await getChangedReleasableFiles({
+        changedFiles: [
+          'package-a/foo',
+          'package-a/foo/bar.js',
+        ],
+        packageCwd: path.join(this.tmpPath, 'package-a'),
+        workspacesCwd: this.tmpPath,
+      });
+
+      expect(changedReleasableFiles).to.deep.equal([
+        'package-a/foo/bar.js',
+      ]);
+    });
+
     describe('shouldExcludeDevChanges', function() {
       let shouldExcludeDevChanges = true;
 
@@ -289,6 +320,87 @@ describe(function() {
       expect(packageJsonDevChangeRegex.test('/publishConfig/foo')).to.be.ok;
       expect(packageJsonDevChangeRegex.test('/dependencies')).to.not.be.ok;
       expect(packageJsonDevChangeRegex.test('/dependencies/foo')).to.not.be.ok;
+    });
+  });
+
+  describe(removeSubDirs, function() {
+    it('works when dir is first', function() {
+      let files = new Set([
+        'foo',
+        'foo/bar.js',
+      ]);
+      let expected = new Set([
+        'foo/bar.js',
+      ]);
+
+      let actual = removeSubDirs(files);
+
+      expect(actual).to.deep.equal(expected);
+    });
+
+    it('works when dir is last', function() {
+      let files = new Set([
+        'foo/bar.js',
+        'foo',
+      ]);
+      let expected = new Set([
+        'foo/bar.js',
+      ]);
+
+      let actual = removeSubDirs(files);
+
+      expect(actual).to.deep.equal(expected);
+    });
+
+    it('works when no sub dir', function() {
+      let files = new Set([
+        'foo/bar.js',
+        'foo/baz.js',
+      ]);
+      let expected = new Set([
+        'foo/bar.js',
+        'foo/baz.js',
+      ]);
+
+      let actual = removeSubDirs(files);
+
+      expect(actual).to.deep.equal(expected);
+    });
+
+    it('works when different dirs', function() {
+      let files = new Set([
+        'foo/baz.js',
+        'bar/baz.js',
+      ]);
+      let expected = new Set([
+        'foo/baz.js',
+        'bar/baz.js',
+      ]);
+
+      let actual = removeSubDirs(files);
+
+      expect(actual).to.deep.equal(expected);
+    });
+  });
+
+  describe('relativePathRegex', function() {
+    it('works', function() {
+      for (let str of [
+        '..',
+        '../',
+        '..\\',
+      ]) {
+        expect(str).to.match(relativePathRegex);
+      }
+
+      for (let str of [
+        '..foo',
+      ]) {
+        // not.match appears to be broken
+        // expect(str).to.not.match(relativePathRegex);
+
+        expect(relativePathRegex.test(str)).to.not.be.ok;
+      }
     });
   });
 });
