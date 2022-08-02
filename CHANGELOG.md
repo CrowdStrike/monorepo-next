@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.5.1](https://github.com/CrowdStrike/monorepo-next/compare/v8.5.0...v8.5.1) (2022-08-02)
+
+
+### Bug Fixes
+
+* handles a dir of files converted to a single file where the dir was ([7d55461](https://github.com/CrowdStrike/monorepo-next/commit/7d55461c57b35e546ebd766ddd93d28d4d9c491e))
+
 ## [8.5.0](https://github.com/CrowdStrike/monorepo-next/compare/v8.4.1...v8.5.0) (2022-08-01)
 
 
