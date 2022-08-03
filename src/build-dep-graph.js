@@ -77,7 +77,7 @@ async function buildDepGraph({
 }) {
   let workspacePackageJson = await readJson(path.join(workspaceCwd, 'package.json'));
 
-  let workspaces = await getWorkspacesPaths({ workspaceCwd });
+  let workspaces = await getWorkspacesPaths({ cwd: workspaceCwd });
 
   let packageDirs = workspaces.map(dir => path.join(workspaceCwd, dir));
 
