@@ -22,9 +22,9 @@ async function getWorkspacesPaths({
         cwd: workspaceCwd,
       })
     ).stdout;
-  
+
     let workspacesJson = JSON.parse(jsonString);
-    
+
     workspaces = Object.values(workspacesJson).map(({ location }) => location);
   }
 
@@ -48,11 +48,11 @@ function getWorkspacesPathsSync({
         cwd: workspaceCwd,
       })
     ).stdout;
-  
+
     let workspacesJson = JSON.parse(jsonString);
-    
+
     workspaces = Object.values(workspacesJson).map(({ location }) => location);
-  }    
+  }
   return workspaces;
 }
 
