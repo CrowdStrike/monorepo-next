@@ -55,6 +55,9 @@ jobs:
       with:
         node-version: ${{ matrix.node }}
 
+    # This is needed for tests
+    - run: npm i -g pnpm
+
     - run: yarn install --frozen-lockfile
     - run: yarn test
 

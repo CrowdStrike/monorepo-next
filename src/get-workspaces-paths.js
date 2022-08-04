@@ -5,54 +5,79 @@ const path = require('path');
 const readJson = require('./json').read;
 const readJsonSync = require('./json').readSync;
 
+function processPnpm({ stdout }, cwd) {
+  let workspaces = stdout.split(/\r?\n/).reduce((workspaces, workspace) => {
+    if (!workspace.startsWith('No projects matched the filters')) {
+      if (process.platform === 'darwin' && workspace.startsWith(`${path.sep}private${path.sep}`)) {
+        workspace = `${path.sep}${path.relative(`${path.sep}private`, workspace)}`;
+      }
+
+      let relative = path.relative(cwd, workspace);
+
+      workspaces.push(relative);
+    }
+
+    return workspaces;
+  }, []);
+
+  return workspaces;
+}
+
+function processYarn({ stdout }) {
+  let json = JSON.parse(stdout);
+
+  let workspaces = Object.values(json).map(({ location }) => location);
+
+  return workspaces;
+}
+
 async function getWorkspacesPaths({
-  workspaceCwd,
+  cwd,
 }) {
-  let workspacePackageJson = await readJson(path.join(workspaceCwd, 'package.json'));
+  let workspacePackageJson = await readJson(path.join(cwd, 'package.json'));
 
   let { workspaces } = workspacePackageJson;
 
   if (!workspaces) {
-    workspaces = (await execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], { cwd: workspaceCwd })).stdout
-      .split(/\r?\n/)
-      .map(workspace => path.relative(workspaceCwd, workspace));
+    workspaces = processPnpm(
+      await execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], {
+        cwd,
+      }),
+      cwd,
+    );
   } else {
-    let jsonString = (
+    workspaces = processYarn(
       await execa('yarn', ['--silent', 'workspaces', 'info'], {
-        cwd: workspaceCwd,
-      })
-    ).stdout;
-
-    let workspacesJson = JSON.parse(jsonString);
-
-    workspaces = Object.values(workspacesJson).map(({ location }) => location);
+        cwd,
+      }),
+    );
   }
 
   return workspaces;
 }
 
 function getWorkspacesPathsSync({
-  workspaceCwd,
+  cwd,
 }) {
-  let workspacePackageJson = readJsonSync(path.join(workspaceCwd, 'package.json'));
+  let workspacePackageJson = readJsonSync(path.join(cwd, 'package.json'));
 
   let { workspaces } = workspacePackageJson;
 
   if (!workspaces) {
-    workspaces = (execa.sync('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], { cwd: workspaceCwd })).stdout
-      .split(/\r?\n/)
-      .map(workspace => path.relative(workspaceCwd, workspace));
+    workspaces = processPnpm(
+      execa.sync('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], {
+        cwd,
+      }),
+      cwd,
+    );
   } else {
-    let jsonString = (
+    workspaces = processYarn(
       execa.sync('yarn', ['--silent', 'workspaces', 'info'], {
-        cwd: workspaceCwd,
-      })
-    ).stdout;
-
-    let workspacesJson = JSON.parse(jsonString);
-
-    workspaces = Object.values(workspacesJson).map(({ location }) => location);
+        cwd,
+      }),
+    );
   }
+
   return workspaces;
 }
 

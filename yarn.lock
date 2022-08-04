@@ -879,6 +879,11 @@ commitlint-format-junit@^1.1.4:
   resolved "https://registry.npmjs.org/commitlint-format-junit/-/commitlint-format-junit-1.1.4.tgz#6e2cb692c1df6e7a189c7521c2de57335bd20a1c"
   integrity sha512-TNghlhli7c473qRPkO+qdHaCdhyr81/xfz1f/CTIlvLjo36IoJ3ZxSE3IMooMpq4z4r0DtWrFO9jshYBg19Few==
 
+common-tags@^1.8.2:
+  version "1.8.2"
+  resolved "https://registry.npmjs.org/common-tags/-/common-tags-1.8.2.tgz#94ebb3c076d26032745fd54face7f688ef5ac9c6"
+  integrity sha512-gk/Z852D2Wtb//0I+kRFNKKE9dIIVirjoqPoA1wJU+XePVXZfGeBpk45+A1rKO4Q43prqWBNY/MiIeRLbPWUaA==
+
 commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
