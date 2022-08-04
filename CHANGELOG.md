@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.3.2](https://github.com/CrowdStrike/monorepo-next/compare/v8.3.1...v8.3.2) (2022-08-04)
+
+
+### Bug Fixes
+
+* correctly handle changes across branches ([937f1ca](https://github.com/CrowdStrike/monorepo-next/commit/937f1cab563d77194fbd081f6417f392e778b3c8))
+
 ### [8.3.1](https://github.com/CrowdStrike/monorepo-next/compare/v8.3.0...v8.3.1) (2022-07-25)
 
 
