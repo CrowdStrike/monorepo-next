@@ -8,7 +8,7 @@ const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
 const { gitInit } = require('git-fixtures');
-const { getCurrentCommit } = require('./helpers/git');
+const { getCurrentCommit, getCurrentBranch } = require('./helpers/git');
 const { replaceJsonFile } = require('../src/fs');
 const path = require('path');
 const fs = { ...require('fs'), ...require('fs').promises };
@@ -1480,5 +1480,85 @@ describe(buildChangeGraph, function() {
     let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
 
     expect(packagesWithChanges).to.be.empty;
+  });
+
+  it('handles changes across branches', async function() {
+    let otherBranchName = 'test-branch';
+
+    let originalBranchName = await getCurrentBranch(tmpPath);
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+          'foo': '',
+          'bar': '',
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await execa('git', ['checkout', '-b', otherBranchName], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'foo': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let fromCommit = await getCurrentCommit(tmpPath);
+
+    await execa('git', ['checkout', originalBranchName], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'bar': 'test',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+    let packagesWithChanges = await buildChangeGraph({
+      workspaceMeta,
+      fromCommit,
+    });
+
+    expect(packagesWithChanges).to.match(this.match([
+      {
+        changedFiles: [
+          'packages/package-a/bar',
+          'packages/package-a/foo',
+        ],
+        changedReleasableFiles: [
+          'packages/package-a/bar',
+          'packages/package-a/foo',
+        ],
+        dag: this.match({
+          node: {
+            packageName: '@scope/package-a',
+          },
+        }),
+      },
+    ]));
   });
 });

@@ -21,22 +21,17 @@ async function getPackageChangedFiles({
   packageCwd,
   options,
 }) {
-  let isAncestor = await isCommitAncestorOf(fromCommit, toCommit, options);
+  // Be careful you don't accidentally use `...` instead of `..`.
+  // `...` finds the merge-base and uses that instead of `fromCommit`.
+  // https://stackoverflow.com/a/60496462
+  let committedChanges = await git(['diff', '--name-only', `${fromCommit}..${toCommit}`, packageCwd], options);
 
-  let olderCommit;
-  let newerCommit;
-  if (isAncestor) {
-    olderCommit = fromCommit;
-    newerCommit = toCommit;
-  } else {
-    olderCommit = toCommit;
-    newerCommit = fromCommit;
-  }
-
-  let committedChanges = await git(['diff', '--name-only', `${olderCommit}...${newerCommit}`, packageCwd], options);
   committedChanges = getLinesFromOutput(committedChanges);
+
   let dirtyChanges = await git(['status', '--porcelain', packageCwd, '-u'], options);
+
   dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
+
   let changedFiles = Array.from(new Set(committedChanges).union(dirtyChanges));
 
   return changedFiles;
