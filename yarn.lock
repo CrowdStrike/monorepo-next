@@ -1319,10 +1319,10 @@ eslint-config-crowdstrike-node@^3.0.0:
   resolved "https://registry.npmjs.org/eslint-config-crowdstrike-node/-/eslint-config-crowdstrike-node-3.0.0.tgz#b7b4c6dc84008f8683c74b33af86a16dcf4d8da0"
   integrity sha512-yIeeg4BTT3SYsebbbOdg7S5MIN8g0NcexvH9RHxiagmYPKmmVaBB9BITPCT1kuVLi9wq/OGebc9U/ErypXYCDg==
 
-eslint-config-crowdstrike@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-crowdstrike/-/eslint-config-crowdstrike-6.0.0.tgz#966b03735c8a1c625031447bd580335befec186c"
-  integrity sha512-AE/2YNzSEuLxH2jpzNggjXk/46eleSvzaMMIvADUMqzWt9ctVuM+tEJ7IS2RwOxh6DEZ7LVlWEtX91miXuzjEQ==
+eslint-config-crowdstrike@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-crowdstrike/-/eslint-config-crowdstrike-7.0.0.tgz#d5100630b722c8b6519ccad14bc75247312c199c"
+  integrity sha512-ct0x0jRDiqvy9kgm+kIXbbmIMdlXfyn7Oy0go1spjRYpzsb3hawBn9YrokQ/8HBi5/bLEfdKTapsinp4IyAIbA==
 
 eslint-plugin-es@^3.0.0:
   version "3.0.1"
