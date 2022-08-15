@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.6.1](https://github.com/CrowdStrike/monorepo-next/compare/v8.6.0...v8.6.1) (2022-08-15)
+
+
+### Bug Fixes
+
+* match dot files with minimatch ([9933f41](https://github.com/CrowdStrike/monorepo-next/commit/9933f411f2d529192dc556b99be5ddf78ebbbc14))
+
 ## [8.6.0](https://github.com/CrowdStrike/monorepo-next/compare/v8.5.1...v8.6.0) (2022-08-15)
 
 
