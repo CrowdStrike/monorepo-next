@@ -54,6 +54,22 @@ describe(function() {
           'packages/package-a',
         ]);
       });
+
+      it(getWorkspacesPaths, async function() {
+        let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+
+        expect(workspaces).to.deep.equal([
+          'packages/package-a',
+        ]);
+      });
+
+      it(getWorkspacesPathsSync, function() {
+        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
+
+        expect(workspaces).to.deep.equal([
+          'packages/package-a',
+        ]);
+      });
     });
 
     describe('packages array', function() {
@@ -93,6 +109,22 @@ describe(function() {
           'packages/package-a',
         ]);
       });
+
+      it(getWorkspacesPaths, async function() {
+        let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+
+        expect(workspaces).to.deep.equal([
+          'packages/package-a',
+        ]);
+      });
+
+      it(getWorkspacesPathsSync, function() {
+        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
+
+        expect(workspaces).to.deep.equal([
+          'packages/package-a',
+        ]);
+      });
     });
 
     describe('missing version', function() {
@@ -125,6 +157,18 @@ describe(function() {
 
         expect(workspaces).to.be.empty;
       });
+
+      it(getWorkspacesPaths, async function() {
+        let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+
+        expect(workspaces).to.be.empty;
+      });
+
+      it(getWorkspacesPathsSync, function() {
+        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
+
+        expect(workspaces).to.be.empty;
+      });
     });
 
     describe('missing name', function() {
@@ -154,6 +198,18 @@ describe(function() {
 
       it(getWorkspacesPathsSync, function() {
         let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+
+        expect(workspaces).to.be.empty;
+      });
+
+      it(getWorkspacesPaths, async function() {
+        let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+
+        expect(workspaces).to.be.empty;
+      });
+
+      it(getWorkspacesPathsSync, function() {
+        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
 
         expect(workspaces).to.be.empty;
       });
@@ -192,6 +248,22 @@ describe(function() {
           'packages/package-a',
         ]);
       });
+
+      it(getWorkspacesPaths, async function() {
+        let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+
+        expect(workspaces).to.deep.equal([
+          'packages/package-a',
+        ]);
+      });
+
+      it(getWorkspacesPathsSync, function() {
+        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
+
+        expect(workspaces).to.deep.equal([
+          'packages/package-a',
+        ]);
+      });
     });
 
     describe('empty dir', function() {
@@ -216,6 +288,18 @@ describe(function() {
 
       it(getWorkspacesPathsSync, function() {
         let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+
+        expect(workspaces).to.be.empty;
+      });
+
+      it(getWorkspacesPaths, async function() {
+        let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+
+        expect(workspaces).to.be.empty;
+      });
+
+      it(getWorkspacesPathsSync, function() {
+        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
 
         expect(workspaces).to.be.empty;
       });
