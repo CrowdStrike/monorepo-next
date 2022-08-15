@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [8.6.0](https://github.com/CrowdStrike/monorepo-next/compare/v8.5.1...v8.6.0) (2022-08-15)
+
+
+### Features
+
+* add globbing as default instead of spawing packagemanagers ([c88852b](https://github.com/CrowdStrike/monorepo-next/commit/c88852ba093e2b7125eecedab28249b3e1f6e89d))
+* duplicate all tests using `shouldSpawn: true` ([d5f7b3b](https://github.com/CrowdStrike/monorepo-next/commit/d5f7b3bc83b1d32565d9a7d36dd5b11b5098a638))
+
+
+### Bug Fixes
+
+* correctly handle changes across branches ([0b6cd4c](https://github.com/CrowdStrike/monorepo-next/commit/0b6cd4c75e6db05ffc6d9daef7e384fbc8fda4be))
+
 ### [8.5.1](https://github.com/CrowdStrike/monorepo-next/compare/v8.5.0...v8.5.1) (2022-08-02)
 
 
