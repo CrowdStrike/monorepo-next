@@ -43,7 +43,7 @@ function processPnpmYaml(buffer) {
   return packagesGlobs;
 }
 
-function processGlobs({ cwd, _2dFilesArray, arePnpmGlobs }) {
+function processGlobs({ cwd, _2dFilesArray, isPnpm }) {
   let _1dFilesArray = Array.prototype.concat.apply([], _2dFilesArray);
 
   let packagePaths = [...new Set(_1dFilesArray)];
@@ -63,13 +63,13 @@ function processGlobs({ cwd, _2dFilesArray, arePnpmGlobs }) {
       throw err;
     }
 
-    if (arePnpmGlobs) {
-      return packagePath;
-    } else {
-      // for yarn, not a valid package if name and version are missing in package.json
-      if (neededYarnKeys.every(key => Object.keys(packageJson).includes(key))) {
-        return packagePath;
-      }
+    if (isPnpm) {
+      return true;
+    }
+
+    // for yarn, not a valid package if name and version are missing in package.json
+    if (neededYarnKeys.every(key => Object.keys(packageJson).includes(key))) {
+      return true;
     }
   });
 
@@ -84,10 +84,10 @@ async function getWorkspacesPaths({
 
   let { workspaces } = workspacePackageJson;
 
-  let packagesGlobs;
+  let isPnpm = !workspaces;
 
-  if (!workspaces) {
-    if (shouldSpawn) {
+  if (shouldSpawn) {
+    if (isPnpm) {
       workspaces = processPnpm(
         await execa('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], {
           cwd,
@@ -95,36 +95,30 @@ async function getWorkspacesPaths({
         cwd,
       );
     } else {
-      packagesGlobs = processPnpmYaml(
-        await fs.readFile(path.join(cwd, 'pnpm-workspace.yaml')),
-      );
-
-      let _2dFilesArray = await Promise.all(packagesGlobs.map(packagesGlob => {
-        return glob(packagesGlob, {
-          cwd,
-        });
-      }));
-
-      workspaces = processGlobs({ cwd, _2dFilesArray, arePnpmGlobs: true });
-    }
-  } else {
-    if (shouldSpawn) {
       workspaces = processYarn(
         await execa('yarn', ['--silent', 'workspaces', 'info'], {
           cwd,
         }),
       );
+    }
+  } else {
+    let packagesGlobs;
+
+    if (isPnpm) {
+      packagesGlobs = processPnpmYaml(
+        await fs.readFile(path.join(cwd, 'pnpm-workspace.yaml')),
+      );
     } else {
       packagesGlobs = workspaces.packages || workspaces;
-
-      let _2dFilesArray = await Promise.all(packagesGlobs.map(packagesGlob => {
-        return glob(packagesGlob, {
-          cwd,
-        });
-      }));
-
-      workspaces = processGlobs({ cwd, _2dFilesArray, arePnpmGlobs: false });
     }
+
+    let _2dFilesArray = await Promise.all(packagesGlobs.map(packagesGlob => {
+      return glob(packagesGlob, {
+        cwd,
+      });
+    }));
+
+    workspaces = processGlobs({ cwd, _2dFilesArray, isPnpm });
   }
 
   return workspaces;
@@ -138,10 +132,10 @@ function getWorkspacesPathsSync({
 
   let { workspaces } = workspacePackageJson;
 
-  let packagesGlobs;
+  let isPnpm = !workspaces;
 
-  if (!workspaces) {
-    if (shouldSpawn) {
+  if (shouldSpawn) {
+    if (isPnpm) {
       workspaces = processPnpm(
         execa.sync('pnpm', ['recursive', 'exec', '--', 'node', '-e', 'console.log(process.cwd())'], {
           cwd,
@@ -149,36 +143,30 @@ function getWorkspacesPathsSync({
         cwd,
       );
     } else {
-      packagesGlobs = processPnpmYaml(
-        fs.readFileSync(path.join(cwd, 'pnpm-workspace.yaml')),
-      );
-
-      let _2dFilesArray = packagesGlobs.map(packagesGlob => {
-        return glob.sync(packagesGlob, {
-          cwd,
-        });
-      });
-
-      workspaces = processGlobs({ cwd, _2dFilesArray, arePnpmGlobs: true });
-    }
-  } else {
-    if (shouldSpawn) {
       workspaces = processYarn(
         execa.sync('yarn', ['--silent', 'workspaces', 'info'], {
           cwd,
         }),
       );
-    } else {
-      let packagesGlobs = workspaces.packages || workspaces;
-
-      let _2dFilesArray = packagesGlobs.map(packagesGlob => {
-        return glob.sync(packagesGlob, {
-          cwd,
-        });
-      });
-
-      workspaces = processGlobs({ cwd, _2dFilesArray, arePnpmGlobs: false });
     }
+  } else {
+    let packagesGlobs;
+
+    if (isPnpm) {
+      packagesGlobs = processPnpmYaml(
+        fs.readFileSync(path.join(cwd, 'pnpm-workspace.yaml')),
+      );
+    } else {
+      packagesGlobs = workspaces.packages || workspaces;
+    }
+
+    let _2dFilesArray = packagesGlobs.map(packagesGlob => {
+      return glob.sync(packagesGlob, {
+        cwd,
+      });
+    });
+
+    workspaces = processGlobs({ cwd, _2dFilesArray, isPnpm });
   }
 
   return workspaces;
