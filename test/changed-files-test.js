@@ -211,6 +211,25 @@ describe(changedFiles, function() {
     ]);
   });
 
+  it('matches dot files with globs', async function() {
+    fixturify.writeSync(tmpPath, {
+      '.foo': '',
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+      globs: ['*'],
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      '.foo',
+    ]);
+  });
+
   it('filters globs and exts', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {

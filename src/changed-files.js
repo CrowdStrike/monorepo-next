@@ -67,7 +67,7 @@ async function changedFiles({
         isMatch = true;
       } else if (exts.some(ext => file.endsWith(`.${ext}`))) {
         isMatch = true;
-      } else if (globs.some(glob => minimatch(file, glob))) {
+      } else if (globs.some(glob => minimatch(file, glob, { dot: true }))) {
         isMatch = true;
       }
 
