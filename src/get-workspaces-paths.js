@@ -68,7 +68,7 @@ function processGlobs({ cwd, _2dFilesArray, isPnpm }) {
     }
 
     // for yarn, not a valid package if name and version are missing in package.json
-    if (neededYarnKeys.every(key => Object.keys(packageJson).includes(key))) {
+    if (neededYarnKeys.every(key => key in packageJson)) {
       return true;
     }
   });
