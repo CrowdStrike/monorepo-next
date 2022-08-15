@@ -1,7 +1,7 @@
 'use strict';
 
 const execa = require('execa');
-const fs = require('fs-extra');
+const fs = { ...require('fs'), ...require('fs').promises };
 const { promisify } = require('util');
 const glob = promisify(require('glob'));
 const jsYaml = require('js-yaml');
@@ -51,16 +51,24 @@ function processGlobs(cwd, _2dFilesArray, pnpmGlobs) {
   let neededKeys = ['name', 'version'];
 
   let workspaces = packagePaths.filter(packagePath => {
-    if (fs.existsSync(path.join(cwd, packagePath, 'package.json'))) {
-      let packageJson = readJsonSync(path.join(cwd, packagePath, 'package.json'));
+    let packageJson;
 
-      if (pnpmGlobs) {
+    try {
+      packageJson = readJsonSync(path.join(cwd, packagePath, 'package.json'));
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        return;
+      }
+
+      throw err;
+    }
+
+    if (pnpmGlobs) {
+      return packagePath;
+    } else {
+      // for yarn, not a valid package if name and version are missing in package.json
+      if (neededKeys.every(key => Object.keys(packageJson).includes(key))) {
         return packagePath;
-      } else {
-        // for yarn, not a valid package if name and version are missing in package.json
-        if (neededKeys.every(key => Object.keys(packageJson).includes(key))) {
-          return packagePath;
-        }
       }
     }
   });
