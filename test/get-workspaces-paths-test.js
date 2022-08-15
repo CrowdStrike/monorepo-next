@@ -39,36 +39,40 @@ describe(function() {
         });
       });
 
-      it(getWorkspacesPaths, async function() {
-        let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
+      describe('globs', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
 
-        expect(workspaces).to.deep.equal([
-          'packages/package-a',
-        ]);
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
+
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
       });
 
-      it(getWorkspacesPathsSync, function() {
-        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+      describe('spawn', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
 
-        expect(workspaces).to.deep.equal([
-          'packages/package-a',
-        ]);
-      });
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
 
-      it(getWorkspacesPaths, async function() {
-        let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
 
-        expect(workspaces).to.deep.equal([
-          'packages/package-a',
-        ]);
-      });
-
-      it(getWorkspacesPathsSync, function() {
-        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
-
-        expect(workspaces).to.deep.equal([
-          'packages/package-a',
-        ]);
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
       });
     });
 
@@ -94,36 +98,40 @@ describe(function() {
         });
       });
 
-      it(getWorkspacesPaths, async function() {
-        let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
+      describe('globs', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
 
-        expect(workspaces).to.deep.equal([
-          'packages/package-a',
-        ]);
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
+
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
       });
 
-      it(getWorkspacesPathsSync, function() {
-        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+      describe('spawn', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
 
-        expect(workspaces).to.deep.equal([
-          'packages/package-a',
-        ]);
-      });
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
 
-      it(getWorkspacesPaths, async function() {
-        let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
 
-        expect(workspaces).to.deep.equal([
-          'packages/package-a',
-        ]);
-      });
-
-      it(getWorkspacesPathsSync, function() {
-        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
-
-        expect(workspaces).to.deep.equal([
-          'packages/package-a',
-        ]);
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
       });
     });
 
@@ -146,28 +154,32 @@ describe(function() {
         });
       });
 
-      it(getWorkspacesPaths, async function() {
-        let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
+      describe('globs', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
 
-        expect(workspaces).to.be.empty;
+          expect(workspaces).to.be.empty;
+        });
+
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+
+          expect(workspaces).to.be.empty;
+        });
       });
 
-      it(getWorkspacesPathsSync, function() {
-        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+      describe('spawn', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
 
-        expect(workspaces).to.be.empty;
-      });
+          expect(workspaces).to.be.empty;
+        });
 
-      it(getWorkspacesPaths, async function() {
-        let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
 
-        expect(workspaces).to.be.empty;
-      });
-
-      it(getWorkspacesPathsSync, function() {
-        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
-
-        expect(workspaces).to.be.empty;
+          expect(workspaces).to.be.empty;
+        });
       });
     });
 
@@ -190,28 +202,32 @@ describe(function() {
         });
       });
 
-      it(getWorkspacesPaths, async function() {
-        let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
+      describe('globs', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
 
-        expect(workspaces).to.be.empty;
+          expect(workspaces).to.be.empty;
+        });
+
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+
+          expect(workspaces).to.be.empty;
+        });
       });
 
-      it(getWorkspacesPathsSync, function() {
-        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+      describe('spawn', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
 
-        expect(workspaces).to.be.empty;
-      });
+          expect(workspaces).to.be.empty;
+        });
 
-      it(getWorkspacesPaths, async function() {
-        let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
 
-        expect(workspaces).to.be.empty;
-      });
-
-      it(getWorkspacesPathsSync, function() {
-        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
-
-        expect(workspaces).to.be.empty;
+          expect(workspaces).to.be.empty;
+        });
       });
     });
   });
@@ -233,36 +249,40 @@ describe(function() {
         });
       });
 
-      it(getWorkspacesPaths, async function() {
-        let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
+      describe('globs', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
 
-        expect(workspaces).to.deep.equal([
-          'packages/package-a',
-        ]);
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
+
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
       });
 
-      it(getWorkspacesPathsSync, function() {
-        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+      describe('spawn', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
 
-        expect(workspaces).to.deep.equal([
-          'packages/package-a',
-        ]);
-      });
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
 
-      it(getWorkspacesPaths, async function() {
-        let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
 
-        expect(workspaces).to.deep.equal([
-          'packages/package-a',
-        ]);
-      });
-
-      it(getWorkspacesPathsSync, function() {
-        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
-
-        expect(workspaces).to.deep.equal([
-          'packages/package-a',
-        ]);
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
       });
     });
 
@@ -280,28 +300,32 @@ describe(function() {
         });
       });
 
-      it(getWorkspacesPaths, async function() {
-        let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
+      describe('globs', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
 
-        expect(workspaces).to.be.empty;
+          expect(workspaces).to.be.empty;
+        });
+
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+
+          expect(workspaces).to.be.empty;
+        });
       });
 
-      it(getWorkspacesPathsSync, function() {
-        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+      describe('spawn', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
 
-        expect(workspaces).to.be.empty;
-      });
+          expect(workspaces).to.be.empty;
+        });
 
-      it(getWorkspacesPaths, async function() {
-        let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
 
-        expect(workspaces).to.be.empty;
-      });
-
-      it(getWorkspacesPathsSync, function() {
-        let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
-
-        expect(workspaces).to.be.empty;
+          expect(workspaces).to.be.empty;
+        });
       });
     });
   });
