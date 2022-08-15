@@ -163,7 +163,9 @@ describe(changedFiles, function() {
           'changed.txt': 'test',
           '.my-config.json': 'test',
         },
-        'changed-without-config-1.txt': 'test',
+        'package-b': {
+          'changed-without-config-1.txt': 'test',
+        },
       },
       'changed-without-config-2.txt': 'test',
       '.my-config.json': 'test',
@@ -216,8 +218,10 @@ describe(changedFiles, function() {
           'changed.txt': 'test',
           '.my-config.json': 'test',
         },
-        'changed-without-config-1.txt': 'test',
-        'non-matching-file-1.json': 'test',
+        'package-b': {
+          'changed-without-config-1.txt': 'test',
+          'non-matching-file-1.json': 'test',
+        },
       },
       'changed-without-config-2.txt': 'test',
       'non-matching-file-2.json': 'test',
@@ -237,7 +241,7 @@ describe(changedFiles, function() {
       'packages/package-a/.my-config.json',
       'packages/package-a/changed.txt',
       'changed-without-config-2.txt',
-      'packages/changed-without-config-1.txt',
+      'packages/package-b/changed-without-config-1.txt',
     ]);
   });
 
