@@ -43,12 +43,12 @@ function processPnpmYaml(buffer) {
   return packagesGlobs;
 }
 
-function processGlobs(cwd, _2dFilesArray, pnpmGlobs) {
+function processGlobs({ cwd, _2dFilesArray, arePnpmGlobs }) {
   let _1dFilesArray = Array.prototype.concat.apply([], _2dFilesArray);
 
   let packagePaths = [...new Set(_1dFilesArray)];
 
-  let neededKeys = ['name', 'version'];
+  let neededYarnKeys = ['name', 'version'];
 
   let workspaces = packagePaths.filter(packagePath => {
     let packageJson;
@@ -63,11 +63,11 @@ function processGlobs(cwd, _2dFilesArray, pnpmGlobs) {
       throw err;
     }
 
-    if (pnpmGlobs) {
+    if (arePnpmGlobs) {
       return packagePath;
     } else {
       // for yarn, not a valid package if name and version are missing in package.json
-      if (neededKeys.every(key => Object.keys(packageJson).includes(key))) {
+      if (neededYarnKeys.every(key => Object.keys(packageJson).includes(key))) {
         return packagePath;
       }
     }
@@ -95,10 +95,9 @@ async function getWorkspacesPaths({
         cwd,
       );
     } else {
-      let pnpmGlobs = true;
-
       packagesGlobs = processPnpmYaml(
-        await fs.readFile(path.join(cwd, 'pnpm-workspace.yaml')));
+        await fs.readFile(path.join(cwd, 'pnpm-workspace.yaml')),
+      );
 
       let _2dFilesArray = await Promise.all(packagesGlobs.map(packagesGlob => {
         return glob(packagesGlob, {
@@ -106,7 +105,7 @@ async function getWorkspacesPaths({
         });
       }));
 
-      workspaces = processGlobs(cwd, _2dFilesArray, pnpmGlobs);
+      workspaces = processGlobs({ cwd, _2dFilesArray, arePnpmGlobs: true });
     }
   } else {
     if (shouldSpawn) {
@@ -116,8 +115,6 @@ async function getWorkspacesPaths({
         }),
       );
     } else {
-      let pnpmGlobs = false;
-
       packagesGlobs = workspaces.packages || workspaces;
 
       let _2dFilesArray = await Promise.all(packagesGlobs.map(packagesGlob => {
@@ -126,7 +123,7 @@ async function getWorkspacesPaths({
         });
       }));
 
-      workspaces = processGlobs(cwd, _2dFilesArray, pnpmGlobs);
+      workspaces = processGlobs({ cwd, _2dFilesArray, arePnpmGlobs: false });
     }
   }
 
@@ -152,10 +149,9 @@ function getWorkspacesPathsSync({
         cwd,
       );
     } else {
-      let pnpmGlobs = true;
-
       packagesGlobs = processPnpmYaml(
-        fs.readFileSync(path.join(cwd, 'pnpm-workspace.yaml')));
+        fs.readFileSync(path.join(cwd, 'pnpm-workspace.yaml')),
+      );
 
       let _2dFilesArray = packagesGlobs.map(packagesGlob => {
         return glob.sync(packagesGlob, {
@@ -163,7 +159,7 @@ function getWorkspacesPathsSync({
         });
       });
 
-      workspaces = processGlobs(cwd, _2dFilesArray, pnpmGlobs);
+      workspaces = processGlobs({ cwd, _2dFilesArray, arePnpmGlobs: true });
     }
   } else {
     if (shouldSpawn) {
@@ -173,8 +169,6 @@ function getWorkspacesPathsSync({
         }),
       );
     } else {
-      let pnpmGlobs = false;
-
       let packagesGlobs = workspaces.packages || workspaces;
 
       let _2dFilesArray = packagesGlobs.map(packagesGlob => {
@@ -183,7 +177,7 @@ function getWorkspacesPathsSync({
         });
       });
 
-      workspaces = processGlobs(cwd, _2dFilesArray, pnpmGlobs);
+      workspaces = processGlobs({ cwd, _2dFilesArray, arePnpmGlobs: false });
     }
   }
 
