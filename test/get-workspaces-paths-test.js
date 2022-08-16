@@ -230,6 +230,64 @@ describe(function() {
         });
       });
     });
+
+    describe('dir with files but no package.json', function() {
+      beforeEach(function() {
+        fixturify.writeSync(tmpPath, {
+          'packages': {
+            'package-a': {
+              'package.json': stringifyJson({
+                'name': 'package-a',
+                'version': '0.0.0',
+              }),
+            },
+            'README.md': '',
+          },
+          'package.json': stringifyJson({
+            'private': true,
+            'workspaces': [
+              'packages/*',
+            ],
+          }),
+        });
+      });
+
+      describe('globs', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
+
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
+
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
+      });
+
+      describe('spawn', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
+
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
+
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
+      });
+    });
   });
 
   describe('pnpm', function() {
@@ -325,6 +383,60 @@ describe(function() {
           let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
 
           expect(workspaces).to.be.empty;
+        });
+      });
+    });
+
+    describe('dir with files but no package.json', function() {
+      beforeEach(function() {
+        fixturify.writeSync(tmpPath, {
+          'packages': {
+            'package-a': {
+              'package.json': stringifyJson({}),
+            },
+            'README.md': '',
+          },
+          'package.json': stringifyJson({}),
+          'pnpm-workspace.yaml': stripIndent`
+            packages:
+            - 'packages/*'
+          `,
+        });
+      });
+
+      describe('globs', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath });
+
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
+
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath });
+
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
+      });
+
+      describe('spawn', function() {
+        it(getWorkspacesPaths, async function() {
+          let workspaces = await getWorkspacesPaths({ cwd: tmpPath, shouldSpawn: true });
+
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
+        });
+
+        it(getWorkspacesPathsSync, function() {
+          let workspaces = getWorkspacesPathsSync({ cwd: tmpPath, shouldSpawn: true });
+
+          expect(workspaces).to.deep.equal([
+            'packages/package-a',
+          ]);
         });
       });
     });

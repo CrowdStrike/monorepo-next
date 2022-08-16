@@ -56,7 +56,7 @@ function processGlobs({ cwd, _2dFilesArray, isPnpm }) {
     try {
       packageJson = readJsonSync(path.join(cwd, packagePath, 'package.json'));
     } catch (err) {
-      if (err.code === 'ENOENT') {
+      if (['ENOENT', 'ENOTDIR'].includes(err.code)) {
         return;
       }
 
