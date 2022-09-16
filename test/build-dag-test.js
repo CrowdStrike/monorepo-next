@@ -261,10 +261,7 @@ describe(buildDAG, function() {
     let dag = buildDAG(await buildDepGraph({ workspaceCwd: tmpPath }), packageName);
 
     expect(dag).to.match(this.match({
-      parent: undefined,
       node: {
-        isPackage: true,
-        cwd: path.join(tmpPath, 'packages/package-a'),
         packageName,
         version: '1.0.0',
         dependents: [
@@ -277,10 +274,7 @@ describe(buildDAG, function() {
             dependencyType: 'devDependencies',
             dependencyRange: '',
             node: {
-              isPackage: false,
-              cwd: tmpPath,
               packageName: 'Workspace Root',
-              version: undefined,
             },
           }),
         ],
