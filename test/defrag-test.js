@@ -12,7 +12,6 @@ const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const { gitInit } = require('git-fixtures');
 const dependencyTypes = require('../src/dependency-types');
-const { collectPackages } = require('../src/build-dep-graph');
 const readWorkspaces = require('./helpers/read-workspaces');
 
 function normalize(workspaceMeta) {
@@ -22,20 +21,6 @@ function normalize(workspaceMeta) {
     for (let dependencyType of dependencyTypes) {
       if (!_package[dependencyType]) {
         _package[dependencyType] = {};
-      }
-    }
-  }
-
-  return workspaceMeta;
-}
-
-function unnormalize(workspaceMeta) {
-  for (let _package of collectPackages(workspaceMeta)) {
-    delete _package.packageName;
-
-    for (let dependencyType of dependencyTypes) {
-      if (!Object.keys(_package[dependencyType]).length) {
-        delete _package[dependencyType];
       }
     }
   }
@@ -297,7 +282,7 @@ describe(function() {
 
       applyRangeUpdates(workspaceMeta, rangeUpdates);
 
-      expect(unnormalize(workspaceMeta)).to.deep.equal({
+      expect(workspaceMeta).to.match(this.match({
         devDependencies: {
           packageB: '^1.0.1',
         },
@@ -308,7 +293,7 @@ describe(function() {
             },
           },
         },
-      });
+      }));
     });
 
     it('can perform a dry run', function() {
@@ -340,7 +325,7 @@ describe(function() {
       expect(log).to.have.callCount(1);
       expect(log).to.be.calledWith('packageA.dependencies.packageB: ^1.0.0 -> ^1.0.1');
 
-      expect(unnormalize(workspaceMeta)).to.deep.equal({
+      expect(workspaceMeta).to.match(this.match({
         devDependencies: {
           packageB: '^1.0.1',
         },
@@ -351,7 +336,7 @@ describe(function() {
             },
           },
         },
-      });
+      }));
     });
   });
 
