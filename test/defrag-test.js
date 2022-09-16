@@ -11,19 +11,23 @@ const {
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const { gitInit } = require('git-fixtures');
-const dependencyTypes = require('../src/dependency-types');
+const { buildDepGraphFromObject } = require('../src/build-dep-graph');
 const readWorkspaces = require('./helpers/read-workspaces');
 
-function normalize(workspaceMeta) {
-  for (let [packageName, _package] of [...Object.entries(workspaceMeta.packages), ['', workspaceMeta]]) {
-    _package.packageName = packageName;
+function normalize({
+  packages,
+  ...workspacePackageJson
+}) {
+  let workspaceMeta = buildDepGraphFromObject({
+    workspaceCwd: '/root',
+    workspacePackageJson,
+    workspacesPackageJsons: Object.entries(packages).reduce((packages, [name, pkg]) => {
+      Object.assign(pkg, { name });
 
-    for (let dependencyType of dependencyTypes) {
-      if (!_package[dependencyType]) {
-        _package[dependencyType] = {};
-      }
-    }
-  }
+      return packages;
+    }, packages),
+    shouldPruneDeps: false,
+  });
 
   return workspaceMeta;
 }

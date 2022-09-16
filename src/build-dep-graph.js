@@ -12,23 +12,16 @@ function copyDeps(left, right) {
   }
 }
 
-async function firstPass(workspaceMeta, workspacePackageJson, packageDirs) {
+function firstPass(workspaceMeta, workspacePackageJson, workspacesPackageJsons) {
   workspaceMeta.packageName = workspacePackageJson.name || 'Workspace Root';
   workspaceMeta.version = workspacePackageJson.version;
   workspaceMeta.isPrivate = true;
   workspaceMeta.packages = {};
   copyDeps(workspaceMeta, workspacePackageJson);
-  for (let packageDir of packageDirs) {
-    let packageJson;
-    try {
-      packageJson = await readJson(path.join(packageDir, 'package.json'));
-    } catch (err) {
-      // ignore empty folders
-      continue;
-    }
+  for (let [workspace, packageJson] of Object.entries(workspacesPackageJsons)) {
     let packageName = packageJson.name;
     workspaceMeta.packages[packageName] = {
-      cwd: packageDir,
+      cwd: path.join(workspaceMeta.cwd, workspace),
       packageName,
       version: packageJson.version,
       isPrivate: packageJson.private,
@@ -73,19 +66,48 @@ function secondPass(workspaceMeta) {
 
 async function buildDepGraph({
   workspaceCwd,
-  shouldPruneDeps = true,
+  ...options
 }) {
   let workspacePackageJson = await readJson(path.join(workspaceCwd, 'package.json'));
 
   let workspaces = await getWorkspacesPaths({ cwd: workspaceCwd });
 
-  let packageDirs = workspaces.map(dir => path.join(workspaceCwd, dir));
+  let workspacesPackageJsons = {};
 
+  for (let workspace of workspaces) {
+    let packageJson;
+
+    try {
+      packageJson = await readJson(path.join(workspaceCwd, workspace, 'package.json'));
+    } catch (err) {
+      // ignore empty folders
+      continue;
+    }
+
+    workspacesPackageJsons[workspace] = packageJson;
+  }
+
+  let workspaceMeta = buildDepGraphFromObject({
+    workspaceCwd,
+    workspacePackageJson,
+    workspacesPackageJsons,
+    ...options,
+  });
+
+  return workspaceMeta;
+}
+
+function buildDepGraphFromObject({
+  workspaceCwd,
+  workspacePackageJson,
+  workspacesPackageJsons,
+  shouldPruneDeps = true,
+}) {
   let workspaceMeta = {
     cwd: workspaceCwd,
   };
 
-  await firstPass(workspaceMeta, workspacePackageJson, packageDirs);
+  firstPass(workspaceMeta, workspacePackageJson, workspacesPackageJsons);
   if (shouldPruneDeps) {
     secondPass(workspaceMeta);
   }
@@ -99,5 +121,6 @@ function collectPackages(workspaceMeta) {
 
 module.exports = buildDepGraph;
 Object.assign(module.exports, {
+  buildDepGraphFromObject,
   collectPackages,
 });
