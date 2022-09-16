@@ -121,5 +121,6 @@ function collectPackages(workspaceMeta) {
 
 module.exports = buildDepGraph;
 Object.assign(module.exports, {
+  buildDepGraphFromObject,
   collectPackages,
 });
