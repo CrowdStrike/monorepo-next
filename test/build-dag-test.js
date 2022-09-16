@@ -29,6 +29,8 @@ describe(buildDAG, function() {
 
     expect(dag).to.match(this.match({
       parent: undefined,
+      dependencyType: undefined,
+      dependencyRange: undefined,
       node: {
         isPackage: true,
         cwd: matchPath('/workspace/packages/package-a'),
@@ -124,6 +126,8 @@ describe(buildDAG, function() {
 
     expect(dag).to.match(this.match({
       parent: undefined,
+      dependencyType: undefined,
+      dependencyRange: undefined,
       node: {
         isPackage: true,
         cwd: matchPath('/workspace/packages/package-b'),
@@ -219,6 +223,8 @@ describe(buildDAG, function() {
 
     expect(dag).to.match(this.match({
       parent: undefined,
+      dependencyType: undefined,
+      dependencyRange: undefined,
       node: {
         isPackage: true,
         cwd: matchPath('/workspace/packages/package-c'),
