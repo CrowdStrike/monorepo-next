@@ -9,7 +9,6 @@ const {
 const { trackNewVersion } = require('./version');
 const semver = require('semver');
 const dependencyTypes = require('./dependency-types');
-const { isCycle } = require('./build-dag');
 const { loadPackageConfig } = require('./config');
 
 const defaultReleaseType = 'patch';
@@ -168,7 +167,7 @@ async function secondPass({
       }
 
       for (let group of dag.node.dependents) {
-        if (isCycle(group)) {
+        if (group.isCycle) {
           continue;
         }
 
@@ -221,7 +220,7 @@ function thirdPass({
       }
 
       for (let group of dag.node.dependents) {
-        if (isCycle(group)) {
+        if (group.isCycle) {
           continue;
         }
 
@@ -283,7 +282,7 @@ function fourthPass({
       }
 
       for (let group of dag.node.dependents) {
-        if (isCycle(group)) {
+        if (group.isCycle) {
           continue;
         }
 
