@@ -29,6 +29,8 @@ describe(buildDAG, function() {
 
     expect(dag).to.match(this.match({
       parent: undefined,
+      dependencyType: undefined,
+      dependencyRange: undefined,
       node: {
         isPackage: true,
         cwd: matchPath('/workspace/packages/package-a'),
@@ -124,6 +126,8 @@ describe(buildDAG, function() {
 
     expect(dag).to.match(this.match({
       parent: undefined,
+      dependencyType: undefined,
+      dependencyRange: undefined,
       node: {
         isPackage: true,
         cwd: matchPath('/workspace/packages/package-b'),
@@ -219,6 +223,8 @@ describe(buildDAG, function() {
 
     expect(dag).to.match(this.match({
       parent: undefined,
+      dependencyType: undefined,
+      dependencyRange: undefined,
       node: {
         isPackage: true,
         cwd: matchPath('/workspace/packages/package-c'),
@@ -255,10 +261,7 @@ describe(buildDAG, function() {
     let dag = buildDAG(await buildDepGraph({ workspaceCwd: tmpPath }), packageName);
 
     expect(dag).to.match(this.match({
-      parent: undefined,
       node: {
-        isPackage: true,
-        cwd: path.join(tmpPath, 'packages/package-a'),
         packageName,
         version: '1.0.0',
         dependents: [
@@ -271,10 +274,7 @@ describe(buildDAG, function() {
             dependencyType: 'devDependencies',
             dependencyRange: '',
             node: {
-              isPackage: false,
-              cwd: tmpPath,
               packageName: 'Workspace Root',
-              version: undefined,
             },
           }),
         ],
