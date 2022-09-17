@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.6.2](https://github.com/CrowdStrike/monorepo-next/compare/v8.6.1...v8.6.2) (2022-09-17)
+
+
+### Bug Fixes
+
+* cycles only come from visitedNodes, so we can remove these cycle checks ([ad1cdbb](https://github.com/CrowdStrike/monorepo-next/commit/ad1cdbb7d539e80a0d71f75a8be28b8d8c96b44a))
+* save cycle status instead of recalculating ([f9842cc](https://github.com/CrowdStrike/monorepo-next/commit/f9842cc22072f136cf40c8704c11fd8c5b8a5d5d))
+
 ### [8.6.1](https://github.com/CrowdStrike/monorepo-next/compare/v8.6.0...v8.6.1) (2022-08-15)
 
 
