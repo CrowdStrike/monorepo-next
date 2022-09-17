@@ -31,6 +31,7 @@ describe(buildDAG, function() {
       parent: undefined,
       dependencyType: undefined,
       dependencyRange: undefined,
+      isCycle: false,
       node: {
         isPackage: true,
         cwd: matchPath('/workspace/packages/package-a'),
@@ -45,6 +46,7 @@ describe(buildDAG, function() {
             },
             dependencyType: 'dependencies',
             dependencyRange: '^1.0.0',
+            isCycle: false,
             node: {
               isPackage: true,
               cwd: matchPath('/workspace/packages/package-b'),
@@ -59,6 +61,7 @@ describe(buildDAG, function() {
                   },
                   dependencyType: 'devDependencies',
                   dependencyRange: '^2.0.0',
+                  isCycle: true,
                   node: {
                     isPackage: true,
                     cwd: matchPath('/workspace/packages/package-a'),
@@ -74,6 +77,7 @@ describe(buildDAG, function() {
                   },
                   dependencyType: 'dependencies',
                   dependencyRange: '^2.0.0',
+                  isCycle: false,
                   node: {
                     isPackage: true,
                     cwd: matchPath('/workspace/packages/package-c'),
@@ -92,6 +96,7 @@ describe(buildDAG, function() {
             },
             dependencyType: 'optionalDependencies',
             dependencyRange: '^1.0.0',
+            isCycle: false,
             node: {
               isPackage: true,
               cwd: matchPath('/workspace/packages/package-c'),
@@ -107,6 +112,7 @@ describe(buildDAG, function() {
             },
             dependencyType: 'devDependencies',
             dependencyRange: '^1.0.0',
+            isCycle: false,
             node: {
               isPackage: false,
               cwd: matchPath('/workspace'),
@@ -128,6 +134,7 @@ describe(buildDAG, function() {
       parent: undefined,
       dependencyType: undefined,
       dependencyRange: undefined,
+      isCycle: false,
       node: {
         isPackage: true,
         cwd: matchPath('/workspace/packages/package-b'),
@@ -142,6 +149,7 @@ describe(buildDAG, function() {
             },
             dependencyType: 'devDependencies',
             dependencyRange: '^2.0.0',
+            isCycle: false,
             node: {
               isPackage: true,
               cwd: matchPath('/workspace/packages/package-a'),
@@ -156,6 +164,7 @@ describe(buildDAG, function() {
                   },
                   dependencyType: 'dependencies',
                   dependencyRange: '^1.0.0',
+                  isCycle: true,
                   node: {
                     isPackage: true,
                     cwd: matchPath('/workspace/packages/package-b'),
@@ -171,6 +180,7 @@ describe(buildDAG, function() {
                   },
                   dependencyType: 'optionalDependencies',
                   dependencyRange: '^1.0.0',
+                  isCycle: false,
                   node: {
                     isPackage: true,
                     cwd: matchPath('/workspace/packages/package-c'),
@@ -186,6 +196,7 @@ describe(buildDAG, function() {
                   },
                   dependencyType: 'devDependencies',
                   dependencyRange: '^1.0.0',
+                  isCycle: false,
                   node: {
                     isPackage: false,
                     cwd: matchPath('/workspace'),
@@ -204,6 +215,7 @@ describe(buildDAG, function() {
             },
             dependencyType: 'dependencies',
             dependencyRange: '^2.0.0',
+            isCycle: false,
             node: {
               isPackage: true,
               cwd: matchPath('/workspace/packages/package-c'),
@@ -225,6 +237,7 @@ describe(buildDAG, function() {
       parent: undefined,
       dependencyType: undefined,
       dependencyRange: undefined,
+      isCycle: false,
       node: {
         isPackage: true,
         cwd: matchPath('/workspace/packages/package-c'),

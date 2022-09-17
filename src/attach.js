@@ -4,7 +4,6 @@ const path = require('path');
 const writeJson = require('./json').write;
 const buildDepGraph = require('./build-dep-graph');
 const buildDAG = require('./build-dag');
-const { isCycle } = buildDAG;
 const dependencyTypes = require('./dependency-types');
 const {
   getWorkspaceCwd,
@@ -84,7 +83,7 @@ async function attach({
     // don't mutate package.json until after DAG is built
     myPackageJson.version = matches[1];
 
-    if (!isCycle(dag)) {
+    if (!dag.isCycle) {
       await detachDependents(dag);
     }
   }

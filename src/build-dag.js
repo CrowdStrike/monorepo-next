@@ -40,10 +40,13 @@ function thirdPass({
       let visitedNode = visitedNodes[_package.packageName];
 
       if (visitedNode) {
+        let isCycle = branch.includes(_package.packageName);
+
         group.node.dependents.push({
           parent,
           dependencyType,
           dependencyRange,
+          isCycle,
           node: visitedNode,
         });
 
@@ -64,7 +67,7 @@ function thirdPass({
 
       group.node.dependents.push(newGroup);
 
-      if (group.node.isPackage && !isCycle(newGroup)) {
+      if (group.node.isPackage) {
         thirdPass({
           workspaceMeta,
           group: newGroup,
@@ -74,22 +77,6 @@ function thirdPass({
       }
     }
   }
-}
-
-function isCycle(group) {
-  let current = group;
-
-  do {
-    current = current.parent;
-
-    if (!current) {
-      return false;
-    }
-
-    if (current.node === group.node) {
-      return true;
-    }
-  } while (true);
 }
 
 function createPackageNode({
@@ -107,18 +94,16 @@ function createPackageNode({
     cwd: _package ? _package.cwd : workspaceMeta.cwd,
     packageName,
     version: _package ? _package.version : workspaceMeta.version,
+    dependents: [],
   };
 
   let group = {
     parent,
     dependencyType,
     dependencyRange,
+    isCycle: false,
     node,
   };
-
-  if (!isCycle(group)) {
-    node.dependents = [];
-  }
 
   let newBranch = [...branch, packageName].filter(Boolean);
 
@@ -151,6 +136,3 @@ function buildDAG(workspaceMeta, packageName) {
 }
 
 module.exports = buildDAG;
-Object.assign(module.exports, {
-  isCycle,
-});
