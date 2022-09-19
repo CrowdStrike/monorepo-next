@@ -3,8 +3,14 @@
 const dependencyTypes = require('./dependency-types');
 const { collectPackages } = require('./build-dep-graph');
 
-function doesDependOnPackage(_package, packageName) {
+function doesDependOnPackage(_package, packageName, {
+  shouldIncludeDevDependencies,
+}) {
   for (let dependencyType of dependencyTypes) {
+    if (!shouldIncludeDevDependencies && dependencyType === 'devDependencies') {
+      return;
+    }
+
     if (Object.keys(_package[dependencyType]).includes(packageName)) {
       return {
         dependencyType,
@@ -19,6 +25,7 @@ function thirdPass({
   group,
   branch,
   visitedNodes,
+  shouldIncludeDevDependencies,
 }) {
   let currentPackageName = group.node.packageName;
 
@@ -32,7 +39,9 @@ function thirdPass({
     let {
       dependencyType,
       dependencyRange,
-    } = doesDependOnPackage(_package, currentPackageName) || {};
+    } = doesDependOnPackage(_package, currentPackageName, {
+      shouldIncludeDevDependencies,
+    }) || {};
 
     if (dependencyType) {
       let parent = group;
@@ -73,6 +82,7 @@ function thirdPass({
           group: newGroup,
           branch: newBranch,
           visitedNodes,
+          shouldIncludeDevDependencies,
         });
       }
     }
@@ -113,7 +123,9 @@ function createPackageNode({
   };
 }
 
-function buildDAG(workspaceMeta, packageName) {
+function buildDAG(workspaceMeta, packageName, {
+  shouldIncludeDevDependencies = true,
+} = {}) {
   let {
     newGroup,
     newBranch,
@@ -130,6 +142,7 @@ function buildDAG(workspaceMeta, packageName) {
     group: newGroup,
     branch: newBranch,
     visitedNodes,
+    shouldIncludeDevDependencies,
   });
 
   return newGroup;

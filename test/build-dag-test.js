@@ -294,4 +294,82 @@ describe(buildDAG, function() {
       },
     }));
   });
+
+  describe('devDependencies', function() {
+    beforeEach(function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+              'devDependencies': {
+                '@scope/package-b': '1.0.0',
+              },
+            }),
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-b',
+              'version': '1.0.0',
+              'dependencies': {
+                '@scope/package-a': '1.0.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+    });
+
+    it('can stop traversing devDependencies if enabled', async function() {
+      let dag = buildDAG(await buildDepGraph({ workspaceCwd: tmpPath }), '@scope/package-a', { shouldIncludeDevDependencies: false });
+
+      expect(dag).to.match(this.match({
+        node: {
+          packageName: '@scope/package-a',
+          dependents: [
+            this.match({
+              dependencyType: 'dependencies',
+              node: {
+                packageName: '@scope/package-b',
+                dependents: [],
+              },
+            }),
+          ],
+        },
+      }));
+    });
+
+    it('doesn\'t stop traversing devDependencies by default', async function() {
+      let dag = buildDAG(await buildDepGraph({ workspaceCwd: tmpPath }), '@scope/package-a');
+
+      expect(dag).to.match(this.match({
+        node: {
+          packageName: '@scope/package-a',
+          dependents: [
+            this.match({
+              dependencyType: 'dependencies',
+              node: {
+                packageName: '@scope/package-b',
+                dependents: [
+                  this.match({
+                    dependencyType: 'devDependencies',
+                    node: {
+                      packageName: '@scope/package-a',
+                    },
+                  }),
+                ],
+              },
+            }),
+          ],
+        },
+      }));
+    });
+  });
 });
