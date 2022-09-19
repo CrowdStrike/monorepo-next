@@ -18,7 +18,7 @@ function normalize({
   packages,
   ...workspacePackageJson
 }) {
-  let workspaceMeta = buildDepGraphFromObject({
+  return buildDepGraphFromObject({
     workspaceCwd: '/root',
     workspacePackageJson,
     workspacesPackageJsons: Object.entries(packages).reduce((packages, [name, pkg]) => {
@@ -28,8 +28,6 @@ function normalize({
     }, packages),
     shouldPruneDeps: false,
   });
-
-  return workspaceMeta;
 }
 
 describe(function() {
