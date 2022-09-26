@@ -17,8 +17,6 @@ describe(changedFiles, function() {
 
   beforeEach(async function() {
     tmpPath = await gitInit();
-
-    await setUpFixtures();
   });
 
   async function setUpFixtures() {
@@ -63,6 +61,8 @@ describe(changedFiles, function() {
   }
 
   it('works at root with no package', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -87,6 +87,8 @@ describe(changedFiles, function() {
   });
 
   it('works at root with package', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -113,6 +115,8 @@ describe(changedFiles, function() {
   });
 
   it('works when run from package', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -136,6 +140,8 @@ describe(changedFiles, function() {
   });
 
   it('filters extensions', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -161,6 +167,8 @@ describe(changedFiles, function() {
   });
 
   it('filters globs only', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -191,6 +199,8 @@ describe(changedFiles, function() {
   });
 
   it('multiple globs', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -216,6 +226,8 @@ describe(changedFiles, function() {
   });
 
   it('matches dot files with globs', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       '.foo': '',
     });
@@ -235,6 +247,8 @@ describe(changedFiles, function() {
   });
 
   it('filters globs and exts', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -269,6 +283,8 @@ describe(changedFiles, function() {
   });
 
   it('accepts an arbitrary from commit to calculate difference', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -305,6 +321,8 @@ describe(changedFiles, function() {
   });
 
   it('accepts an arbitrary to commit to calculate difference', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -341,6 +359,8 @@ describe(changedFiles, function() {
   });
 
   it('can calulate difference since branch point', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -386,6 +406,8 @@ describe(changedFiles, function() {
   });
 
   it('can cache the results', async function() {
+    await setUpFixtures();
+
     this.timeout(5e3);
 
     let _changedFiles;
