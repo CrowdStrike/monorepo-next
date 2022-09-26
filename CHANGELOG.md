@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [9.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v8.6.2...v9.0.0) (2022-09-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* This fix means everyone using `changedFiles.packages` needs to update to a full relative path instead of just the basename. For example, a package at "packages/my-package" will go from:
+
+```js
+changedFiles({
+  packages: ['my-package'],
+})
+```
+
+to
+
+```js
+changedFiles({
+  packages: ['packages/my-package'],
+})
+```
+
+### Bug Fixes
+
+* **deps:** update dependency npm-packlist to v6 ([978646e](https://github.com/CrowdStrike/monorepo-next/commit/978646ee8a705fa3af8df720a4c63f2470c57cae))
+* support packages with same basename ([36ebc7a](https://github.com/CrowdStrike/monorepo-next/commit/36ebc7a9114cf50ada82479e214d052926e3b6cf))
+
 ### [8.6.2](https://github.com/CrowdStrike/monorepo-next/compare/v8.6.1...v8.6.2) (2022-09-17)
 
 
