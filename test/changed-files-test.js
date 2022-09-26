@@ -18,6 +18,10 @@ describe(changedFiles, function() {
   beforeEach(async function() {
     tmpPath = await gitInit();
 
+    await setUpFixtures();
+  });
+
+  async function setUpFixtures() {
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -56,7 +60,7 @@ describe(changedFiles, function() {
     await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
     await execa('git', ['tag', 'my-app-1@0.0.0'], { cwd: tmpPath });
     await execa('git', ['tag', 'root@0.0.0'], { cwd: tmpPath });
-  });
+  }
 
   it('works at root with no package', async function() {
     fixturify.writeSync(tmpPath, {
