@@ -52,7 +52,7 @@ async function changedFiles({
     changedFiles: _changedFiles,
     dag,
   } of packagesWithChanges) {
-    if (packages.length && !packages.includes(path.basename(dag.node.cwd))) {
+    if (packages.length && !packages.includes(path.relative(workspaceCwd, dag.node.cwd))) {
       continue;
     }
 

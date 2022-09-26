@@ -105,7 +105,7 @@ describe(changedFiles, function() {
       cwd: tmpPath,
       silent: true,
       packages: [
-        'package-a',
+        'packages/package-a',
       ],
     });
 
@@ -429,7 +429,7 @@ describe(changedFiles, function() {
       silent: true,
       cached: true,
       packages: [
-        'package-a',
+        'packages/package-a',
       ],
       exts: ['txt'],
     });
@@ -478,7 +478,7 @@ describe(changedFiles, function() {
       silent: true,
       cached: true,
       packages: [
-        'package-a',
+        'packages/package-a',
       ],
     });
 
