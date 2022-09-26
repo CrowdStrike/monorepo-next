@@ -508,4 +508,44 @@ describe(changedFiles, function() {
       'changed',
     ]);
   });
+
+  it('can match a different package with same basename', async function() {
+    fixturify.writeSync(tmpPath, {
+      'package-a': {
+        'my-package': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package-b': {
+        'my-package': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'package-a/my-package',
+          'package-b/my-package',
+        ],
+      }),
+    });
+
+    let _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+      packages: [
+        'package-b/my-package',
+      ],
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'package-b/my-package/package.json',
+    ]);
+  });
 });
