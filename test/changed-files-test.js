@@ -17,7 +17,9 @@ describe(changedFiles, function() {
 
   beforeEach(async function() {
     tmpPath = await gitInit();
+  });
 
+  async function setUpFixtures() {
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -56,9 +58,11 @@ describe(changedFiles, function() {
     await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
     await execa('git', ['tag', 'my-app-1@0.0.0'], { cwd: tmpPath });
     await execa('git', ['tag', 'root@0.0.0'], { cwd: tmpPath });
-  });
+  }
 
   it('works at root with no package', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -83,6 +87,8 @@ describe(changedFiles, function() {
   });
 
   it('works at root with package', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -99,7 +105,7 @@ describe(changedFiles, function() {
       cwd: tmpPath,
       silent: true,
       packages: [
-        'package-a',
+        'packages/package-a',
       ],
     });
 
@@ -109,6 +115,8 @@ describe(changedFiles, function() {
   });
 
   it('works when run from package', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -132,6 +140,8 @@ describe(changedFiles, function() {
   });
 
   it('filters extensions', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -157,6 +167,8 @@ describe(changedFiles, function() {
   });
 
   it('filters globs only', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -187,6 +199,8 @@ describe(changedFiles, function() {
   });
 
   it('multiple globs', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -212,6 +226,8 @@ describe(changedFiles, function() {
   });
 
   it('matches dot files with globs', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       '.foo': '',
     });
@@ -231,6 +247,8 @@ describe(changedFiles, function() {
   });
 
   it('filters globs and exts', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -265,6 +283,8 @@ describe(changedFiles, function() {
   });
 
   it('accepts an arbitrary from commit to calculate difference', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -301,6 +321,8 @@ describe(changedFiles, function() {
   });
 
   it('accepts an arbitrary to commit to calculate difference', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -337,6 +359,8 @@ describe(changedFiles, function() {
   });
 
   it('can calulate difference since branch point', async function() {
+    await setUpFixtures();
+
     fixturify.writeSync(tmpPath, {
       'packages': {
         'package-a': {
@@ -382,6 +406,8 @@ describe(changedFiles, function() {
   });
 
   it('can cache the results', async function() {
+    await setUpFixtures();
+
     this.timeout(5e3);
 
     let _changedFiles;
@@ -403,7 +429,7 @@ describe(changedFiles, function() {
       silent: true,
       cached: true,
       packages: [
-        'package-a',
+        'packages/package-a',
       ],
       exts: ['txt'],
     });
@@ -452,7 +478,7 @@ describe(changedFiles, function() {
       silent: true,
       cached: true,
       packages: [
-        'package-a',
+        'packages/package-a',
       ],
     });
 
@@ -480,6 +506,46 @@ describe(changedFiles, function() {
       'packages/my-app-1/changed.txt',
       'packages/package-a/changed.txt',
       'changed',
+    ]);
+  });
+
+  it('can match a different package with same basename', async function() {
+    fixturify.writeSync(tmpPath, {
+      'package-a': {
+        'my-package': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package-b': {
+        'my-package': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-b',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'package-a/my-package',
+          'package-b/my-package',
+        ],
+      }),
+    });
+
+    let _changedFiles = await changedFiles({
+      cwd: tmpPath,
+      silent: true,
+      packages: [
+        'package-b/my-package',
+      ],
+    });
+
+    expect(_changedFiles).to.deep.equal([
+      'package-b/my-package/package.json',
     ]);
   });
 });
