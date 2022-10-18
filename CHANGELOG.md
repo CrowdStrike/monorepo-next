@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [9.0.1](https://github.com/CrowdStrike/monorepo-next/compare/v9.0.0...v9.0.1) (2022-10-18)
+
+
+### Bug Fixes
+
+* accommodate removed package jsons ([4b47138](https://github.com/CrowdStrike/monorepo-next/commit/4b47138a0a9a9f316df4c047ba4395435229e6e4))
+* **deps:** update dependency semver to v7.3.8 ([3847a59](https://github.com/CrowdStrike/monorepo-next/commit/3847a5986fba9dd28883b39cd0e9dd8070015c37))
+
 ## [9.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v8.6.2...v9.0.0) (2022-09-26)
 
 
