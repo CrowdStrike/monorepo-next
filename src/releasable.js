@@ -73,7 +73,17 @@ async function prepareTmpPackage({
 
     await fs.mkdir(path.dirname(filePath), { recursive: true });
 
-    await fs.writeFile(filePath, '');
+    let text;
+
+    if (path.basename(filePath) === 'package.json') {
+      // removed packages will still match the root package.json's workspaces
+      // and packlist will throw if they aren't readable.
+      text = JSON.stringify({});
+    } else {
+      text = '';
+    }
+
+    await fs.writeFile(filePath, text);
   }
 }
 
