@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [9.0.2](https://github.com/CrowdStrike/monorepo-next/compare/v9.0.1...v9.0.2) (2022-10-20)
+
+
+### Bug Fixes
+
+* speed up `removeSubDirs` ([cd53585](https://github.com/CrowdStrike/monorepo-next/commit/cd53585d94c96b462a796d82171a23b8c41f03e3))
+
 ### [9.0.1](https://github.com/CrowdStrike/monorepo-next/compare/v9.0.0...v9.0.1) (2022-10-18)
 
 
