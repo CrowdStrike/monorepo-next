@@ -29,9 +29,7 @@ function removeSubDirs(files) {
         return false;
       }
 
-      let relative = path.relative(file, nextFile);
-
-      let isSubDir = !relativePathRegex.test(relative);
+      let isSubDir = nextFile.startsWith(file);
 
       return isSubDir;
     });
