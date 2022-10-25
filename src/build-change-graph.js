@@ -152,6 +152,7 @@ async function buildChangeGraph({
       fromCommit: _fromCommit,
       toCommit,
       packageCwd: _package.cwd,
+      shouldRunPerPackage: false,
       options: {
         cwd: workspaceMeta.cwd,
         cached,
