@@ -1482,6 +1482,28 @@ describe(buildChangeGraph, function() {
     expect(packagesWithChanges).to.be.empty;
   });
 
+  it('respects config shouldBumpVersion in CJS file', async function () {
+    fixturify.writeSync(tmpPath, {
+      'package.json': stringifyJson({
+        private: true,
+        version: '0.0.0',
+        workspaces: ['packages/*'],
+      }),
+      'monorepo-next.config.cjs': `module.exports = ${stringifyJson({
+        shouldBumpVersion: false,
+      })}`,
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+    expect(packagesWithChanges).to.be.empty;
+  });
+
   it('handles changes across branches', async function() {
     let otherBranchName = 'test-branch';
 
