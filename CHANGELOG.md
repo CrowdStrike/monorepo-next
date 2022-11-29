@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [9.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v9.0.2...v9.1.0) (2022-11-29)
+
+
+### Features
+
+* add support for CJS config file extension ([94b77bc](https://github.com/CrowdStrike/monorepo-next/commit/94b77bc66f31c82f3b83f44328ffb54ae38be027))
+
 ### [9.0.2](https://github.com/CrowdStrike/monorepo-next/compare/v9.0.1...v9.0.2) (2022-10-20)
 
 
