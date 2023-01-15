@@ -2029,15 +2029,6 @@ format@^0.2.0:
   resolved "https://registry.npmjs.org/format/-/format-0.2.2.tgz#d6170107e9efdc4ed30c9dc39016df942b5cb58b"
   integrity sha1-1hcBB+nv3E7TDJ3DkBbflCtctYs=
 
-fs-extra@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-10.0.0.tgz#9ff61b655dde53fb34a82df84bb214ce802e17c1"
-  integrity sha512-C5owb14u9eJwizKGdchcDUQeFtlSHHthBk8pbX9Vc1PFZrLombudjDnNns88aYslCyF6IY5SUw3Roz6xShcEIQ==
-  dependencies:
-    graceful-fs "^4.2.0"
-    jsonfile "^6.0.1"
-    universalify "^2.0.0"
-
 fs-extra@^10.1.0:
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-10.1.0.tgz#02873cfbc4084dde127eaa5f9905eef2325d1abf"
@@ -2164,14 +2155,14 @@ git-diff-apply@^3.0.0:
     uuid "^8.0.0"
     yargs "^16.0.0"
 
-git-fixtures@^4.0.0:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/git-fixtures/-/git-fixtures-4.0.1.tgz#2482494002c80edaf3d136a1c42081cfaa6a9cec"
-  integrity sha512-zgDd73Yly6B5NPO8S4EIx6jvR1WGzf1Q5gJUmKfQeSXVcSJBabUgxTJfx8sFYjlAqAKBXZzUS91h+lae4ddw7w==
+git-fixtures@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/git-fixtures/-/git-fixtures-5.0.0.tgz#3ee06d2f2571d2b6d4bc61f864a60caa1d73b391"
+  integrity sha512-xVi4eSJN1f3ldIsPkyKq09U8gmGlYeBPd7T/TZo05a78eB1QRS6KD+wdVhs8Lmoh5dRO3Ocn9502dj6v/qvA0Q==
   dependencies:
     execa "^5.0.0"
-    fixturify "^2.0.0"
-    fs-extra "^10.0.0"
+    fixturify "^3.0.0"
+    fs-extra "^11.0.0"
     git-diff-apply "^3.0.0"
     tmp "0.2.1"
 
