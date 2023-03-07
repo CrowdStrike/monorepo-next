@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [9.1.1](https://github.com/CrowdStrike/monorepo-next/compare/v9.1.0...v9.1.1) (2023-03-07)
+
+
+### Bug Fixes
+
+* fix ENOTDIR error ([b4cfb70](https://github.com/CrowdStrike/monorepo-next/commit/b4cfb70d62f99821d9159eef49501608a5808a85))
+
 ## [9.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v9.0.2...v9.1.0) (2022-11-29)
 
 
