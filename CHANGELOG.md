@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [9.2.0](https://github.com/CrowdStrike/monorepo-next/compare/v9.1.1...v9.2.0) (2023-03-21)
+
+
+### Features
+
+* add `cycles` command ([4143b7c](https://github.com/CrowdStrike/monorepo-next/commit/4143b7ccffa91c0311944c3e4e1bcaca5a16482d))
+* add `detectCircularReferences` ([6c080b2](https://github.com/CrowdStrike/monorepo-next/commit/6c080b2638fb4abf98b859d552947b692b14b22f))
+* add `getCycles` ([4f061f5](https://github.com/CrowdStrike/monorepo-next/commit/4f061f5d6e1faece0a336e0cbccacf35b5853256))
+
 ### [9.1.1](https://github.com/CrowdStrike/monorepo-next/compare/v9.1.0...v9.1.1) (2023-03-07)
 
 

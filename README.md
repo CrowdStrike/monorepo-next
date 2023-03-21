@@ -23,6 +23,7 @@ Commands:
                                    resume normal linking            [aliases: a]
   next changed-files [packages..]  list changed files
   next changed                     list changed packages
+  next cycles                      detect circular references
   next defrag                      synchronize all dependency version
                                    discrepancies
   next detach [package]            detach a package from normal linking
@@ -72,6 +73,16 @@ Options:
                              monorepo dev dep change or manually bumping an
                              external dev dep, don't count it towards a package
                              change.                  [boolean] [default: false]
+
+next cycles
+
+detect circular references
+
+Options:
+  --help                            Show help                          [boolean]
+  --version                         Show version number                [boolean]
+  --detect-dev-dependencies, --dev  alert when there is a devDependency in the
+                                    loop              [boolean] [default: false]
 
 next defrag
 
