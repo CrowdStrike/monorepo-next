@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [9.2.1](https://github.com/CrowdStrike/monorepo-next/compare/v9.2.0...v9.2.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* always sort Object.keys to be deterministic ([809643a](https://github.com/CrowdStrike/monorepo-next/commit/809643ac9e1e4a50678d94114947aa7f0191e701))
+
 ## [9.2.0](https://github.com/CrowdStrike/monorepo-next/compare/v9.1.1...v9.2.0) (2023-03-21)
 
 
