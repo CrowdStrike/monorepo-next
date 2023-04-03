@@ -77,6 +77,60 @@ describe(function() {
           'packageA < dependencies < packageB < devDependencies < packageA',
         ]);
       });
+
+      it('is deterministic when packages not alphabetized', async function() {
+        let workspaceMeta = normalize({
+          packageB: {
+            version: '0.0.0',
+            dependencies: {
+              packageA: '0.0.0',
+            },
+          },
+          packageA: {
+            version: '0.0.0',
+            dependencies: {
+              packageB: '0.0.0',
+            },
+          },
+        });
+
+        let cycles = await getCycles(workspaceMeta);
+
+        expect(cycles).to.deep.equal([
+          'packageA < dependencies < packageB < dependencies < packageA',
+        ]);
+      });
+
+      it('is deterministic when dependencies not alphabetized', async function() {
+        let workspaceMeta = normalize({
+          packageA: {
+            version: '0.0.0',
+            dependencies: {
+              packageC: '0.0.0',
+              packageB: '0.0.0',
+            },
+          },
+          packageB: {
+            version: '0.0.0',
+            dependencies: {
+              packageA: '0.0.0',
+            },
+          },
+          packageC: {
+            version: '0.0.0',
+            dependencies: {
+              packageA: '0.0.0',
+            },
+          },
+        });
+
+        let cycles = await getCycles(workspaceMeta);
+
+        expect(cycles).to.deep.equal([
+          'packageA < dependencies < packageB < dependencies < packageA',
+          'packageA < dependencies < packageC < dependencies < packageA',
+        ]);
+      });
     });
   });
 
