@@ -96,7 +96,10 @@ function _getCycles({
       continue;
     }
 
-    for (let [packageName, dependencyRange] of Object.entries(_package[dependencyType])) {
+    let dependencies = _package[dependencyType];
+
+    for (let packageName of Object.keys(dependencies).sort()) {
+      let dependencyRange = dependencies[packageName];
       let _package = packages[packageName];
 
       _getCycles({
@@ -121,7 +124,9 @@ function getCycles(workspaceMeta, {
   let visitedNodes = {};
   let { packages } = workspaceMeta;
 
-  for (let _package of Object.values(packages)) {
+  for (let packageName of Object.keys(packages).sort()) {
+    let _package = packages[packageName];
+
     _getCycles({
       packages,
       _package,
@@ -132,7 +137,7 @@ function getCycles(workspaceMeta, {
     });
   }
 
-  return Object.keys(cycles);
+  return Object.keys(cycles).sort();
 }
 
 Object.assign(module.exports, {
