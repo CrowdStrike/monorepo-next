@@ -2,20 +2,6 @@
 
 const dependencyTypes = require('./dependency-types');
 
-function findGroupInBranchByPackageName(branch, packageName) {
-  let _i = -1;
-
-  for (let i = 0; i < branch.length; i++) {
-    if (branch[i].packageName === packageName) {
-      _i = i;
-
-      break;
-    }
-  }
-
-  return _i;
-}
-
 function _getCycles({
   packages,
   _package,
@@ -31,9 +17,7 @@ function _getCycles({
   let hasVisitedNode = visitedNodes.has(packageName);
 
   if (hasVisitedNode) {
-    let i = findGroupInBranchByPackageName(branch, packageName);
-
-    let isCycle = i !== -1;
+    let isCycle = branch.has(packageName);
 
     if (isCycle) {
       let existingGroup = {
@@ -42,7 +26,7 @@ function _getCycles({
         packageName,
       };
 
-      let newBranch = [...branch.slice(i), existingGroup];
+      let newBranch = [...[...branch.values()].slice([...branch.keys()].indexOf(packageName)), existingGroup];
 
       let cycle = newBranch.map(({ dependencyType, packageName }) => {
         return [dependencyType, packageName];
@@ -60,7 +44,7 @@ function _getCycles({
     packageName,
   };
 
-  let newBranch = [...branch, newGroup];
+  let newBranch = new Map([...branch, [packageName, newGroup]]);
 
   visitedNodes.add(packageName);
 
@@ -102,7 +86,7 @@ function getCycles(workspaceMeta, {
     _getCycles({
       packages,
       _package,
-      branch: [],
+      branch: new Map(),
       visitedNodes,
       cycles,
       shouldDetectDevDependencies,
