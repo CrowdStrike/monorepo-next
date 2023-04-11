@@ -35,13 +35,13 @@ function _getCycles({
 
     let isCycle = i !== -1;
 
-    let existingGroup = {
-      dependencyType,
-      dependencyRange,
-      packageName,
-    };
-
     if (isCycle) {
+      let existingGroup = {
+        dependencyType,
+        dependencyRange,
+        packageName,
+      };
+
       let newBranch = [...branch.slice(i), existingGroup];
 
       let cycle = newBranch.map(({ dependencyType, packageName }) => {
