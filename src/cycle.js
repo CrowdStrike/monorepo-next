@@ -26,17 +26,19 @@ function _getCycles({
   cycles,
   shouldDetectDevDependencies,
 }) {
-  let hasVisitedNode = visitedNodes.has(_package.packageName);
+  let { packageName } = _package;
+
+  let hasVisitedNode = visitedNodes.has(packageName);
 
   if (hasVisitedNode) {
-    let i = findGroupInBranchByPackageName(branch, _package.packageName);
+    let i = findGroupInBranchByPackageName(branch, packageName);
 
     let isCycle = i !== -1;
 
     let existingGroup = {
       dependencyType,
       dependencyRange,
-      packageName: _package.packageName,
+      packageName,
     };
 
     if (isCycle) {
@@ -55,10 +57,10 @@ function _getCycles({
   let newBranch = [...branch, {
     dependencyType,
     dependencyRange,
-    packageName: _package.packageName,
+    packageName,
   }];
 
-  visitedNodes.add(_package.packageName);
+  visitedNodes.add(packageName);
 
   for (let dependencyType of dependencyTypes) {
     if (!shouldDetectDevDependencies && dependencyType === 'devDependencies') {
