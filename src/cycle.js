@@ -2,6 +2,28 @@
 
 const dependencyTypes = require('./dependency-types');
 
+function sortCycle(cycle) {
+  let alpha = cycle[0];
+  let index = 0;
+
+  for (let i = 2; i < cycle.length - 2; i += 2) {
+    let name = cycle[i];
+
+    if (name < alpha) {
+      alpha = name;
+      index = i;
+    }
+  }
+
+  let shifts = index / 2;
+
+  for (let i = 0; i < shifts; i++) {
+    cycle = [...cycle.slice(2), cycle[1], cycle[2]];
+  }
+
+  return cycle;
+}
+
 function _getCycles({
   packages,
   _package,
@@ -36,7 +58,7 @@ function _getCycles({
       return [dependencyType, packageName];
     });
 
-    cycles.add(cycle.flat().slice(1).join(' < '));
+    cycles.add(sortCycle(cycle.flat().slice(1)).join(' < '));
 
     cycleTips.add(packageName);
 
