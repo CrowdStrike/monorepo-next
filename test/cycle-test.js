@@ -132,34 +132,34 @@ describe(function() {
         ]);
       });
     });
-  });
 
-  it('ignores the dependency type just outside the loop', async function() {
-    let workspaceMeta = normalize({
-      packageA: {
-        version: '0.0.0',
-        dependencies: {
-          packageB: '0.0.0',
+    it('ignores the dependency type just outside the loop', async function() {
+      let workspaceMeta = normalize({
+        packageA: {
+          version: '0.0.0',
+          dependencies: {
+            packageB: '0.0.0',
+          },
         },
-      },
-      packageB: {
-        version: '0.0.0',
-        dependencies: {
-          packageC: '0.0.0',
+        packageB: {
+          version: '0.0.0',
+          dependencies: {
+            packageC: '0.0.0',
+          },
         },
-      },
-      packageC: {
-        version: '0.0.0',
-        dependencies: {
-          packageB: '0.0.0',
+        packageC: {
+          version: '0.0.0',
+          dependencies: {
+            packageB: '0.0.0',
+          },
         },
-      },
+      });
+
+      let cycles = await getCycles(workspaceMeta);
+
+      expect(cycles).to.deep.equal([
+        'packageB < dependencies < packageC < dependencies < packageB',
+      ]);
     });
-
-    let cycles = await getCycles(workspaceMeta);
-
-    expect(cycles).to.deep.equal([
-      'packageB < dependencies < packageC < dependencies < packageB',
-    ]);
   });
 });
