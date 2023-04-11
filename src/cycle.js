@@ -48,7 +48,7 @@ function _getCycles({
         return [dependencyType, packageName];
       });
 
-      cycles[cycle.flat().slice(1).join(' < ')] = existingGroup;
+      cycles.add(cycle.flat().slice(1).join(' < '));
     }
 
     return;
@@ -90,7 +90,7 @@ function _getCycles({
 function getCycles(workspaceMeta, {
   shouldDetectDevDependencies,
 } = {}) {
-  let cycles = {};
+  let cycles = new Set();
   let visitedNodes = new Set();
   let { packages } = workspaceMeta;
 
@@ -107,7 +107,7 @@ function getCycles(workspaceMeta, {
     });
   }
 
-  return Object.keys(cycles).sort();
+  return [...cycles].sort();
 }
 
 Object.assign(module.exports, {
