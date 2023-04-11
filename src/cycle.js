@@ -6,11 +6,9 @@ function createPackageNode({
   packageName,
   dependencyType,
   dependencyRange,
-  parent,
   branch,
 }) {
   let group = {
-    parent,
     dependencyType,
     dependencyRange,
     packageName,
@@ -19,7 +17,6 @@ function createPackageNode({
   let newBranch = [...branch, group].filter(Boolean);
 
   return {
-    newGroup: group,
     newBranch,
   };
 }
@@ -43,7 +40,6 @@ function _getCycles({
   _package,
   dependencyType,
   dependencyRange,
-  parent,
   branch,
   visitedNodes,
   cycles,
@@ -57,7 +53,6 @@ function _getCycles({
     let isCycle = i !== -1;
 
     let existingGroup = {
-      parent,
       dependencyType,
       dependencyRange,
       packageName: _package.packageName,
@@ -77,13 +72,11 @@ function _getCycles({
   }
 
   let {
-    newGroup,
     newBranch,
   } = createPackageNode({
     packageName: _package.packageName,
     dependencyType,
     dependencyRange,
-    parent,
     branch,
   });
 
@@ -105,7 +98,6 @@ function _getCycles({
         _package,
         dependencyType,
         dependencyRange,
-        parent: newGroup,
         branch: newBranch,
         visitedNodes,
         cycles,
