@@ -14,7 +14,7 @@ function createPackageNode({
     packageName,
   };
 
-  let newBranch = [...branch, group].filter(Boolean);
+  let newBranch = [...branch, group];
 
   return newBranch;
 }
