@@ -161,5 +161,36 @@ describe(function() {
         'packageB < dependencies < packageC < dependencies < packageB',
       ]);
     });
+
+    it('detects shorter loops inside larger loops', async function() {
+      let workspaceMeta = normalize({
+        packageA: {
+          version: '0.0.0',
+          dependencies: {
+            packageB: '0.0.0',
+            packageC: '0.0.0',
+          },
+        },
+        packageB: {
+          version: '0.0.0',
+          dependencies: {
+            packageC: '0.0.0',
+          },
+        },
+        packageC: {
+          version: '0.0.0',
+          dependencies: {
+            packageA: '0.0.0',
+          },
+        },
+      });
+
+      let cycles = await getCycles(workspaceMeta);
+
+      expect(cycles).to.deep.equal([
+        'packageA < dependencies < packageB < dependencies < packageC < dependencies < packageA',
+        'packageA < dependencies < packageC < dependencies < packageA',
+      ]);
+    });
   });
 });

@@ -13,29 +13,34 @@ function _getCycles({
   shouldDetectDevDependencies,
 }) {
   let { packageName } = _package;
+  let cycleTips = new Set();
 
   let hasVisitedNode = visitedNodes.has(packageName);
 
   if (hasVisitedNode) {
-    let isCycle = branch.has(packageName);
+    return cycleTips;
+  }
 
-    if (isCycle) {
-      let existingGroup = {
-        dependencyType,
-        dependencyRange,
-        packageName,
-      };
+  let isCycle = branch.has(packageName);
 
-      let newBranch = [...[...branch.values()].slice([...branch.keys()].indexOf(packageName)), existingGroup];
+  if (isCycle) {
+    let existingGroup = {
+      dependencyType,
+      dependencyRange,
+      packageName,
+    };
 
-      let cycle = newBranch.map(({ dependencyType, packageName }) => {
-        return [dependencyType, packageName];
-      });
+    let newBranch = [...[...branch.values()].slice([...branch.keys()].indexOf(packageName)), existingGroup];
 
-      cycles.add(cycle.flat().slice(1).join(' < '));
-    }
+    let cycle = newBranch.map(({ dependencyType, packageName }) => {
+      return [dependencyType, packageName];
+    });
 
-    return;
+    cycles.add(cycle.flat().slice(1).join(' < '));
+
+    cycleTips.add(packageName);
+
+    return cycleTips;
   }
 
   let newGroup = {
@@ -45,8 +50,6 @@ function _getCycles({
   };
 
   let newBranch = new Map([...branch, [packageName, newGroup]]);
-
-  visitedNodes.add(packageName);
 
   for (let dependencyType of dependencyTypes) {
     if (!shouldDetectDevDependencies && dependencyType === 'devDependencies') {
@@ -59,7 +62,7 @@ function _getCycles({
       let dependencyRange = dependencies[packageName];
       let _package = packages[packageName];
 
-      _getCycles({
+      cycleTips = new Set([...cycleTips, ..._getCycles({
         packages,
         _package,
         dependencyType,
@@ -68,9 +71,17 @@ function _getCycles({
         visitedNodes,
         cycles,
         shouldDetectDevDependencies,
-      });
+      })]);
     }
   }
+
+  cycleTips.delete(packageName);
+
+  if (!cycleTips.size) {
+    visitedNodes.add(packageName);
+  }
+
+  return cycleTips;
 }
 
 function getCycles(workspaceMeta, {
