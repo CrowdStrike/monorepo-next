@@ -13,7 +13,6 @@ function createPackageNode({
     parent,
     dependencyType,
     dependencyRange,
-    isCycle: false,
     packageName,
   };
 
@@ -61,7 +60,6 @@ function _getCycles({
       parent,
       dependencyType,
       dependencyRange,
-      isCycle,
       packageName: _package.packageName,
     };
 
