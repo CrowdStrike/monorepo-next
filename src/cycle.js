@@ -50,9 +50,9 @@ function _getCycles({
   cycles,
   shouldDetectDevDependencies,
 }) {
-  let visitedNode = visitedNodes[_package.packageName];
+  let hasVisitedNode = visitedNodes.has(_package.packageName);
 
-  if (visitedNode) {
+  if (hasVisitedNode) {
     let i = findGroupInBranchByPackageName(branch, _package.packageName);
 
     let isCycle = i !== -1;
@@ -62,7 +62,7 @@ function _getCycles({
       dependencyType,
       dependencyRange,
       isCycle,
-      packageName: visitedNode,
+      packageName: _package.packageName,
     };
 
     if (isCycle) {
@@ -89,7 +89,7 @@ function _getCycles({
     branch,
   });
 
-  visitedNodes[_package.packageName] = newGroup.packageName;
+  visitedNodes.add(_package.packageName);
 
   for (let dependencyType of dependencyTypes) {
     if (!shouldDetectDevDependencies && dependencyType === 'devDependencies') {
@@ -121,7 +121,7 @@ function getCycles(workspaceMeta, {
   shouldDetectDevDependencies,
 } = {}) {
   let cycles = {};
-  let visitedNodes = {};
+  let visitedNodes = new Set();
   let { packages } = workspaceMeta;
 
   for (let packageName of Object.keys(packages).sort()) {
