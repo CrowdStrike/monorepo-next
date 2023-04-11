@@ -2,29 +2,6 @@
 
 const dependencyTypes = require('./dependency-types');
 
-function createPackageNode({
-  packageName,
-  dependencyType,
-  dependencyRange,
-  parent,
-  branch,
-}) {
-  let group = {
-    parent,
-    dependencyType,
-    dependencyRange,
-    isCycle: false,
-    packageName,
-  };
-
-  let newBranch = [...branch, group].filter(Boolean);
-
-  return {
-    newGroup: group,
-    newBranch,
-  };
-}
-
 function findGroupInBranchByPackageName(branch, packageName) {
   let _i = -1;
 
@@ -44,25 +21,24 @@ function _getCycles({
   _package,
   dependencyType,
   dependencyRange,
-  parent,
   branch,
   visitedNodes,
   cycles,
   shouldDetectDevDependencies,
 }) {
-  let hasVisitedNode = visitedNodes.has(_package.packageName);
+  let { packageName } = _package;
+
+  let hasVisitedNode = visitedNodes.has(packageName);
 
   if (hasVisitedNode) {
-    let i = findGroupInBranchByPackageName(branch, _package.packageName);
+    let i = findGroupInBranchByPackageName(branch, packageName);
 
     let isCycle = i !== -1;
 
     let existingGroup = {
-      parent,
       dependencyType,
       dependencyRange,
-      isCycle,
-      packageName: _package.packageName,
+      packageName,
     };
 
     if (isCycle) {
@@ -78,18 +54,13 @@ function _getCycles({
     return;
   }
 
-  let {
-    newGroup,
-    newBranch,
-  } = createPackageNode({
-    packageName: _package.packageName,
+  let newBranch = [...branch, {
     dependencyType,
     dependencyRange,
-    parent,
-    branch,
-  });
+    packageName,
+  }];
 
-  visitedNodes.add(_package.packageName);
+  visitedNodes.add(packageName);
 
   for (let dependencyType of dependencyTypes) {
     if (!shouldDetectDevDependencies && dependencyType === 'devDependencies') {
@@ -107,7 +78,6 @@ function _getCycles({
         _package,
         dependencyType,
         dependencyRange,
-        parent: newGroup,
         branch: newBranch,
         visitedNodes,
         cycles,
