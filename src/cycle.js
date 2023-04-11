@@ -2,23 +2,6 @@
 
 const dependencyTypes = require('./dependency-types');
 
-function createPackageNode({
-  packageName,
-  dependencyType,
-  dependencyRange,
-  branch,
-}) {
-  let group = {
-    dependencyType,
-    dependencyRange,
-    packageName,
-  };
-
-  let newBranch = [...branch, group];
-
-  return newBranch;
-}
-
 function findGroupInBranchByPackageName(branch, packageName) {
   let _i = -1;
 
@@ -69,12 +52,11 @@ function _getCycles({
     return;
   }
 
-  let newBranch = createPackageNode({
-    packageName: _package.packageName,
+  let newBranch = [...branch, {
     dependencyType,
     dependencyRange,
-    branch,
-  });
+    packageName: _package.packageName,
+  }];
 
   visitedNodes.add(_package.packageName);
 
