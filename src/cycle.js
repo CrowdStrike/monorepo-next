@@ -35,30 +35,32 @@ function _getCycles({
 
     let isCycle = i !== -1;
 
-    let existingGroup = {
-      dependencyType,
-      dependencyRange,
-      packageName,
-    };
-
     if (isCycle) {
+      let existingGroup = {
+        dependencyType,
+        dependencyRange,
+        packageName,
+      };
+
       let newBranch = [...branch.slice(i), existingGroup];
 
       let cycle = newBranch.map(({ dependencyType, packageName }) => {
         return [dependencyType, packageName];
       });
 
-      cycles[cycle.flat().slice(1).join(' < ')] = existingGroup;
+      cycles.add(cycle.flat().slice(1).join(' < '));
     }
 
     return;
   }
 
-  let newBranch = [...branch, {
+  let newGroup = {
     dependencyType,
     dependencyRange,
     packageName,
-  }];
+  };
+
+  let newBranch = [...branch, newGroup];
 
   visitedNodes.add(packageName);
 
@@ -90,7 +92,7 @@ function _getCycles({
 function getCycles(workspaceMeta, {
   shouldDetectDevDependencies,
 } = {}) {
-  let cycles = {};
+  let cycles = new Set();
   let visitedNodes = new Set();
   let { packages } = workspaceMeta;
 
@@ -107,7 +109,7 @@ function getCycles(workspaceMeta, {
     });
   }
 
-  return Object.keys(cycles).sort();
+  return [...cycles].sort();
 }
 
 Object.assign(module.exports, {
