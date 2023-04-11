@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [9.2.3](https://github.com/CrowdStrike/monorepo-next/compare/v9.2.2...v9.2.3) (2023-04-11)
+
+
+### Bug Fixes
+
+* detect subset cycles ([e5c1415](https://github.com/CrowdStrike/monorepo-next/commit/e5c1415afa182958f4fd2cf498d91a29cee0f07a))
+
 ### [9.2.2](https://github.com/CrowdStrike/monorepo-next/compare/v9.2.1...v9.2.2) (2023-04-11)
 
 ### [9.2.1](https://github.com/CrowdStrike/monorepo-next/compare/v9.2.0...v9.2.1) (2023-04-03)
