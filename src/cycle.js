@@ -54,11 +54,13 @@ function _getCycles({
     return;
   }
 
-  let newBranch = [...branch, {
+  let newGroup = {
     dependencyType,
     dependencyRange,
     packageName,
-  }];
+  };
+
+  let newBranch = [...branch, newGroup];
 
   visitedNodes.add(packageName);
 
