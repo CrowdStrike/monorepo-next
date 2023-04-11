@@ -16,9 +16,7 @@ function createPackageNode({
 
   let newBranch = [...branch, group].filter(Boolean);
 
-  return {
-    newBranch,
-  };
+  return newBranch;
 }
 
 function findGroupInBranchByPackageName(branch, packageName) {
@@ -71,9 +69,7 @@ function _getCycles({
     return;
   }
 
-  let {
-    newBranch,
-  } = createPackageNode({
+  let newBranch = createPackageNode({
     packageName: _package.packageName,
     dependencyType,
     dependencyRange,
