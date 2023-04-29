@@ -159,7 +159,7 @@ async function getChangedReleasableFiles({
   changedFiles = new Set(changedFiles);
 
   for (let changedFile of changedFiles) {
-    if (changedFile.endsWith(path.sep)) {
+    if (path.normalize(changedFile).endsWith(path.sep)) {
       throw new Error(`expected '${changedFile}' to be a file, but it is a directory`);
     }
   }

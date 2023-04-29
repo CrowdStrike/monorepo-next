@@ -69,7 +69,7 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/package-a/index.js',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
@@ -151,7 +151,7 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/package-a/index.js',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
@@ -325,7 +325,7 @@ describe(buildChangeGraph, function() {
         changedReleasableFiles: [
           'packages/package-a/index.js',
           'packages/package-a/package.json',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
@@ -383,7 +383,7 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/package-a/index.js',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
@@ -500,7 +500,7 @@ describe(buildChangeGraph, function() {
           ],
           changedReleasableFiles: [
             'packages/package-a/index.js',
-          ],
+          ].map(path.normalize),
           dag: this.match({
             node: {
               packageName: '@scope/package-a',
@@ -612,7 +612,7 @@ describe(buildChangeGraph, function() {
           ],
           changedReleasableFiles: [
             'packages/package-a/index.js',
-          ],
+          ].map(path.normalize),
           dag: this.match({
             node: {
               packageName: '@scope/package-a',
@@ -669,7 +669,7 @@ describe(buildChangeGraph, function() {
           ],
           changedReleasableFiles: [
             'packages/package-a/index.js',
-          ],
+          ].map(path.normalize),
           dag: this.match({
             node: {
               packageName: '@scope/package-a',
@@ -732,7 +732,7 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/package-a/index.js',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
@@ -788,7 +788,7 @@ describe(buildChangeGraph, function() {
         changedReleasableFiles: [
           'packages/package-a/index.js',
           'packages/package-a/package.json',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
@@ -809,7 +809,7 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/package-a/index.js',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
@@ -875,7 +875,7 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/package-a/changed.txt',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
@@ -909,7 +909,7 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/package-a/changed.txt',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
@@ -931,7 +931,7 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/my-app-1/changed.txt',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: 'my-app-1',
@@ -951,7 +951,7 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/my-app-1/changed.txt',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: 'my-app-1',
@@ -964,7 +964,7 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/package-a/changed.txt',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
@@ -1031,7 +1031,7 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/package-a/changed.txt',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
@@ -1066,7 +1066,7 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/my-app-1/changed.txt',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: 'my-app-1',
@@ -1088,7 +1088,7 @@ describe(buildChangeGraph, function() {
         ],
         changedReleasableFiles: [
           'packages/package-a/changed.txt',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
@@ -1111,7 +1111,7 @@ describe(buildChangeGraph, function() {
         changedReleasableFiles: [
           'packages/my-app-1/changed.txt',
           'packages/my-app-1/package.json',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: 'my-app-1',
@@ -1126,7 +1126,7 @@ describe(buildChangeGraph, function() {
         changedReleasableFiles: [
           'packages/package-a/changed.txt',
           'packages/package-a/package.json',
-        ],
+        ].map(path.normalize),
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
@@ -1393,7 +1393,7 @@ describe(buildChangeGraph, function() {
           ],
           changedReleasableFiles: [
             'packages/package-a/index.js',
-          ],
+          ].map(path.normalize),
           dag: this.match({
             node: {
               packageName: '@scope/package-a',

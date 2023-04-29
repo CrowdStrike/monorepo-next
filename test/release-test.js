@@ -16,6 +16,7 @@ const {
 } = require('./helpers/git');
 const { EOL } = require('os');
 const readWorkspaces = require('./helpers/read-workspaces');
+const path = require('path');
 
 describe(_release, function() {
   this.timeout(10e3);
@@ -1208,7 +1209,7 @@ describe(_release, function() {
     ]);
 
     expect(publishOverride).calledOnceWith(this.match({
-      cwd: this.match('packages/package-a'),
+      cwd: this.match(path.normalize('packages/package-a')),
     }));
   });
 
