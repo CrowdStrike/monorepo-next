@@ -22,7 +22,9 @@ describe(buildChangeGraph, function() {
   let tmpPath;
 
   beforeEach(async function() {
-    tmpPath = await gitInit();
+    tmpPath = await gitInit({
+      defaultBranchName: 'master',
+    });
   });
 
   it('tracks package changes', async function() {
