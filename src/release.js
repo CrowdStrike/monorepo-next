@@ -139,7 +139,7 @@ async function release({
   async function handleLifecycleScript(lifecycle) {
     let script = scripts[lifecycle];
     if (script) {
-      await execa.command(script, {
+      await exec(execa.command, script, {
         shell: true,
       });
     }
@@ -159,14 +159,14 @@ async function release({
 
   let previousCommit = await getCurrentCommit(workspaceCwd);
 
-  await execa('git', ['commit', '-m', commitMessage], { cwd: workspaceCwd });
+  await exec(execa, 'git', ['commit', '-m', commitMessage], { cwd: workspaceCwd });
 
   await handleLifecycleScript('postcommit');
 
   await handleLifecycleScript('pretag');
 
   for (let tag of tags) {
-    await execa('git', ['tag', '-a', tag, '-m', tag], { cwd: workspaceCwd });
+    await exec(execa, 'git', ['tag', '-a', tag, '-m', tag], { cwd: workspaceCwd });
   }
 
   await handleLifecycleScript('posttag');
@@ -219,6 +219,10 @@ async function release({
         await originalPublish();
       }
     }
+  }
+
+  async function exec(execa, ...args) {
+    await execa.apply(this, args);
   }
 }
 
