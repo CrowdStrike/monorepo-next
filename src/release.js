@@ -75,7 +75,7 @@ async function release({
     let packageJsonPath = path.join(cwd, 'package.json');
     let packageJson = await readJson(packageJsonPath);
 
-    if (releaseTree.oldVersion) {
+    if (releaseTree.oldVersion && releaseTree.oldVersion !== packageJson.version) {
       packageJson.version = releaseTree.oldVersion;
     }
 
@@ -83,7 +83,11 @@ async function release({
       let deps = releaseTree[type];
 
       for (let [name, newRange] of Object.entries(deps)) {
-        packageJson[type][name] = newRange;
+        let oldRange = packageJson[type][name];
+
+        if (newRange !== oldRange) {
+          packageJson[type][name] = newRange;
+        }
       }
     }
 
