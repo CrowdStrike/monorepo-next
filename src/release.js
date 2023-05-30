@@ -15,12 +15,13 @@ const {
   getWorkspaceCwd,
   getCurrentCommit,
 } = require('./git');
-
+const semver = require('semver');
 const { builder } = require('../bin/commands/release');
 
 async function release({
   cwd = process.cwd(),
   silent,
+  dryRun = builder['dry-run'].default,
   shouldPush = builder['push'].default,
   shouldPublish = builder['publish'].default,
   shouldBumpInRangeDependencies = builder['bump-in-range-dependencies'].default,
@@ -76,6 +77,8 @@ async function release({
     let packageJson = await readJson(packageJsonPath);
 
     if (releaseTree.oldVersion && releaseTree.oldVersion !== packageJson.version) {
+      log(`Updating ${packageJson.name} from ${packageJson.version} to ${releaseTree.oldVersion}.`);
+
       packageJson.version = releaseTree.oldVersion;
     }
 
@@ -86,12 +89,16 @@ async function release({
         let oldRange = packageJson[type][name];
 
         if (newRange !== oldRange) {
+          log(`Updating ${packageJson.name} ${type} ${name} from ${oldRange} to ${newRange}.`);
+
           packageJson[type][name] = newRange;
         }
       }
     }
 
-    await writeJson(packageJsonPath, packageJson);
+    if (!dryRun) {
+      await writeJson(packageJsonPath, packageJson);
+    }
 
     // eslint-disable-next-line no-inner-declarations
     async function originalVersion(options) {
@@ -102,6 +109,7 @@ async function release({
           tag: true,
         },
         silent,
+        dryRun,
         tagPrefix: `${name}@`,
         releaseAs: releaseTree.releaseType,
         scripts,
@@ -129,7 +137,13 @@ async function release({
         process.chdir(originalCwd);
       }
 
-      let { version } = await readJson(packageJsonPath);
+      let version;
+
+      if (dryRun) {
+        version = semver.inc(releaseTree.oldVersion, releaseTree.releaseType);
+      } else {
+        version = (await readJson(packageJsonPath)).version;
+      }
 
       // eslint-disable-next-line require-atomic-updates
       releaseTree.newVersion = version;
@@ -151,9 +165,11 @@ async function release({
 
   let commitMessage = `chore(release): ${tags.join()}`;
 
-  await execa('git', ['add', '-A'], { cwd: workspaceCwd });
+  if (!dryRun) {
+    await execa('git', ['add', '-A'], { cwd: workspaceCwd });
+  }
 
-  await preCommitCallback();
+  await preCommitCallback({ dryRun });
 
   await handleLifecycleScript('precommit');
 
@@ -172,17 +188,22 @@ async function release({
   await handleLifecycleScript('posttag');
 
   async function originalPush() {
-    await push({ cwd: workspaceCwd });
+    if (dryRun) {
+      log('push');
+    } else {
+      await push({ cwd: workspaceCwd });
+    }
   }
 
   if (shouldPush) {
-    await prePushCallback();
+    await prePushCallback({ dryRun });
 
     try {
       if (pushOverride) {
         await pushOverride({
           cwd: workspaceCwd,
           originalPush,
+          dryRun,
         });
       } else {
         await originalPush();
@@ -199,7 +220,7 @@ async function release({
   }
 
   if (shouldPublish) {
-    await prePublishCallback();
+    await prePublishCallback({ dryRun });
   }
 
   // eslint-disable-next-line require-atomic-updates
@@ -207,13 +228,18 @@ async function release({
     if (shouldPublish && _shouldPublish) {
       // eslint-disable-next-line no-inner-declarations
       async function originalPublish() {
-        await publish({ cwd });
+        if (dryRun) {
+          log('publish');
+        } else {
+          await publish({ cwd });
+        }
       }
 
       if (publishOverride) {
         await publishOverride({
           cwd,
           originalPublish,
+          dryRun,
         });
       } else {
         await originalPublish();
@@ -221,8 +247,20 @@ async function release({
     }
   }
 
-  async function exec(execa, ...args) {
-    await execa.apply(this, args);
+  function exec(execa, ...args) {
+    if (dryRun) {
+      log(...args);
+    } else {
+      return execa.apply(this, args);
+    }
+  }
+
+  function log() {
+    if (silent) {
+      return;
+    }
+
+    console.log(...arguments);
   }
 }
 

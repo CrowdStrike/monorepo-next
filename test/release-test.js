@@ -13,10 +13,14 @@ const {
   getCurrentCommit,
   doesTagExist,
   isGitClean,
+  getWorkspaceCwd,
 } = require('./helpers/git');
 const { EOL } = require('os');
 const readWorkspaces = require('./helpers/read-workspaces');
 const { builder } = require('../bin/commands/release');
+const path = require('path');
+const fs = require('fs-extra');
+const { createTmpDir } = require('../src/tmp');
 
 describe(_release, function() {
   this.timeout(10e3);
@@ -30,6 +34,11 @@ describe(_release, function() {
     tmpPath = await gitInit({
       defaultBranchName: builder['default-branch'].default,
     });
+
+    if (process.platform === 'darwin') {
+      // prepend /private in mac
+      tmpPath = await getWorkspaceCwd(tmpPath);
+    }
   });
 
   async function release(options) {
@@ -1375,5 +1384,131 @@ describe(_release, function() {
     expect(tags).to.deep.equal([
       '@scope/package-a@1.1.0',
     ]);
+  });
+
+  describe('dry run', function() {
+    const dryRun = true;
+
+    let consoleLog;
+    let gitCopyPath;
+
+    beforeEach(async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0-detached',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'name': 'root',
+          'version': '1.0.0',
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+          'devDependencies': {
+            '@scope/package-a': '1.0.0 || 1.0.0-detached',
+          },
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+      await execa('git', ['tag', 'root@1.0.0'], { cwd: tmpPath });
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'index.js': 'console.log()',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+      consoleLog = this.stub(console, 'log');
+
+      gitCopyPath = await createTmpDir();
+
+      await fs.copy(path.join(tmpPath, '.git'), gitCopyPath);
+    });
+
+    async function assertCleanGit() {
+      expect(fixturify.readSync(path.join(tmpPath, '.git'))).to.deep.equal(fixturify.readSync(gitCopyPath));
+
+      expect(await isGitClean(tmpPath)).to.be.true;
+    }
+
+    it('works', async function() {
+      let preCommitCallback = this.spy();
+      let prePushCallback = this.spy();
+      let prePublishCallback = this.spy();
+
+      await release({
+        dryRun,
+        scripts: {
+          precommit: 'precommit test',
+          postcommit: 'postcommit test',
+          pretag: 'pretag test',
+          posttag: 'posttag test',
+        },
+        silent: false,
+        shouldPush: true,
+        shouldPublish: true,
+        preCommitCallback,
+        prePushCallback,
+        prePublishCallback,
+      });
+
+      await assertCleanGit();
+
+      expect(consoleLog.args).to.deep.equal([
+        ['Updating @scope/package-a from 1.0.0-detached to 1.0.0.'],
+        ['Updating root devDependencies @scope/package-a from 1.0.0 || 1.0.0-detached to 1.1.0.'],
+        ['precommit test', { shell: true }],
+        ['git', ['commit', '-m', 'chore(release): @scope/package-a@1.1.0,root@1.0.1'], { cwd: tmpPath }],
+        ['postcommit test', { shell: true }],
+        ['pretag test', { shell: true }],
+        ['git', ['tag', '-a', '@scope/package-a@1.1.0', '-m', '@scope/package-a@1.1.0'], { cwd: tmpPath }],
+        ['git', ['tag', '-a', 'root@1.0.1', '-m', 'root@1.0.1'], { cwd: tmpPath }],
+        ['posttag test', { shell: true }],
+        ['push'],
+        ['publish'],
+      ]);
+    });
+
+    it('works with overrides', async function() {
+      let pushOverride = this.stub().callsFake(({ originalPush }) => originalPush());
+      let publishOverride = this.stub().callsFake(({ originalPublish }) => originalPublish());
+
+      await release({
+        dryRun,
+        silent: false,
+        shouldPush: true,
+        shouldPublish: true,
+        pushOverride,
+        publishOverride,
+      });
+
+      await assertCleanGit();
+
+      expect(consoleLog.args).to.deep.equal([
+        ['Updating @scope/package-a from 1.0.0-detached to 1.0.0.'],
+        ['Updating root devDependencies @scope/package-a from 1.0.0 || 1.0.0-detached to 1.1.0.'],
+        ['git', ['commit', '-m', 'chore(release): @scope/package-a@1.1.0,root@1.0.1'], { cwd: tmpPath }],
+        ['git', ['tag', '-a', '@scope/package-a@1.1.0', '-m', '@scope/package-a@1.1.0'], { cwd: tmpPath }],
+        ['git', ['tag', '-a', 'root@1.0.1', '-m', 'root@1.0.1'], { cwd: tmpPath }],
+        ['push'],
+        ['publish'],
+      ]);
+
+      expect(pushOverride.args).to.match([[this.match({ dryRun: true })]]);
+      expect(publishOverride.args).to.match([[this.match({ dryRun: true })]]);
+    });
   });
 });

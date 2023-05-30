@@ -10,6 +10,7 @@ module.exports = {
   describe: 'release all packages as needed',
   builder: {
     'silent': commonArgs['silent'],
+    'dry-run': commonArgs['dry-run'],
     'push': {
       describe: 'git push + tags when done',
       type: 'boolean',
