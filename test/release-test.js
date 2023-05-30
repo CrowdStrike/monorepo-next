@@ -16,6 +16,7 @@ const {
 } = require('./helpers/git');
 const { EOL } = require('os');
 const readWorkspaces = require('./helpers/read-workspaces');
+const { builder } = require('../bin/commands/release');
 
 describe(_release, function() {
   this.timeout(10e3);
@@ -26,7 +27,9 @@ describe(_release, function() {
   let tmpPath;
 
   beforeEach(async function() {
-    tmpPath = await gitInit();
+    tmpPath = await gitInit({
+      defaultBranchName: builder['default-branch'].default,
+    });
   });
 
   async function release(options) {

@@ -16,7 +16,9 @@ describe(changedFiles, function() {
   let tmpPath;
 
   beforeEach(async function() {
-    tmpPath = await gitInit();
+    tmpPath = await gitInit({
+      defaultBranchName: 'master',
+    });
   });
 
   async function setUpFixtures() {
