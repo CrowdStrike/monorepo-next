@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [9.3.0](https://github.com/CrowdStrike/monorepo-next/compare/v9.2.6...v9.3.0) (2023-05-31)
+
+
+### Features
+
+* add --dry-run to release ([2460b6a](https://github.com/CrowdStrike/monorepo-next/commit/2460b6ac36771fd9df24d5fabc65abbaac00ab91))
+
+
+### Bug Fixes
+
+* **deps:** update dependency semver to v7.5.1 ([b3711fa](https://github.com/CrowdStrike/monorepo-next/commit/b3711fa031ae5d313526e6f6acf4428d652c9712))
+
 ### [9.2.6](https://github.com/CrowdStrike/monorepo-next/compare/v9.2.5...v9.2.6) (2023-04-17)
 
 

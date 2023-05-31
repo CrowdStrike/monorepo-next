@@ -115,6 +115,8 @@ Options:
   --version                       Show version number                  [boolean]
   --silent                        Don't print logs and errors
                                                       [boolean] [default: false]
+  --dry-run                       log to console instead of modifying files
+                                                      [boolean] [default: false]
   --push                          git push + tags when done
                                                        [boolean] [default: true]
   --publish                       npm publish when done[boolean] [default: true]
