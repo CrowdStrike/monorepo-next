@@ -15,7 +15,9 @@ describe(changed, function() {
   let tmpPath;
 
   beforeEach(async function() {
-    tmpPath = await gitInit();
+    tmpPath = await gitInit({
+      defaultBranchName: 'master',
+    });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
