@@ -19,22 +19,12 @@ async function getPackageChangedFiles({
   fromCommit,
   toCommit,
   packageCwd,
-  isUnreleased,
   options,
 }) {
-  let committedChanges;
-
-  if (isUnreleased) {
-    // If a package is new (you can't find its last version tag),
-    // there is no point doing a diff against the beginning of time.
-    // `ls-tree` should get you the same results in less time.
-    committedChanges = await git(['ls-tree', '-r', '--name-only', toCommit, packageCwd], options);
-  } else {
-    // Be careful you don't accidentally use `...` instead of `..`.
-    // `...` finds the merge-base and uses that instead of `fromCommit`.
-    // https://stackoverflow.com/a/60496462
-    committedChanges = await git(['diff', '--name-only', `${fromCommit}..${toCommit}`, packageCwd], options);
-  }
+  // Be careful you don't accidentally use `...` instead of `..`.
+  // `...` finds the merge-base and uses that instead of `fromCommit`.
+  // https://stackoverflow.com/a/60496462
+  let committedChanges = await git(['diff', '--name-only', `${fromCommit}..${toCommit}`, packageCwd], options);
 
   committedChanges = getLinesFromOutput(committedChanges);
 
@@ -93,8 +83,6 @@ async function buildChangeGraph({
       continue;
     }
 
-    let isUnreleased = false;
-
     let _fromCommit;
     if (fromCommit) {
       _fromCommit = fromCommit;
@@ -107,36 +95,29 @@ async function buildChangeGraph({
       }
       _fromCommit = sinceBranchCommit;
     } else {
-      ({
-        sha: _fromCommit,
-        isUnreleased,
-      } = await getCommitSinceLastRelease(_package, {
-        cwd: workspaceMeta.cwd,
-        cached,
-      }));
-    }
-
-    if (fromCommitIfNewer) {
-      let isInSameBranch = await isCommitAncestorOf(fromCommitIfNewer, toCommit, {
+      _fromCommit = await getCommitSinceLastRelease(_package, {
         cwd: workspaceMeta.cwd,
         cached,
       });
+    }
 
-      if (isInSameBranch) {
-        if (isUnreleased) {
-          _fromCommit = fromCommitIfNewer;
+    if (fromCommitIfNewer) {
+      let [
+        isNewerThanTagCommit,
+        isInSameBranch,
+      ] = await Promise.all([
+        isCommitAncestorOf(_fromCommit, fromCommitIfNewer, {
+          cwd: workspaceMeta.cwd,
+          cached,
+        }),
+        isCommitAncestorOf(fromCommitIfNewer, toCommit, {
+          cwd: workspaceMeta.cwd,
+          cached,
+        }),
+      ]);
 
-          isUnreleased = false;
-        } else {
-          let isNewerThanTagCommit = await isCommitAncestorOf(_fromCommit, fromCommitIfNewer, {
-            cwd: workspaceMeta.cwd,
-            cached,
-          });
-
-          if (isNewerThanTagCommit) {
-            _fromCommit = fromCommitIfNewer;
-          }
-        }
+      if (isNewerThanTagCommit && isInSameBranch) {
+        _fromCommit = fromCommitIfNewer;
       }
     }
 
@@ -144,7 +125,6 @@ async function buildChangeGraph({
       fromCommit: _fromCommit,
       toCommit,
       packageCwd: _package.cwd,
-      isUnreleased,
       options: {
         cwd: workspaceMeta.cwd,
         cached,
