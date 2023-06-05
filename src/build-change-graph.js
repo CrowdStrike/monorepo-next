@@ -73,15 +73,17 @@ async function buildChangeGraph({
     return path.relative(workspaceMeta.cwd, cwd);
   });
 
-  for (let _package of collectPackages(workspaceMeta)) {
+  const { default: pMap } = await import('p-map');
+
+  await pMap(collectPackages(workspaceMeta), async (_package) => {
     if (!_package.packageName || !_package.version) {
-      continue;
+      return;
     }
 
     let nextConfig = loadPackageConfig(_package.cwd);
 
     if (!nextConfig.shouldBumpVersion) {
-      continue;
+      return;
     }
 
     let _fromCommit;
@@ -144,7 +146,7 @@ async function buildChangeGraph({
     }
 
     if (!newFiles.length) {
-      continue;
+      return;
     }
 
     let changedReleasableFiles = await getChangedReleasableFiles({
@@ -156,7 +158,7 @@ async function buildChangeGraph({
     });
 
     if (shouldOnlyIncludeReleasable && !changedReleasableFiles.length) {
-      continue;
+      return;
     }
 
     let dag = buildDAG(workspaceMeta, _package.packageName);
@@ -166,7 +168,7 @@ async function buildChangeGraph({
       changedReleasableFiles,
       dag,
     };
-  }
+  });
 
   for (let { dag, changedReleasableFiles } of Object.values(packagesWithChanges)) {
     if (!changedReleasableFiles.length) {
