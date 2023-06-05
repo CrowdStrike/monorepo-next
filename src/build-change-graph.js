@@ -14,6 +14,7 @@ const { getChangedReleasableFiles } = require('./releasable');
 const Set = require('superset');
 const { loadPackageConfig } = require('./config');
 const path = require('path');
+const { sortByString, mapByIndex } = require('./array');
 
 async function getPackageChangedFiles({
   fromCommit,
@@ -175,7 +176,7 @@ async function buildChangeGraph({
     crawlDag(dag, packagesWithChanges);
   }
 
-  return Object.values(packagesWithChanges);
+  return mapByIndex(sortByString(Object.entries(packagesWithChanges), ([packageName]) => packageName), 1);
 }
 
 module.exports = buildChangeGraph;

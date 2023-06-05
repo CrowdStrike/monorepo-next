@@ -949,19 +949,6 @@ describe(buildChangeGraph, function() {
     expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
-          'packages/my-app-1/changed.txt',
-        ],
-        changedReleasableFiles: [
-          'packages/my-app-1/changed.txt',
-        ],
-        dag: this.match({
-          node: {
-            packageName: 'my-app-1',
-          },
-        }),
-      },
-      {
-        changedFiles: [
           'packages/package-a/changed.txt',
         ],
         changedReleasableFiles: [
@@ -970,6 +957,19 @@ describe(buildChangeGraph, function() {
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
+          },
+        }),
+      },
+      {
+        changedFiles: [
+          'packages/my-app-1/changed.txt',
+        ],
+        changedReleasableFiles: [
+          'packages/my-app-1/changed.txt',
+        ],
+        dag: this.match({
+          node: {
+            packageName: 'my-app-1',
           },
         }),
       },
@@ -1107,21 +1107,6 @@ describe(buildChangeGraph, function() {
     expect(packagesWithChanges).to.match(this.match([
       {
         changedFiles: [
-          'packages/my-app-1/changed.txt',
-          'packages/my-app-1/package.json',
-        ],
-        changedReleasableFiles: [
-          'packages/my-app-1/changed.txt',
-          'packages/my-app-1/package.json',
-        ],
-        dag: this.match({
-          node: {
-            packageName: 'my-app-1',
-          },
-        }),
-      },
-      {
-        changedFiles: [
           'packages/package-a/changed.txt',
           'packages/package-a/package.json',
         ],
@@ -1132,6 +1117,21 @@ describe(buildChangeGraph, function() {
         dag: this.match({
           node: {
             packageName: '@scope/package-a',
+          },
+        }),
+      },
+      {
+        changedFiles: [
+          'packages/my-app-1/changed.txt',
+          'packages/my-app-1/package.json',
+        ],
+        changedReleasableFiles: [
+          'packages/my-app-1/changed.txt',
+          'packages/my-app-1/package.json',
+        ],
+        dag: this.match({
+          node: {
+            packageName: 'my-app-1',
           },
         }),
       },
