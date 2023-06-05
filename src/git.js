@@ -89,10 +89,16 @@ async function getCommitSinceLastRelease(_package, options) {
   let tag = `${_package.packageName}@${version}`;
 
   try {
-    return await getCommitAtTag(tag, options);
+    return {
+      sha: await getCommitAtTag(tag, options),
+      isUnreleased: false,
+    };
   } catch (err) {
     if (err.stderr.includes(`fatal: ambiguous argument '${tag}': unknown revision or path not in the working tree.`)) {
-      return await getFirstCommit(options);
+      return {
+        sha: await getFirstCommit(options),
+        isUnreleased: true,
+      };
     } else {
       throw err;
     }
