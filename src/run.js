@@ -15,6 +15,7 @@ async function run({
   shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
   silent,
   args,
+  cached,
 }) {
   let workspaceCwd = await getWorkspaceCwd(cwd);
 
@@ -24,6 +25,7 @@ async function run({
     workspaceMeta,
     shouldOnlyIncludeReleasable,
     shouldExcludeDevChanges,
+    cached,
   });
 
   let stdout = '';

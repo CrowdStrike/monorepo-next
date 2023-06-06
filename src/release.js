@@ -38,6 +38,7 @@ async function release({
   pushOverride,
   prePublishCallback = () => {},
   publishOverride,
+  cached,
 } = {}) {
   let currentBranch = await getCurrentBranch(cwd);
   if (currentBranch !== defaultBranch) {
@@ -51,6 +52,7 @@ async function release({
   let packagesWithChanges = await buildChangeGraph({
     workspaceMeta,
     shouldExcludeDevChanges,
+    cached,
   });
 
   packagesWithChanges = packagesWithChanges.filter(({ dag }) => {
