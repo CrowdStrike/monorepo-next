@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [9.3.1](https://github.com/CrowdStrike/monorepo-next/compare/v9.3.0...v9.3.1) (2023-06-06)
+
+
+### Features
+
+* run ls-tree instead of diff if new package ([aa42921](https://github.com/CrowdStrike/monorepo-next/commit/aa429218f316a255b90ea48d5a1f75191eadbad0))
+
+
+### Bug Fixes
+
+* add some missing uses of `cached` ([bc4c037](https://github.com/CrowdStrike/monorepo-next/commit/bc4c037c7e9a8247485ac84fc90d56a7e2c1092d))
+
 ## [9.3.0](https://github.com/CrowdStrike/monorepo-next/compare/v9.2.6...v9.3.0) (2023-05-31)
 
 
