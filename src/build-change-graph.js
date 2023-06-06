@@ -24,6 +24,9 @@ async function getPackageChangedFiles({
   // Be careful you don't accidentally use `...` instead of `..`.
   // `...` finds the merge-base and uses that instead of `fromCommit`.
   // https://stackoverflow.com/a/60496462
+  //
+  // I tried using ls-tree instead of diff when it is a new package (fromCommit is first commit in repo),
+  // but it took the same amount of time.
   let committedChanges = await git(['diff', '--name-only', `${fromCommit}..${toCommit}`, packageCwd], options);
 
   committedChanges = getLinesFromOutput(committedChanges);
