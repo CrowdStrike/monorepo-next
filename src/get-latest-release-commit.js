@@ -25,13 +25,17 @@ async function getPackage({
 async function getLatestReleaseCommit({
   cwd,
   packageName,
+  cached,
 }) {
   let _package = await getPackage({
     cwd,
     packageName,
   });
 
-  let commit = await getCommitSinceLastRelease(_package, { cwd: _package.cwd });
+  let commit = await getCommitSinceLastRelease(_package, {
+    cwd: _package.cwd,
+    cached,
+  });
 
   return commit;
 }
