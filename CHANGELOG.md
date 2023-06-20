@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [9.3.3](https://github.com/CrowdStrike/monorepo-next/compare/v9.3.2...v9.3.3) (2023-06-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency semver to v7.5.2 ([0ccd71c](https://github.com/CrowdStrike/monorepo-next/commit/0ccd71cb1e8af0ac1b9ae5fd3eb09bc281979122))
+
 ### [9.3.2](https://github.com/CrowdStrike/monorepo-next/compare/v9.3.1...v9.3.2) (2023-06-06)
 
 
