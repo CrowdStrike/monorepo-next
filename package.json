@@ -68,7 +68,7 @@
     "minimatch": "^5.0.0",
     "npm-packlist": "^6.0.0",
     "rfc6902": "^5.0.0",
-    "semver": "7.5.3",
+    "semver": "^7.5.3",
     "standard-version": "9.5.0",
     "superset": "^2.0.1",
     "tmp": "0.2.1",
