@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [9.3.4](https://github.com/CrowdStrike/monorepo-next/compare/v9.3.3...v9.3.4) (2023-06-26)
+
+
+### Bug Fixes
+
+* float semver package version range ([201050d](https://github.com/CrowdStrike/monorepo-next/commit/201050dd619526ca97cbdd0daa3b7abbf65bf737))
+* **deps:** update dependency semver to v7.5.3 ([8063d32](https://github.com/CrowdStrike/monorepo-next/commit/8063d323362f0130c66d7fad5fe11f745c2df01e))
+
 ### [9.3.3](https://github.com/CrowdStrike/monorepo-next/compare/v9.3.2...v9.3.3) (2023-06-20)
 
 
