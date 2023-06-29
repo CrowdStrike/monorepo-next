@@ -211,11 +211,13 @@ async function release({
         await originalPush();
       }
     } catch (err) {
-      if (shouldCleanUpAfterFailedPush) {
-        await execa('git', ['tag', '-d', ...tags], { cwd: workspaceCwd });
-      }
+      if (!dryRun) {
+        if (shouldCleanUpAfterFailedPush) {
+          await execa('git', ['tag', '-d', ...tags], { cwd: workspaceCwd });
+        }
 
-      await execa('git', ['reset', '--hard', previousCommit], { cwd: workspaceCwd });
+        await execa('git', ['reset', '--hard', previousCommit], { cwd: workspaceCwd });
+      }
 
       throw err;
     }
