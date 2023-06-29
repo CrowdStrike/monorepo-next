@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [9.3.5](https://github.com/CrowdStrike/monorepo-next/compare/v9.3.4...v9.3.5) (2023-06-29)
+
+
+### Bug Fixes
+
+* don't try to clean up during dry run ([a2dae97](https://github.com/CrowdStrike/monorepo-next/commit/a2dae97c7e245bbca16b9efa8f529a2a10eb0d53))
+
 ### [9.3.4](https://github.com/CrowdStrike/monorepo-next/compare/v9.3.3...v9.3.4) (2023-06-26)
 
 
