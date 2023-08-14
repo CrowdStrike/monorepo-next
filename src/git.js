@@ -1,7 +1,7 @@
 'use strict';
 
 const execa = require('execa');
-const debug = require('./debug')('git');
+const debug = require('./debug').extend('git');
 
 let cache = {};
 
