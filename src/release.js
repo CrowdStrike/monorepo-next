@@ -17,6 +17,8 @@ const {
 } = require('./git');
 const semver = require('semver');
 const { builder } = require('../bin/commands/release');
+const debug = require('./debug');
+const { createLogger } = require('./log');
 
 async function release({
   cwd = process.cwd(),
@@ -40,6 +42,9 @@ async function release({
   publishOverride,
   cached,
 } = {}) {
+  let _debug = debug.extend(release.name);
+  let log = createLogger(_debug);
+
   let currentBranch = await getCurrentBranch(cwd);
   if (currentBranch !== defaultBranch) {
     return;
@@ -47,9 +52,9 @@ async function release({
 
   let workspaceCwd = await getWorkspaceCwd(cwd);
 
-  let workspaceMeta = await buildDepGraph({ workspaceCwd });
+  let workspaceMeta = await log(buildDepGraph, { workspaceCwd });
 
-  let packagesWithChanges = await buildChangeGraph({
+  let packagesWithChanges = await log(buildChangeGraph, {
     workspaceMeta,
     shouldExcludeDevChanges,
     cached,
@@ -64,7 +69,8 @@ async function release({
     return;
   }
 
-  let releaseTrees = await buildReleaseGraph({
+  let releaseTrees = await log(buildReleaseGraph, {
+    debug: _debug,
     packagesWithChanges,
     shouldBumpInRangeDependencies,
     shouldInheritGreaterReleaseType,
@@ -79,7 +85,7 @@ async function release({
     let packageJson = await readJson(packageJsonPath);
 
     if (releaseTree.oldVersion && releaseTree.oldVersion !== packageJson.version) {
-      log(`Updating ${packageJson.name} from ${packageJson.version} to ${releaseTree.oldVersion}.`);
+      _log(`Updating ${packageJson.name} from ${packageJson.version} to ${releaseTree.oldVersion}.`);
 
       packageJson.version = releaseTree.oldVersion;
     }
@@ -91,7 +97,7 @@ async function release({
         let oldRange = packageJson[type][name];
 
         if (newRange !== oldRange) {
-          log(`Updating ${packageJson.name} ${type} ${name} from ${oldRange} to ${newRange}.`);
+          _log(`Updating ${packageJson.name} ${type} ${name} from ${oldRange} to ${newRange}.`);
 
           packageJson[type][name] = newRange;
         }
@@ -191,7 +197,7 @@ async function release({
 
   async function originalPush() {
     if (dryRun) {
-      log('push');
+      _log('push');
     } else {
       await push({ cwd: workspaceCwd });
     }
@@ -233,7 +239,7 @@ async function release({
       // eslint-disable-next-line no-inner-declarations
       async function originalPublish() {
         if (dryRun) {
-          log('publish');
+          _log('publish');
         } else {
           await publish({ cwd });
         }
@@ -253,13 +259,13 @@ async function release({
 
   function exec(execa, ...args) {
     if (dryRun) {
-      log(...args);
+      _log(...args);
     } else {
       return execa.apply(this, args);
     }
   }
 
-  function log() {
+  function _log() {
     if (silent) {
       return;
     }
