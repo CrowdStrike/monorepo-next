@@ -17,6 +17,8 @@ const {
 } = require('./git');
 const semver = require('semver');
 const { builder } = require('../bin/commands/release');
+const debug = require('./debug');
+const { createLogger } = require('./log');
 
 async function release({
   cwd = process.cwd(),
@@ -40,6 +42,9 @@ async function release({
   publishOverride,
   cached,
 } = {}) {
+  let _debug = debug.extend(release.name);
+  let log = createLogger(_debug);
+
   let currentBranch = await getCurrentBranch(cwd);
   if (currentBranch !== defaultBranch) {
     return;
@@ -47,9 +52,9 @@ async function release({
 
   let workspaceCwd = await getWorkspaceCwd(cwd);
 
-  let workspaceMeta = await buildDepGraph({ workspaceCwd });
+  let workspaceMeta = await log(buildDepGraph, { workspaceCwd });
 
-  let packagesWithChanges = await buildChangeGraph({
+  let packagesWithChanges = await log(buildChangeGraph, {
     workspaceMeta,
     shouldExcludeDevChanges,
     cached,
@@ -64,7 +69,8 @@ async function release({
     return;
   }
 
-  let releaseTrees = await buildReleaseGraph({
+  let releaseTrees = await log(buildReleaseGraph, {
+    debug: _debug,
     packagesWithChanges,
     shouldBumpInRangeDependencies,
     shouldInheritGreaterReleaseType,
