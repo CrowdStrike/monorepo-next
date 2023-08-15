@@ -13,7 +13,7 @@ const { gitInit } = require('git-fixtures');
 const path = require('path');
 
 describe(buildReleaseGraph, function() {
-  // this.timeout(5e3);
+  this.timeout(5e3);
 
   // eslint-disable-next-line mocha/no-setup-in-describe
   setUpSinon();
