@@ -240,9 +240,17 @@ function thirdPass({
           return;
         }
 
+        let isCurrentGreaterThan = !isReleaseTypeLessThan(currentReleaseType, incomingReleaseType);
+
+        if (isCurrentGreaterThan) {
+          // node has changes and hasn't been visited yet
+          // it will be processed later when it's its turn
+          return;
+        }
+
         let isDevDep = dag.dependencyType === 'devDependencies';
 
-        if (shouldInheritGreaterReleaseType && !isDevDep && isReleaseTypeLessThan(currentReleaseType, incomingReleaseType)) {
+        if (shouldInheritGreaterReleaseType && !isDevDep) {
           current.releaseType = incomingReleaseType;
         }
       } else if (currentReleaseType === defaultReleaseType) {
