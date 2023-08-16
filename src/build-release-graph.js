@@ -124,6 +124,23 @@ async function secondPass({
   shouldInheritGreaterReleaseType,
   shouldExcludeDevChanges,
 }) {
+  function shouldInit({
+    dag,
+    parent,
+  }) {
+    let isDevDep = dag.dependencyType === 'devDependencies';
+
+    if (dag.node.isPackage && shouldInheritGreaterReleaseType && !isDevDep && shouldBumpInRangeDependencies) {
+      return true;
+    } else if (!isReleaseTypeInRange(parent.oldVersion, parent.releaseType, dag.dependencyRange)) {
+      return true;
+    } else if (shouldBumpInRangeDependencies) {
+      return true;
+    }
+
+    return false;
+  }
+
   let visitedNodes = new Set();
 
   for (let { dag, changedReleasableFiles } of packagesWithChanges) {
@@ -149,18 +166,16 @@ async function secondPass({
 
       let doesPackageHaveChanges = !!releaseTrees[dag.node.packageName];
       if (!doesPackageHaveChanges) {
-        let isDevDep = dag.dependencyType === 'devDependencies';
-
-        if (dag.node.isPackage && shouldInheritGreaterReleaseType && !isDevDep && shouldBumpInRangeDependencies) {
-          await init({ dag, releaseTrees });
-        } else if (!isReleaseTypeInRange(parent.oldVersion, parent.releaseType, dag.dependencyRange)) {
-          await init({ dag, releaseTrees });
-        } else if (shouldBumpInRangeDependencies) {
-          await init({ dag, releaseTrees });
-        } else {
+        if (!shouldInit({
+          dag,
+          parent,
+        })) {
           return;
         }
 
+        await init({ dag, releaseTrees });
+
+        let isDevDep = dag.dependencyType === 'devDependencies';
         let shouldVersionBump = !(shouldExcludeDevChanges && isDevDep);
 
         if (!shouldVersionBump) {
