@@ -11,7 +11,7 @@ const semver = require('semver');
 const dependencyTypes = require('./dependency-types');
 const { loadPackageConfig } = require('./config');
 const debug = require('./debug');
-const { createLogger } = require('./log');
+const { createSyncLogger, createAsyncLogger } = require('./log');
 
 const defaultReleaseType = 'patch';
 
@@ -306,18 +306,19 @@ async function buildReleaseGraph({
   shouldInheritGreaterReleaseType,
   shouldExcludeDevChanges,
 }) {
-  let log = createLogger(_debug);
+  let logSync = createSyncLogger(_debug);
+  let logAsync = createAsyncLogger(_debug);
 
   let releaseTrees = {};
 
-  await log(firstPass, {
+  await logAsync(firstPass, {
     releaseTrees,
     packagesWithChanges,
   });
 
   // only packages with changes have been analyzed
 
-  await log(secondPass, {
+  await logAsync(secondPass, {
     releaseTrees,
     packagesWithChanges,
     shouldBumpInRangeDependencies,
@@ -327,7 +328,7 @@ async function buildReleaseGraph({
 
   // packages without changes, but need to be analyzed because of options
 
-  log(thirdPass, {
+  logSync(thirdPass, {
     releaseTrees,
     packagesWithChanges,
     shouldInheritGreaterReleaseType,
@@ -336,7 +337,7 @@ async function buildReleaseGraph({
 
   // dependents have now inherited release type
 
-  log(fourthPass, {
+  logSync(fourthPass, {
     releaseTrees,
     packagesWithChanges,
     shouldBumpInRangeDependencies,
