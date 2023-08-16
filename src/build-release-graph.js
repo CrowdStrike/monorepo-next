@@ -302,8 +302,12 @@ function fourthPass({
         }
       }
 
-      if (parent && !current[dag.dependencyType][parent.name]) {
+      if (parent) {
         let { name } = parent;
+
+        if (current[dag.dependencyType][name]) {
+          return;
+        }
 
         let oldRange = dag.dependencyRange;
         let newRange = oldRange.replace(/ +\|\| +[\d.]*-detached.*/, '');
