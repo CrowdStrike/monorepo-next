@@ -119,7 +119,9 @@ async function firstPass({
 
     let releaseTree = await init({ dag, releaseTrees });
 
-    releaseTree.releaseType = await module.exports.getReleaseType(name, cwd);
+    if (releaseTree[nextConfigSymbol].shouldBumpVersion) {
+      releaseTree.releaseType = await module.exports.getReleaseType(name, cwd);
+    }
   }
 }
 
