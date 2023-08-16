@@ -1878,6 +1878,19 @@ describe(buildReleaseGraph, function() {
         devDependencies: {},
         optionalDependencies: {},
       },
+      {
+        name: '@scope/package-a',
+        cwd: matchPath('/packages/package-a'),
+        oldVersion: '0.0.0',
+        releaseType: 'patch',
+        shouldBumpVersion: false,
+        shouldPublish: false,
+        dependencies: {},
+        devDependencies: {
+          '@scope/package-b': '^1.1.0',
+        },
+        optionalDependencies: {},
+      },
     ]));
   });
 });
