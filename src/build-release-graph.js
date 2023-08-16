@@ -48,6 +48,7 @@ function isReleaseTypeInRange(version, type, range) {
 }
 
 let shouldVersionBumpSymbol = Symbol('shouldVersionBump');
+let nextConfigSymbol = Symbol('nextConfig');
 
 async function init({
   dag,
@@ -71,6 +72,8 @@ async function init({
     }
   }
 
+  let nextConfig = loadPackageConfig(cwd);
+
   let canBumpVersion = !!(version && name);
   let canPublish = isPackage;
 
@@ -81,6 +84,9 @@ async function init({
     releaseType: defaultReleaseType,
     cwd,
     name,
+    get [nextConfigSymbol]() {
+      return nextConfig;
+    },
     [shouldVersionBumpSymbol]() {
       shouldVersionBump = true;
     },
@@ -156,15 +162,9 @@ async function secondPass({
         return;
       }
 
-      let nextConfig = loadPackageConfig(dag.node.cwd);
+      let releaseTree = releaseTrees[dag.node.packageName];
+      let doesPackageHaveChanges = !!releaseTree;
 
-      if (!nextConfig.shouldBumpVersion) {
-        visitedNodes.add(dag.node.packageName);
-
-        return;
-      }
-
-      let doesPackageHaveChanges = !!releaseTrees[dag.node.packageName];
       if (!doesPackageHaveChanges) {
         if (!shouldInit({
           dag,
@@ -173,7 +173,7 @@ async function secondPass({
           return;
         }
 
-        await init({ dag, releaseTrees });
+        releaseTree = await init({ dag, releaseTrees });
 
         let isDevDep = dag.dependencyType === 'devDependencies';
         let shouldVersionBump = !(shouldExcludeDevChanges && isDevDep);
@@ -184,6 +184,10 @@ async function secondPass({
       }
 
       visitedNodes.add(dag.node.packageName);
+
+      if (!releaseTree[nextConfigSymbol].shouldBumpVersion) {
+        return;
+      }
 
       for (let group of dag.node.dependents) {
         if (group.isCycle) {
@@ -234,7 +238,7 @@ function thirdPass({
 
       let shouldVersionBump = !(shouldExcludeDevChanges && isDevDep);
 
-      if (shouldVersionBump) {
+      if (shouldVersionBump && current[nextConfigSymbol].shouldBumpVersion) {
         current[shouldVersionBumpSymbol]();
       }
 
