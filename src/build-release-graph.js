@@ -234,10 +234,8 @@ function thirdPass({
       let incomingReleaseType = parent?.releaseType ?? currentReleaseType;
 
       if (shouldInheritGreaterReleaseType && !isDevDep && isReleaseTypeLessThan(currentReleaseType, incomingReleaseType)) {
-        currentReleaseType = incomingReleaseType;
+        current.releaseType = incomingReleaseType;
       }
-
-      current.releaseType = currentReleaseType;
 
       for (let group of dag.node.dependents) {
         if (group.isCycle) {
