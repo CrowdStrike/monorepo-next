@@ -2,24 +2,56 @@
 
 const _debug = require('./debug');
 
-function createLogger(debug = _debug) {
-  return async function log(callback, ...args) {
-    let _debug = debug.extend(callback.name);
+function prepare(callback, debug = _debug) {
+  let _debug = debug.extend(callback.name);
 
-    _debug('begin');
+  _debug('begin');
 
-    let before = new Date();
+  let before = new Date();
+
+  return {
+    debug: _debug,
+    before,
+  };
+}
+
+function finish(debug, before) {
+  let elapsed = new Date() - before;
+
+  debug(`end in ${elapsed}ms`);
+}
+
+function createSyncLogger(debug) {
+  return function log(callback, ...args) {
+    let {
+      debug: _debug,
+      before,
+    } = prepare(callback, debug);
 
     try {
-      return await callback(...args);
+      return callback.apply(this, args);
     } finally {
-      let elapsed = new Date() - before;
+      finish(_debug, before);
+    }
+  };
+}
 
-      _debug(`end in ${elapsed}ms`);
+function createAsyncLogger(debug) {
+  return async function log(callback, ...args) {
+    let {
+      debug: _debug,
+      before,
+    } = prepare(callback, debug);
+
+    try {
+      return await callback.apply(this, args);
+    } finally {
+      finish(_debug, before);
     }
   };
 }
 
 module.exports = {
-  createLogger,
+  createSyncLogger,
+  createAsyncLogger,
 };
