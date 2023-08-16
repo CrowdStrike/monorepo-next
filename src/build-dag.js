@@ -87,13 +87,13 @@ function createPackageNode({
   parent,
   branch,
 }) {
-  let _package = workspaceMeta.packages[packageName];
+  let _package = workspaceMeta.packages[packageName] || workspaceMeta;
 
   let node = {
-    isPackage: !!(_package && !_package.isPrivate),
-    cwd: _package ? _package.cwd : workspaceMeta.cwd,
+    isPackage: !_package.isPrivate,
+    cwd: _package.cwd,
     packageName,
-    version: _package ? _package.version : workspaceMeta.version,
+    version: _package.version,
     dependents: [],
   };
 

@@ -39,7 +39,7 @@ describe(buildDepGraph, function() {
           cwd: matchPath('/workspace/packages/package-a'),
           packageName: '@scope/package-a',
           version: '1.0.0',
-          isPrivate: undefined,
+          isPrivate: false,
           dependencies: {},
           devDependencies: {
             '@scope/package-b': '^2.0.0',
@@ -50,7 +50,7 @@ describe(buildDepGraph, function() {
           cwd: matchPath('/workspace/packages/package-b'),
           packageName: '@scope/package-b',
           version: '2.0.0',
-          isPrivate: undefined,
+          isPrivate: false,
           dependencies: {
             '@scope/package-a': '^1.0.0',
           },
@@ -61,7 +61,7 @@ describe(buildDepGraph, function() {
           cwd: matchPath('/workspace/packages/package-c'),
           packageName: '@scope/package-c',
           version: '3.0.0',
-          isPrivate: undefined,
+          isPrivate: false,
           dependencies: {
             '@scope/package-b': '^2.0.0',
           },
