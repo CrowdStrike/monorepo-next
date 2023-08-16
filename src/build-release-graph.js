@@ -232,8 +232,15 @@ function thirdPass({
       let currentReleaseType = current.releaseType;
 
       if (parent) {
-        let isDevDep = dag.dependencyType === 'devDependencies';
         let incomingReleaseType = parent.releaseType;
+
+        if (currentReleaseType === incomingReleaseType) {
+          // either already visited at this release type, or already at the lowest
+          // either way, no upgrades needed
+          return;
+        }
+
+        let isDevDep = dag.dependencyType === 'devDependencies';
 
         if (shouldInheritGreaterReleaseType && !isDevDep && isReleaseTypeLessThan(currentReleaseType, incomingReleaseType)) {
           current.releaseType = incomingReleaseType;
