@@ -58,7 +58,7 @@ async function detach({
       let workspaceKey = 'Workspace Root';
 
       let choices = dag.node.dependents.map(dependent => {
-        return dependent.node.packageName || path.basename(dependent.node.cwd);
+        return dependent.node.packageName ?? path.basename(dependent.node.cwd);
       });
 
       let { answers } = await inquirer.prompt([{

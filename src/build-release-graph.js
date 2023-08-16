@@ -207,7 +207,7 @@ function thirdPass({
 
       let isDevDep = dag.dependencyType === 'devDependencies';
       let currentReleaseType = current.releaseType;
-      let incomingReleaseType = parent ? parent.releaseType : currentReleaseType;
+      let incomingReleaseType = parent?.releaseType ?? currentReleaseType;
 
       if (shouldInheritGreaterReleaseType && !isDevDep && isReleaseTypeLessThan(currentReleaseType, incomingReleaseType)) {
         currentReleaseType = incomingReleaseType;

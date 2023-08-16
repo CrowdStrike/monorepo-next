@@ -32,7 +32,7 @@ function thirdPass({
     let {
       dependencyType,
       dependencyRange,
-    } = doesDependOnPackage(_package, currentPackageName) || {};
+    } = doesDependOnPackage(_package, currentPackageName) ?? {};
 
     if (dependencyType) {
       let parent = group;
@@ -87,7 +87,7 @@ function createPackageNode({
   parent,
   branch,
 }) {
-  let _package = workspaceMeta.packages[packageName] || workspaceMeta;
+  let _package = workspaceMeta.packages[packageName] ?? workspaceMeta;
 
   let node = {
     isPackage: !_package.isPrivate,
