@@ -13,7 +13,7 @@ function copyDeps(left, right) {
 }
 
 function firstPass(workspaceMeta, workspacePackageJson, workspacesPackageJsons) {
-  workspaceMeta.packageName = workspacePackageJson.name || 'Workspace Root';
+  workspaceMeta.packageName = workspacePackageJson.name ?? 'Workspace Root';
   workspaceMeta.version = workspacePackageJson.version;
   workspaceMeta.isPrivate = true;
   workspaceMeta.packages = {};
@@ -24,7 +24,7 @@ function firstPass(workspaceMeta, workspacePackageJson, workspacesPackageJsons) 
       cwd: path.join(workspaceMeta.cwd, workspace),
       packageName,
       version: packageJson.version,
-      isPrivate: packageJson.private || false,
+      isPrivate: packageJson.private ?? false,
     };
     copyDeps(workspaceMeta.packages[packageName], packageJson);
   }

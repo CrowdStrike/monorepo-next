@@ -109,7 +109,7 @@ async function getWorkspacesPaths({
         await fs.readFile(path.join(cwd, 'pnpm-workspace.yaml')),
       );
     } else {
-      packagesGlobs = workspaces.packages || workspaces;
+      packagesGlobs = workspaces.packages ?? workspaces;
     }
 
     let _2dFilesArray = await Promise.all(packagesGlobs.map(packagesGlob => {
@@ -157,7 +157,7 @@ function getWorkspacesPathsSync({
         fs.readFileSync(path.join(cwd, 'pnpm-workspace.yaml')),
       );
     } else {
-      packagesGlobs = workspaces.packages || workspaces;
+      packagesGlobs = workspaces.packages ?? workspaces;
     }
 
     let _2dFilesArray = packagesGlobs.map(packagesGlob => {
