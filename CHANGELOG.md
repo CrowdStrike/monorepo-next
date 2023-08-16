@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [9.4.5](https://github.com/CrowdStrike/monorepo-next/compare/v9.4.4...v9.4.5) (2023-08-16)
+
+
+### Bug Fixes
+
+* fix shouldBumpVersion when opting out via config ([30a9b19](https://github.com/CrowdStrike/monorepo-next/commit/30a9b1945ebebc1f9071db0febafebd8d3174d8d))
+
 ### [9.4.4](https://github.com/CrowdStrike/monorepo-next/compare/v9.4.3...v9.4.4) (2023-08-16)
 
 
