@@ -191,6 +191,8 @@ async function secondPass({
         return;
       }
 
+      releaseTree[shouldVersionBumpSymbol]();
+
       for (let group of dag.node.dependents) {
         if (group.isCycle) {
           continue;
@@ -211,7 +213,6 @@ function thirdPass({
   releaseTrees,
   packagesWithChanges,
   shouldInheritGreaterReleaseType,
-  shouldExcludeDevChanges,
 }) {
   for (let { dag, changedReleasableFiles } of packagesWithChanges) {
     if (!changedReleasableFiles.length) {
@@ -224,7 +225,7 @@ function thirdPass({
     }) {
       let current = releaseTrees[dag.node.packageName];
 
-      if (!current) {
+      if (!current?.shouldBumpVersion) {
         return;
       }
 
@@ -237,12 +238,6 @@ function thirdPass({
       }
 
       current.releaseType = currentReleaseType;
-
-      let shouldVersionBump = !(shouldExcludeDevChanges && isDevDep);
-
-      if (shouldVersionBump && current[nextConfigSymbol].shouldBumpVersion) {
-        current[shouldVersionBumpSymbol]();
-      }
 
       for (let group of dag.node.dependents) {
         if (group.isCycle) {
@@ -355,7 +350,6 @@ async function buildReleaseGraph({
     releaseTrees,
     packagesWithChanges,
     shouldInheritGreaterReleaseType,
-    shouldExcludeDevChanges,
   });
 
   // dependents have now inherited release type
