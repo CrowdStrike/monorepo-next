@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [9.4.4](https://github.com/CrowdStrike/monorepo-next/compare/v9.4.3...v9.4.4) (2023-08-16)
+
+
+### Bug Fixes
+
+* still traverse dependents when first devDep is found ([3ed56c7](https://github.com/CrowdStrike/monorepo-next/commit/3ed56c7b657a06a3cb5d4bf95d9d30a2c8933a51))
+
 ### [9.4.3](https://github.com/CrowdStrike/monorepo-next/compare/v9.4.2...v9.4.3) (2023-08-16)
 
 
