@@ -229,12 +229,18 @@ function thirdPass({
         return;
       }
 
-      let isDevDep = dag.dependencyType === 'devDependencies';
       let currentReleaseType = current.releaseType;
-      let incomingReleaseType = parent?.releaseType ?? currentReleaseType;
 
-      if (shouldInheritGreaterReleaseType && !isDevDep && isReleaseTypeLessThan(currentReleaseType, incomingReleaseType)) {
-        current.releaseType = incomingReleaseType;
+      if (parent) {
+        let isDevDep = dag.dependencyType === 'devDependencies';
+        let incomingReleaseType = parent.releaseType;
+
+        if (shouldInheritGreaterReleaseType && !isDevDep && isReleaseTypeLessThan(currentReleaseType, incomingReleaseType)) {
+          current.releaseType = incomingReleaseType;
+        }
+      } else if (currentReleaseType === defaultReleaseType) {
+        // no upgrades needed
+        return;
       }
 
       for (let group of dag.node.dependents) {
