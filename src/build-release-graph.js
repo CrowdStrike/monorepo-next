@@ -139,11 +139,11 @@ async function secondPass({
         return;
       }
 
-      visitedNodes.add(dag.node.packageName);
-
       let nextConfig = loadPackageConfig(dag.node.cwd);
 
       if (!nextConfig.shouldBumpVersion) {
+        visitedNodes.add(dag.node.packageName);
+
         return;
       }
 
@@ -167,6 +167,8 @@ async function secondPass({
           return;
         }
       }
+
+      visitedNodes.add(dag.node.packageName);
 
       for (let group of dag.node.dependents) {
         if (group.isCycle) {
