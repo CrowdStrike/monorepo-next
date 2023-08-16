@@ -252,6 +252,8 @@ function thirdPass({
 
         if (shouldInheritGreaterReleaseType && !isDevDep) {
           current.releaseType = incomingReleaseType;
+        } else {
+          return;
         }
       } else if (currentReleaseType === defaultReleaseType) {
         // no upgrades needed
