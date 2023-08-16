@@ -1586,10 +1586,8 @@ describe(buildReleaseGraph, function() {
             'name': '@scope/package-c',
             'version': '1.0.0',
             'dependencies': {
-              '@scope/package-b': '^1.0.0',
-            },
-            'devDependencies': {
               '@scope/package-a': '^1.0.0',
+              '@scope/package-b': '^1.0.0',
             },
           }),
         },
@@ -1616,6 +1614,14 @@ describe(buildReleaseGraph, function() {
             'version': '1.0.0',
           }),
         },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
         'package-b': {
           'package.json': stringifyJson({
             'name': '@scope/package-b',
@@ -1626,7 +1632,7 @@ describe(buildReleaseGraph, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -1637,7 +1643,7 @@ describe(buildReleaseGraph, function() {
     });
 
     let shouldBumpInRangeDependencies = true;
-    let shouldInheritGreaterReleaseType = false;
+    let shouldInheritGreaterReleaseType = true;
     let shouldExcludeDevChanges = true;
 
     let releaseTrees = await buildReleaseGraph({
@@ -1663,7 +1669,7 @@ describe(buildReleaseGraph, function() {
         name: '@scope/package-b',
         cwd: matchPath('/packages/package-b'),
         oldVersion: '1.0.0',
-        releaseType: 'patch',
+        releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
         dependencies: {},
@@ -1674,15 +1680,14 @@ describe(buildReleaseGraph, function() {
         name: '@scope/package-c',
         cwd: matchPath('/packages/package-c'),
         oldVersion: '1.0.0',
-        releaseType: 'patch',
+        releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
         dependencies: {
-          '@scope/package-b': '^1.0.1',
-        },
-        devDependencies: {
           '@scope/package-a': '^1.0.1',
+          '@scope/package-b': '^1.1.0',
         },
+        devDependencies: {},
         optionalDependencies: {},
       },
     ]));
@@ -1696,10 +1701,8 @@ describe(buildReleaseGraph, function() {
             'name': '@scope/package-c',
             'version': '1.0.0',
             'dependencies': {
-              '@scope/package-b': '^1.0.0',
-            },
-            'devDependencies': {
               '@scope/package-a': '^1.0.0',
+              '@scope/package-b': '^1.0.0',
             },
           }),
         },
@@ -1730,7 +1733,7 @@ describe(buildReleaseGraph, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix!: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
 
     fixturify.writeSync(tmpPath, {
       'packages': {
@@ -1744,7 +1747,7 @@ describe(buildReleaseGraph, function() {
     });
 
     await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix!: foo'], { cwd: tmpPath });
 
     let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
@@ -1755,7 +1758,7 @@ describe(buildReleaseGraph, function() {
     });
 
     let shouldBumpInRangeDependencies = true;
-    let shouldInheritGreaterReleaseType = false;
+    let shouldInheritGreaterReleaseType = true;
     let shouldExcludeDevChanges = true;
 
     let releaseTrees = await buildReleaseGraph({
@@ -1770,7 +1773,7 @@ describe(buildReleaseGraph, function() {
         name: '@scope/package-a',
         cwd: matchPath('/packages/package-a'),
         oldVersion: '1.0.0',
-        releaseType: 'major',
+        releaseType: 'minor',
         shouldBumpVersion: true,
         shouldPublish: true,
         dependencies: {},
@@ -1781,7 +1784,7 @@ describe(buildReleaseGraph, function() {
         name: '@scope/package-b',
         cwd: matchPath('/packages/package-b'),
         oldVersion: '1.0.0',
-        releaseType: 'patch',
+        releaseType: 'major',
         shouldBumpVersion: true,
         shouldPublish: true,
         dependencies: {},
@@ -1792,15 +1795,14 @@ describe(buildReleaseGraph, function() {
         name: '@scope/package-c',
         cwd: matchPath('/packages/package-c'),
         oldVersion: '1.0.0',
-        releaseType: 'patch',
+        releaseType: 'major',
         shouldBumpVersion: true,
         shouldPublish: true,
         dependencies: {
-          '@scope/package-b': '^1.0.1',
+          '@scope/package-a': '^1.1.0',
+          '@scope/package-b': '^2.0.0',
         },
-        devDependencies: {
-          '@scope/package-a': '^2.0.0',
-        },
+        devDependencies: {},
         optionalDependencies: {},
       },
     ]));
