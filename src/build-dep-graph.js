@@ -24,7 +24,7 @@ function firstPass(workspaceMeta, workspacePackageJson, workspacesPackageJsons) 
       cwd: path.join(workspaceMeta.cwd, workspace),
       packageName,
       version: packageJson.version,
-      isPrivate: packageJson.private,
+      isPrivate: packageJson.private || false,
     };
     copyDeps(workspaceMeta.packages[packageName], packageJson);
   }
