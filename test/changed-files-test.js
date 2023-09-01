@@ -402,8 +402,8 @@ describe(changedFiles, function() {
     });
 
     expect(_changedFiles).to.deep.equal([
-      'packages/my-app-1/changed.txt',
       'packages/package-a/changed.txt',
+      'packages/my-app-1/changed.txt',
     ]);
   });
 
@@ -505,8 +505,8 @@ describe(changedFiles, function() {
     });
 
     expect(_changedFiles).to.deep.equal([
-      'packages/my-app-1/changed.txt',
       'packages/package-a/changed.txt',
+      'packages/my-app-1/changed.txt',
       'changed',
     ]);
   });

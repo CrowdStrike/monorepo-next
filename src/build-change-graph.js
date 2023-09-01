@@ -14,6 +14,7 @@ const { getChangedReleasableFiles } = require('./releasable');
 const Set = require('superset');
 const { loadPackageConfig } = require('./config');
 const path = require('path');
+const { sortByString, mapByIndex } = require('./array');
 
 async function getPackageChangedFiles({
   fromCommit,
@@ -75,15 +76,17 @@ async function buildChangeGraph({
     return path.relative(workspaceMeta.cwd, cwd);
   });
 
-  for (let _package of collectPackages(workspaceMeta)) {
+  const { default: pMap } = await import('p-map');
+
+  await pMap(collectPackages(workspaceMeta), async (_package) => {
     if (!_package.packageName || !_package.version) {
-      continue;
+      return;
     }
 
     let nextConfig = loadPackageConfig(_package.cwd);
 
     if (!nextConfig.shouldBumpVersion) {
-      continue;
+      return;
     }
 
     let _fromCommit;
@@ -146,7 +149,7 @@ async function buildChangeGraph({
     }
 
     if (!newFiles.length) {
-      continue;
+      return;
     }
 
     let changedReleasableFiles = await getChangedReleasableFiles({
@@ -158,7 +161,7 @@ async function buildChangeGraph({
     });
 
     if (shouldOnlyIncludeReleasable && !changedReleasableFiles.length) {
-      continue;
+      return;
     }
 
     let dag = buildDAG(workspaceMeta, _package.packageName);
@@ -168,7 +171,7 @@ async function buildChangeGraph({
       changedReleasableFiles,
       dag,
     };
-  }
+  });
 
   for (let { dag, changedReleasableFiles } of Object.values(packagesWithChanges)) {
     if (!changedReleasableFiles.length) {
@@ -178,7 +181,7 @@ async function buildChangeGraph({
     crawlDag(dag, packagesWithChanges);
   }
 
-  return Object.values(packagesWithChanges);
+  return mapByIndex(sortByString(Object.entries(packagesWithChanges), ([packageName]) => packageName), 1);
 }
 
 module.exports = buildChangeGraph;
