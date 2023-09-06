@@ -176,7 +176,7 @@ async function release({
   let commitMessage = `chore(release): ${tags.join()}`;
 
   if (!dryRun) {
-    await execa('git', ['add', '-A'], { cwd: workspaceCwd });
+    await execa('git', ['add', '-A'], { cwd: workspaceCwd, silent: true });
   }
 
   await preCommitCallback({ dryRun });
@@ -221,10 +221,10 @@ async function release({
     } catch (err) {
       if (!dryRun) {
         if (shouldCleanUpAfterFailedPush) {
-          await execa('git', ['tag', '-d', ...tags], { cwd: workspaceCwd });
+          await execa('git', ['tag', '-d', ...tags], { cwd: workspaceCwd, silent });
         }
 
-        await execa('git', ['reset', '--hard', previousCommit], { cwd: workspaceCwd });
+        await execa('git', ['reset', '--hard', previousCommit], { cwd: workspaceCwd, silent });
       }
 
       throw err;
