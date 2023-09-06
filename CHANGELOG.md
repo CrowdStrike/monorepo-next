@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1](https://github.com/CrowdStrike/monorepo-next/compare/v10.0.0...v10.0.1) (2023-09-06)
+
+
+### Bug Fixes
+
+* fix silent regression ([833e4e4](https://github.com/CrowdStrike/monorepo-next/commit/833e4e42396c3c1298498d056ae321c9beef4b10))
+
 ## [10.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v9.4.13...v10.0.0) (2023-09-06)
 
 ### [9.4.13](https://github.com/CrowdStrike/monorepo-next/compare/v9.4.12...v9.4.13) (2023-09-06)
