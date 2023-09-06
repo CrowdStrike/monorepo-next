@@ -1471,7 +1471,7 @@ describe(_release, function() {
         ['Updating @scope/package-a from 1.0.0-detached to 1.0.0.'],
         ['Updating root devDependencies @scope/package-a from 1.0.0 || 1.0.0-detached to 1.1.0.'],
         ['precommit test', { shell: true }],
-        ['git', ['commit', '-m', 'chore(release): @scope/package-a@1.1.0,root@1.0.1'], { cwd: tmpPath }],
+        ['git', ['commit', '-m', "'chore(release): @scope/package-a@1.1.0,root@1.0.1'"], { cwd: tmpPath }],
         ['postcommit test', { shell: true }],
         ['pretag test', { shell: true }],
         ['git', ['tag', '-a', '@scope/package-a@1.1.0', '-m', '@scope/package-a@1.1.0'], { cwd: tmpPath }],
@@ -1500,7 +1500,7 @@ describe(_release, function() {
       expect(consoleLog.args).to.deep.equal([
         ['Updating @scope/package-a from 1.0.0-detached to 1.0.0.'],
         ['Updating root devDependencies @scope/package-a from 1.0.0 || 1.0.0-detached to 1.1.0.'],
-        ['git', ['commit', '-m', 'chore(release): @scope/package-a@1.1.0,root@1.0.1'], { cwd: tmpPath }],
+        ['git', ['commit', '-m', "'chore(release): @scope/package-a@1.1.0,root@1.0.1'"], { cwd: tmpPath }],
         ['git', ['tag', '-a', '@scope/package-a@1.1.0', '-m', '@scope/package-a@1.1.0'], { cwd: tmpPath }],
         ['git', ['tag', '-a', 'root@1.0.1', '-m', 'root@1.0.1'], { cwd: tmpPath }],
         ['push'],

@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-const execa = require('execa');
+const { execa } = require('./process');
 const {
   read: readJson,
   write: writeJson,
@@ -161,8 +161,10 @@ async function release({
   async function handleLifecycleScript(lifecycle) {
     let script = scripts[lifecycle];
     if (script) {
-      await exec(execa.command, script, {
+      await execa.command(script, {
         shell: true,
+        silent,
+        dryRun,
       });
     }
   }
@@ -183,14 +185,14 @@ async function release({
 
   let previousCommit = await getCurrentCommit(workspaceCwd);
 
-  await exec(execa, 'git', ['commit', '-m', commitMessage], { cwd: workspaceCwd });
+  await execa('git', ['commit', '-m', commitMessage], { cwd: workspaceCwd, silent, dryRun });
 
   await handleLifecycleScript('postcommit');
 
   await handleLifecycleScript('pretag');
 
   for (let tag of tags) {
-    await exec(execa, 'git', ['tag', '-a', tag, '-m', tag], { cwd: workspaceCwd });
+    await execa('git', ['tag', '-a', tag, '-m', tag], { cwd: workspaceCwd, silent, dryRun });
   }
 
   await handleLifecycleScript('posttag');
@@ -254,14 +256,6 @@ async function release({
       } else {
         await originalPublish();
       }
-    }
-  }
-
-  function exec(execa, ...args) {
-    if (dryRun) {
-      _log(...args);
-    } else {
-      return execa.apply(this, args);
     }
   }
 
