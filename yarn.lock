@@ -2174,10 +2174,10 @@ git-diff-apply@^3.0.0:
     uuid "^8.0.0"
     yargs "^16.0.0"
 
-git-fixtures@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/git-fixtures/-/git-fixtures-5.0.0.tgz#3ee06d2f2571d2b6d4bc61f864a60caa1d73b391"
-  integrity sha512-xVi4eSJN1f3ldIsPkyKq09U8gmGlYeBPd7T/TZo05a78eB1QRS6KD+wdVhs8Lmoh5dRO3Ocn9502dj6v/qvA0Q==
+git-fixtures@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/git-fixtures/-/git-fixtures-6.0.0.tgz#309219cc2b658c7ae533b1e8171aefe2485bad99"
+  integrity sha512-VQItMkZNJFh/BMBZz44qrQ7ViUdtGijoDnUkUQuHe2a4m5iSlbfxLFArh4t6JcdZFinur/eW1FVlg2GemNYlBw==
   dependencies:
     execa "^5.0.0"
     fixturify "^3.0.0"
