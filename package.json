@@ -1,6 +1,6 @@
 {
   "name": "monorepo-next",
-  "version": "9.4.12",
+  "version": "9.4.13",
   "description": "Detach monorepo packages from normal linking",
   "bin": {
     "next": "bin/next.js"
