@@ -198,11 +198,7 @@ async function release({
   await handleLifecycleScript('posttag');
 
   async function originalPush() {
-    if (dryRun) {
-      _log('push');
-    } else {
-      await push({ cwd: workspaceCwd });
-    }
+    await push({ cwd: workspaceCwd, silent, dryRun });
   }
 
   if (shouldPush) {
@@ -240,11 +236,7 @@ async function release({
     if (shouldPublish && _shouldPublish) {
       // eslint-disable-next-line no-inner-declarations
       async function originalPublish() {
-        if (dryRun) {
-          _log('publish');
-        } else {
-          await publish({ cwd });
-        }
+        await publish({ cwd, silent, dryRun });
       }
 
       if (publishOverride) {
@@ -268,8 +260,10 @@ async function release({
   }
 }
 
-async function push({ cwd }) {
-  let remoteUrl = (await execa('git', ['config', '--get', 'remote.origin.url'], { cwd })).stdout;
+async function push({ cwd, silent, dryRun }) {
+  let remoteUrl = (await execa('git', ['config', '--get', 'remote.origin.url'], { cwd, silent: true })).stdout;
+
+  let dryRunArgs = dryRun ? ['--dry-run'] : [];
 
   // https://stackoverflow.com/a/55586434
   let doesntSupportAtomic = remoteUrl.includes('https://');
@@ -278,9 +272,9 @@ async function push({ cwd }) {
 
   try {
     if (doesntSupportAtomic) {
-      await execa('git', ['push'], { cwd });
+      await execa('git', ['push', ...dryRunArgs], { cwd, silent });
     } else {
-      await execa('git', ['push', '--follow-tags', '--atomic'], { cwd });
+      await execa('git', ['push', '--follow-tags', '--atomic', ...dryRunArgs], { cwd, silent });
     }
 
     success = true;
@@ -296,12 +290,14 @@ async function push({ cwd }) {
   if (doesntSupportAtomic && success) {
     // only push tags after the commit
     // and hard error if there is a tag collision
-    await execa('git', ['push', '--follow-tags'], { cwd });
+    await execa('git', ['push', '--follow-tags', ...dryRunArgs], { cwd, silent });
   }
 }
 
-async function publish({ cwd }) {
-  await execa('npm', ['publish'], { cwd });
+async function publish({ cwd, silent, dryRun }) {
+  let dryRunArgs = dryRun ? ['--dry-run'] : [];
+
+  await execa('npm', ['publish', ...dryRunArgs], { cwd, silent });
 }
 
 module.exports = release;
