@@ -5073,10 +5073,10 @@ ssri@^9.0.0:
   dependencies:
     minipass "^3.1.1"
 
-standard-node-template@3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/standard-node-template/-/standard-node-template-3.3.0.tgz#dc9d7019d9a22a656adbd0b52f8058a1881008a4"
-  integrity sha512-yAa0J7s5kuxvDjQXHX0t2OczywnHXegEvi7sdINkvotgz7J+us5IDLWK4uoLIJbnYy6MMBrXOzH6rUA7nN8jHA==
+standard-node-template@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/standard-node-template/-/standard-node-template-4.0.1.tgz#059a15d37c89a6006c5cd23e0c110f0dd46b3093"
+  integrity sha512-hCPBmRiz82IjhqSFbjNmByfzZAB1SKN61AeQObHRO73/mFQ/shzR3DcHG2oPrqfvM7FFnrDErWE1dF49nl4kWQ==
 
 standard-version@9.5.0:
   version "9.5.0"
