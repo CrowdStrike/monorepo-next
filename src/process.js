@@ -24,20 +24,34 @@ function prepareArgs(command, args, options = {}) {
 
   if (!silent) {
     logArgs(command, args, _options);
+
+    options.stdio = 'pipe';
   }
 
   return {
     args: [command, args, _options].filter(Boolean),
+    silent,
     dryRun,
   };
 }
 
 function bind(_execa) {
   return function execa() {
-    let { args, dryRun } = prepareArgs(...arguments);
+    let {
+      args,
+      silent,
+      dryRun,
+    } = prepareArgs(...arguments);
 
     if (!dryRun) {
-      return _execa().apply(this, args);
+      let ps = _execa().apply(this, args);
+
+      if (!silent) {
+        ps.stdout.pipe(process.stdout);
+        ps.stderr.pipe(process.stderr);
+      }
+
+      return ps;
     }
   };
 }
