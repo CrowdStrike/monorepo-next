@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v10.0.1...v10.1.0) (2023-09-08)
+
+
+### Features
+
+* handle piping in new process helper ([5d47fe7](https://github.com/CrowdStrike/monorepo-next/commit/5d47fe709d28e636ab22175f031a36a6f1cff6ce))
+
 ### [10.0.1](https://github.com/CrowdStrike/monorepo-next/compare/v10.0.0...v10.0.1) (2023-09-06)
 
 
