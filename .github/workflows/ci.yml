@@ -20,7 +20,7 @@ jobs:
       run: git branch ${{ github.base_ref }} origin/${{ github.base_ref }}
     - uses: actions/setup-node@v3
 
-    - run: yarn install --frozen-lockfile
+    - run: yarn install --frozen-lockfile --ignore-scripts
     - run: yarn lint:git
 
   lint:
@@ -34,7 +34,7 @@ jobs:
       with:
         node-version: 16
 
-    - run: yarn install --frozen-lockfile
+    - run: yarn install --frozen-lockfile --ignore-scripts
     - run: yarn lint:md
     - run: yarn lint:js
 
@@ -62,7 +62,7 @@ jobs:
       with:
         version: 7
 
-    - run: yarn install --frozen-lockfile
+    - run: yarn install --frozen-lockfile --ignore-scripts
     - run: yarn test
 
   ember-cli-update:
