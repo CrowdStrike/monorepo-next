@@ -6,7 +6,7 @@ const _release = require('../src/release');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
 const execa = require('execa');
-const { gitInit } = require('git-fixtures');
+const { gitInit, cloneRemote } = require('git-fixtures');
 const {
   getLastCommitMessage,
   getTagsOnLastCommit,
@@ -1393,6 +1393,10 @@ describe(_release, function() {
     let gitCopyPath;
 
     beforeEach(async function() {
+      await cloneRemote({
+        localPath: tmpPath,
+      });
+
       fixturify.writeSync(tmpPath, {
         'packages': {
           'package-a': {
@@ -1477,8 +1481,8 @@ describe(_release, function() {
         ['git', ['tag', '-a', '@scope/package-a@1.1.0', '-m', '@scope/package-a@1.1.0'], { cwd: tmpPath }],
         ['git', ['tag', '-a', 'root@1.0.1', '-m', 'root@1.0.1'], { cwd: tmpPath }],
         ['posttag test', { shell: true }],
-        ['push'],
-        ['publish'],
+        ['git', ['push', '--follow-tags', '--atomic', '--dry-run'], { cwd: tmpPath }],
+        ['npm', ['publish', '--dry-run'], { cwd: path.join(tmpPath, 'packages/package-a') }],
       ]);
     });
 
@@ -1503,8 +1507,8 @@ describe(_release, function() {
         ['git', ['commit', '-m', "'chore(release): @scope/package-a@1.1.0,root@1.0.1'"], { cwd: tmpPath }],
         ['git', ['tag', '-a', '@scope/package-a@1.1.0', '-m', '@scope/package-a@1.1.0'], { cwd: tmpPath }],
         ['git', ['tag', '-a', 'root@1.0.1', '-m', 'root@1.0.1'], { cwd: tmpPath }],
-        ['push'],
-        ['publish'],
+        ['git', ['push', '--follow-tags', '--atomic', '--dry-run'], { cwd: tmpPath }],
+        ['npm', ['publish', '--dry-run'], { cwd: path.join(tmpPath, 'packages/package-a') }],
       ]);
 
       expect(pushOverride.args).to.match([[this.match({ dryRun: true })]]);
