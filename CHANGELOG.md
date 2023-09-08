@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.2.0](https://github.com/CrowdStrike/monorepo-next/compare/v10.1.0...v10.2.0) (2023-09-08)
+
+
+### Features
+
+* add dry run to push and publish ([bd821cc](https://github.com/CrowdStrike/monorepo-next/commit/bd821cc73e0e5ec3d6327cd599289e368b86752f))
+
 ## [10.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v10.0.1...v10.1.0) (2023-09-08)
 
 
