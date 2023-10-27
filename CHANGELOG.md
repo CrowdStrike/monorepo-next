@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.2.1](https://github.com/CrowdStrike/monorepo-next/compare/v10.2.0...v10.2.1) (2023-10-27)
+
+
+### Bug Fixes
+
+* handle two removed packages that have the same basename ([b0c4c2c](https://github.com/CrowdStrike/monorepo-next/commit/b0c4c2c58e9fa7a6c5df800b53d554b0d09cbae7))
+
 ## [10.2.0](https://github.com/CrowdStrike/monorepo-next/compare/v10.1.0...v10.2.0) (2023-09-08)
 
 
