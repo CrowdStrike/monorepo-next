@@ -235,27 +235,54 @@ describe(function() {
       ]);
     });
 
-    it('handles a removed package', async function() {
-      fixturify.writeSync(this.tmpPath, {
-        'package.json': stringifyJson({
-          'private': true,
-          'workspaces': [
-            'packages/*',
+    describe('removed package', function() {
+      it('works', async function() {
+        fixturify.writeSync(this.tmpPath, {
+          'package.json': stringifyJson({
+            'private': true,
+            'workspaces': [
+              'packages/*',
+            ],
+          }),
+        });
+
+        let changedReleasableFiles = await getChangedReleasableFiles({
+          changedFiles: [
+            'packages/package-a/package.json',
           ],
-        }),
-      });
+          packageCwd: this.tmpPath,
+          workspacesCwd: this.tmpPath,
+        });
 
-      let changedReleasableFiles = await getChangedReleasableFiles({
-        changedFiles: [
+        expect(changedReleasableFiles).to.deep.equal([
           'packages/package-a/package.json',
-        ],
-        packageCwd: this.tmpPath,
-        workspacesCwd: this.tmpPath,
+        ]);
       });
 
-      expect(changedReleasableFiles).to.deep.equal([
-        'packages/package-a/package.json',
-      ]);
+      it('handles two removed packages that have the same basename', async function() {
+        fixturify.writeSync(this.tmpPath, {
+          'package.json': stringifyJson({
+            'private': true,
+            'workspaces': [
+              'packages/*/package',
+            ],
+          }),
+        });
+
+        let changedReleasableFiles = await getChangedReleasableFiles({
+          changedFiles: [
+            'packages/package-a/package/package.json',
+            'packages/package-b/package/package.json',
+          ],
+          packageCwd: this.tmpPath,
+          workspacesCwd: this.tmpPath,
+        });
+
+        expect(changedReleasableFiles).to.deep.equal([
+          'packages/package-a/package/package.json',
+          'packages/package-b/package/package.json',
+        ]);
+      });
     });
 
     describe('shouldExcludeDevChanges', function() {

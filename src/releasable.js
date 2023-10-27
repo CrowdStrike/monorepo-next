@@ -9,6 +9,7 @@ const { createPatch } = require('rfc6902');
 const {
   getFileAtCommit,
 } = require('./git');
+const { replaceJsonFile } = require('./fs');
 
 const filesContributingToReleasability = new Set([
   '.gitignore',
@@ -53,12 +54,29 @@ async function prepareTmpPackage({
 
     await fs.mkdir(path.dirname(to), { recursive: true });
 
+    let doesExist;
+
     try {
       await fs.copyFile(from, to);
+
+      doesExist = true;
     } catch (err) {
       if (err.code !== 'ENOENT') {
         throw err;
       }
+    }
+
+    if (fileName === 'package.json' && doesExist) {
+      await replaceJsonFile(to, packageJson => {
+        // If complete packages are deleted that still match our current workspaces globs,
+        // AND their path basenames happen to be the same (because we zerod out their package.json names below),
+        // packlist will think the packages are duplicates without this line (when it's the monorepo root package).
+        // We already filtered out current package changes before we got to this point,
+        // so everything remaining shouldn't be considered packages anyways.
+        if (packageJson.workspaces) {
+          packageJson.workspaces = [];
+        }
+      });
     }
   }
 
