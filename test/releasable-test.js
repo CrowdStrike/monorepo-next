@@ -235,27 +235,29 @@ describe(function() {
       ]);
     });
 
-    it('handles a removed package', async function() {
-      fixturify.writeSync(this.tmpPath, {
-        'package.json': stringifyJson({
-          'private': true,
-          'workspaces': [
-            'packages/*',
+    describe('removed package', function() {
+      it('works', async function() {
+        fixturify.writeSync(this.tmpPath, {
+          'package.json': stringifyJson({
+            'private': true,
+            'workspaces': [
+              'packages/*',
+            ],
+          }),
+        });
+
+        let changedReleasableFiles = await getChangedReleasableFiles({
+          changedFiles: [
+            'packages/package-a/package.json',
           ],
-        }),
-      });
+          packageCwd: this.tmpPath,
+          workspacesCwd: this.tmpPath,
+        });
 
-      let changedReleasableFiles = await getChangedReleasableFiles({
-        changedFiles: [
+        expect(changedReleasableFiles).to.deep.equal([
           'packages/package-a/package.json',
-        ],
-        packageCwd: this.tmpPath,
-        workspacesCwd: this.tmpPath,
+        ]);
       });
-
-      expect(changedReleasableFiles).to.deep.equal([
-        'packages/package-a/package.json',
-      ]);
     });
 
     describe('shouldExcludeDevChanges', function() {
