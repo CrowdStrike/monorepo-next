@@ -258,6 +258,31 @@ describe(function() {
           'packages/package-a/package.json',
         ]);
       });
+
+      it('handles two removed packages that have the same basename', async function() {
+        fixturify.writeSync(this.tmpPath, {
+          'package.json': stringifyJson({
+            'private': true,
+            'workspaces': [
+              'packages/*/package',
+            ],
+          }),
+        });
+
+        let changedReleasableFiles = await getChangedReleasableFiles({
+          changedFiles: [
+            'packages/package-a/package/package.json',
+            'packages/package-b/package/package.json',
+          ],
+          packageCwd: this.tmpPath,
+          workspacesCwd: this.tmpPath,
+        });
+
+        expect(changedReleasableFiles).to.deep.equal([
+          'packages/package-a/package/package.json',
+          'packages/package-b/package/package.json',
+        ]);
+      });
     });
 
     describe('shouldExcludeDevChanges', function() {
