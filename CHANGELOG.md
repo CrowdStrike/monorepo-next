@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v10.2.1...v11.0.0) (2023-11-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* require node 18
+
+* Merge pull request #452 from CrowdStrike/renovate/standard-node-template-4.x ([471c6a1](https://github.com/CrowdStrike/monorepo-next/commit/471c6a1b760f40c4ca11ce5a6e0e785e8274e6cd)), closes [#452](https://github.com/CrowdStrike/monorepo-next/issues/452)
+
 ### [10.2.1](https://github.com/CrowdStrike/monorepo-next/compare/v10.2.0...v10.2.1) (2023-10-27)
 
 
