@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.0.4](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.3...v11.0.4) (2023-11-08)
+
+
+### Bug Fixes
+
+* add @npmcli/arborist to support breaking change in npm-packlist ([ca3b0c4](https://github.com/CrowdStrike/monorepo-next/commit/ca3b0c44898fc655f1334a9875959c6c9ae84330))
+* **deps:** update dependency npm-packlist to v8 ([838dfaf](https://github.com/CrowdStrike/monorepo-next/commit/838dfaf65dbfcdd07aecf629275832517fad8ec4))
+
 ### [11.0.3](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.2...v11.0.3) (2023-11-08)
 
 
