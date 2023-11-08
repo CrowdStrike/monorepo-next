@@ -3,7 +3,6 @@
 const path = require('path');
 const writeJson = require('./json').write;
 const semver = require('semver');
-const inquirer = require('inquirer');
 const buildDepGraph = require('./build-dep-graph');
 const buildDAG = require('./build-dag');
 const dependencyTypes = require('./dependency-types');
@@ -25,6 +24,12 @@ function updateDependencyVersion(packageJson, name) {
       break;
     }
   }
+}
+
+async function inquirerPrompt() {
+  const { default: inquirer } = await import('inquirer');
+
+  return inquirer.prompt(...arguments);
 }
 
 async function detach({
@@ -61,7 +66,7 @@ async function detach({
         return dependent.node.packageName ?? path.basename(dependent.node.cwd);
       });
 
-      let { answers } = await inquirer.prompt([{
+      let { answers } = await module.exports.inquirerPrompt([{
         type: 'checkbox',
         message: 'Would you like to attach any of these dependents to this newly detached package while you\'re at it?',
         name: 'answers',
@@ -93,3 +98,6 @@ async function detach({
 }
 
 module.exports = detach;
+Object.assign(module.exports, {
+  inquirerPrompt,
+});

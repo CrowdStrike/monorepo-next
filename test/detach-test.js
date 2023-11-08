@@ -6,7 +6,6 @@ const path = require('path');
 const detach = require('../src/detach');
 const fixturify = require('fixturify');
 const stringifyJson = require('../src/json').stringify;
-const inquirer = require('inquirer');
 const { gitInit } = require('git-fixtures');
 
 const defaultWorkspace = {
@@ -63,7 +62,7 @@ describe(detach, function() {
   let prompt;
 
   beforeEach(async function() {
-    prompt = this.stub(inquirer, 'prompt');
+    prompt = this.stub(detach, 'inquirerPrompt');
 
     tmpPath = await gitInit();
 
