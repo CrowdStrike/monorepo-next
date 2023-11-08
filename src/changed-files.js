@@ -7,7 +7,6 @@ const fs = { ...require('fs'), ...require('fs').promises };
 const {
   getWorkspaceCwd,
 } = require('./git');
-const minimatch = require('minimatch');
 
 const { builder } = require('../bin/commands/changed-files');
 
@@ -29,6 +28,8 @@ async function changedFiles({
   exts = [],
   globs = [],
 } = {}) {
+  const { minimatch } = await import('minimatch');
+
   let workspaceCwd = await getWorkspaceCwd(cwd);
 
   let workspaceMeta = await buildDepGraph({ workspaceCwd });
