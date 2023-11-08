@@ -60,7 +60,7 @@
   "dependencies": {
     "@npmcli/arborist": "^7.0.0",
     "conventional-changelog": "5.1.0",
-    "conventional-recommended-bump": "8.0.0",
+    "conventional-recommended-bump": "9.0.0",
     "debug": "^4.3.1",
     "execa": "^5.0.0",
     "glob": "^8.0.0",
