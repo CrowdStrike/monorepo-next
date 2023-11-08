@@ -1,7 +1,6 @@
 'use strict';
 
-const { promisify } = require('util');
-const conventionalRecommendedBump = promisify(require('conventional-recommended-bump'));
+const conventionalRecommendedBump = require('conventional-recommended-bump');
 const path = require('path');
 const {
   read: readJson,
