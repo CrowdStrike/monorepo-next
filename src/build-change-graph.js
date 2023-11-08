@@ -80,7 +80,7 @@ async function buildChangeGraph({
       continue;
     }
 
-    let nextConfig = loadPackageConfig(_package.cwd);
+    let nextConfig = await loadPackageConfig(_package.cwd);
 
     if (!nextConfig.shouldBumpVersion) {
       continue;

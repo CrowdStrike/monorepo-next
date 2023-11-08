@@ -1,10 +1,11 @@
 'use strict';
 
-const glob = require('glob');
+const { promisify } = require('util');
+const glob = promisify(require('glob'));
 const path = require('path');
 
-function loadPackageConfig(cwd) {
-  const [configFile] = glob.sync('monorepo-next.config.{cjs,js}', { cwd });
+async function loadPackageConfig(cwd) {
+  const [configFile] = await glob('monorepo-next.config.{cjs,js}', { cwd });
 
   return {
     shouldBumpVersion: true,
