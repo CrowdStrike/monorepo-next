@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.0.2](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.1...v11.0.2) (2023-11-08)
+
+
+### Bug Fixes
+
+* support esm minimatch ([166e6b2](https://github.com/CrowdStrike/monorepo-next/commit/166e6b27901d5c49a2b1a8a8134bb45013456958))
+* **deps:** update dependency minimatch to v9 ([04b8b13](https://github.com/CrowdStrike/monorepo-next/commit/04b8b13e003bcc6da0e1b4a25d7750f21dee9d6e))
+
 ### [11.0.1](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.0...v11.0.1) (2023-11-08)
 
 
