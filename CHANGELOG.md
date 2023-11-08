@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.0.3](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.2...v11.0.3) (2023-11-08)
+
+
+### Bug Fixes
+
+* use async glob in loadPackageConfig ([9b16657](https://github.com/CrowdStrike/monorepo-next/commit/9b16657c36370b8f78191370b467a0a7cc942df1))
+
 ### [11.0.2](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.1...v11.0.2) (2023-11-08)
 
 
