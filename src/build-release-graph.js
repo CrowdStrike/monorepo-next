@@ -72,7 +72,7 @@ async function init({
     }
   }
 
-  let nextConfig = loadPackageConfig(cwd);
+  let nextConfig = await loadPackageConfig(cwd);
 
   let canBumpVersion = !!(version && name);
   let canPublish = isPackage;
