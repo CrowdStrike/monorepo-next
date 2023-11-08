@@ -1531,6 +1531,11 @@ conventional-changelog-preset-loader@^2.3.4:
   resolved "https://registry.npmjs.org/conventional-changelog-preset-loader/-/conventional-changelog-preset-loader-2.3.4.tgz#14a855abbffd59027fd602581f1f34d9862ea44c"
   integrity sha512-GEKRWkrSAZeTq5+YjUZOYxdHq+ci4dNwHvpaBC3+ENalzFWuCWa9EZXSuZBpkr72sMdKB+1fyDV4takK1Lf58g==
 
+conventional-changelog-preset-loader@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/conventional-changelog-preset-loader/-/conventional-changelog-preset-loader-3.0.0.tgz#14975ef759d22515d6eabae6396c2ae721d4c105"
+  integrity sha512-qy9XbdSLmVnwnvzEisjxdDiLA4OmV3o8db+Zdg4WiFw14fP3B6XNz98X0swPPpkTd/pc1K7+adKgEDM1JCUMiA==
+
 conventional-changelog-preset-loader@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/conventional-changelog-preset-loader/-/conventional-changelog-preset-loader-4.1.0.tgz#996bc40d516471c5bf8248fdc30222563b9bcfe6"
@@ -1606,6 +1611,14 @@ conventional-commits-filter@^2.0.7:
     lodash.ismatch "^4.4.0"
     modify-values "^1.0.0"
 
+conventional-commits-filter@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/conventional-commits-filter/-/conventional-commits-filter-3.0.0.tgz#bf1113266151dd64c49cd269e3eb7d71d7015ee2"
+  integrity sha512-1ymej8b5LouPx9Ox0Dw/qAO2dVdfpRFq28e5Y0jJEU8ZrLdy0vOSkkIInwmxErFGhg6SALro60ZrwYFVTUDo4Q==
+  dependencies:
+    lodash.ismatch "^4.4.0"
+    modify-values "^1.0.1"
+
 conventional-commits-filter@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/conventional-commits-filter/-/conventional-commits-filter-4.0.0.tgz#845d713e48dc7d1520b84ec182e2773c10c7bf7f"
@@ -1636,6 +1649,16 @@ conventional-commits-parser@^3.2.2:
     split2 "^3.0.0"
     through2 "^4.0.0"
 
+conventional-commits-parser@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npmjs.org/conventional-commits-parser/-/conventional-commits-parser-4.0.0.tgz#02ae1178a381304839bce7cea9da5f1b549ae505"
+  integrity sha512-WRv5j1FsVM5FISJkoYMR6tPk07fkKT0UodruX4je86V4owk451yjXAKzKAPOs9l7y59E2viHUS9eQ+dfUA9NSg==
+  dependencies:
+    JSONStream "^1.3.5"
+    is-text-path "^1.0.1"
+    meow "^8.1.2"
+    split2 "^3.2.2"
+
 conventional-commits-parser@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/conventional-commits-parser/-/conventional-commits-parser-5.0.0.tgz#57f3594b81ad54d40c1b4280f04554df28627d9a"
@@ -1659,6 +1682,19 @@ conventional-recommended-bump@6.1.0:
     git-semver-tags "^4.1.1"
     meow "^8.0.0"
     q "^1.5.1"
+
+conventional-recommended-bump@7.0.1:
+  version "7.0.1"
+  resolved "https://registry.npmjs.org/conventional-recommended-bump/-/conventional-recommended-bump-7.0.1.tgz#ec01f6c7f5d0e2491c2d89488b0d757393392424"
+  integrity sha512-Ft79FF4SlOFvX4PkwFDRnaNiIVX7YbmqGU0RwccUaiGvgp3S0a8ipR2/Qxk31vclDNM+GSdJOVs2KrsUCjblVA==
+  dependencies:
+    concat-stream "^2.0.0"
+    conventional-changelog-preset-loader "^3.0.0"
+    conventional-commits-filter "^3.0.0"
+    conventional-commits-parser "^4.0.0"
+    git-raw-commits "^3.0.0"
+    git-semver-tags "^5.0.0"
+    meow "^8.1.2"
 
 core-util-is@~1.0.0:
   version "1.0.2"
@@ -2496,6 +2532,15 @@ git-raw-commits@^2.0.0, git-raw-commits@^2.0.8:
     split2 "^3.0.0"
     through2 "^4.0.0"
 
+git-raw-commits@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/git-raw-commits/-/git-raw-commits-3.0.0.tgz#5432f053a9744f67e8db03dbc48add81252cfdeb"
+  integrity sha512-b5OHmZ3vAgGrDn/X0kS+9qCfNKWe4K/jFnhwzVWWg0/k5eLa3060tZShrRg8Dja5kPc+YjS0Gc6y7cRr44Lpjw==
+  dependencies:
+    dargs "^7.0.0"
+    meow "^8.1.2"
+    split2 "^3.2.2"
+
 git-raw-commits@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/git-raw-commits/-/git-raw-commits-4.0.0.tgz#b212fd2bff9726d27c1283a1157e829490593285"
@@ -2520,6 +2565,14 @@ git-semver-tags@^4.0.0, git-semver-tags@^4.1.1:
   dependencies:
     meow "^8.0.0"
     semver "^6.0.0"
+
+git-semver-tags@^5.0.0:
+  version "5.0.1"
+  resolved "https://registry.npmjs.org/git-semver-tags/-/git-semver-tags-5.0.1.tgz#db748aa0e43d313bf38dcd68624d8443234e1c15"
+  integrity sha512-hIvOeZwRbQ+7YEUmCkHqo8FOLQZCEn18yevLHADlFPZY02KJGsu5FZt9YW/lybfK2uhWFI7Qg/07LekJiTv7iA==
+  dependencies:
+    meow "^8.1.2"
+    semver "^7.0.0"
 
 git-semver-tags@^7.0.0:
   version "7.0.1"
@@ -3527,6 +3580,23 @@ meow@^8.0.0:
     type-fest "^0.18.0"
     yargs-parser "^20.2.3"
 
+meow@^8.1.2:
+  version "8.1.2"
+  resolved "https://registry.npmjs.org/meow/-/meow-8.1.2.tgz#bcbe45bda0ee1729d350c03cffc8395a36c4e897"
+  integrity sha512-r85E3NdZ+mpYk1C6RjPFEMSE+s1iZMuHtsHAqY0DT3jZczl0diWUZ8g6oU7h0M9cD2EL+PzaYghhCLzR0ZNn5Q==
+  dependencies:
+    "@types/minimist" "^1.2.0"
+    camelcase-keys "^6.2.2"
+    decamelize-keys "^1.1.0"
+    hard-rejection "^2.1.0"
+    minimist-options "4.1.0"
+    normalize-package-data "^3.0.0"
+    read-pkg-up "^7.0.1"
+    redent "^3.0.0"
+    trim-newlines "^3.0.0"
+    type-fest "^0.18.0"
+    yargs-parser "^20.2.3"
+
 merge-stream@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/merge-stream/-/merge-stream-2.0.0.tgz#52823629a14dd00c9770fb6ad47dc6310f2c1f60"
@@ -3938,7 +4008,7 @@ mocha@^10.2.0:
     yargs-parser "20.2.4"
     yargs-unparser "2.0.0"
 
-modify-values@^1.0.0:
+modify-values@^1.0.0, modify-values@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
@@ -5488,7 +5558,7 @@ split2@^2.0.0:
   dependencies:
     through2 "^2.0.2"
 
-split2@^3.0.0:
+split2@^3.0.0, split2@^3.2.2:
   version "3.2.2"
   resolved "https://registry.npmjs.org/split2/-/split2-3.2.2.tgz#bf2cf2a37d838312c249c89206fd7a17dd12365f"
   integrity sha512-9NThjpgZnifTkJpzTZ7Eue85S49QwpNhZTq6GRJwObb6jnLFNGB7Qm73V5HewTROPyxD0C29xqmaI68bQtV+hg==
