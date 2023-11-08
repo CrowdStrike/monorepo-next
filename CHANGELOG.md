@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.0.1](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.0...v11.0.1) (2023-11-08)
+
+
+### Bug Fixes
+
+* support esm inquirer ([75bde88](https://github.com/CrowdStrike/monorepo-next/commit/75bde88400e79b2160c1cabf2f155e2d5a68c4bf))
+* **deps:** update dependency conventional-changelog to v5 ([03b5330](https://github.com/CrowdStrike/monorepo-next/commit/03b5330d119632bb9da3f5c2d36f3a6867dbc134))
+* **deps:** update dependency inquirer to v9 ([2c48cfb](https://github.com/CrowdStrike/monorepo-next/commit/2c48cfb8ccf8d5015cdf2e0fad73bbe782e3b11f))
+
 ## [11.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v10.2.1...v11.0.0) (2023-11-08)
 
 
