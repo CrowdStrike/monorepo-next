@@ -10,6 +10,7 @@ const {
   getFileAtCommit,
 } = require('./git');
 const { replaceJsonFile } = require('./fs');
+const Arborist = require('@npmcli/arborist');
 
 const filesContributingToReleasability = new Set([
   '.gitignore',
@@ -121,7 +122,9 @@ async function _getChangedReleasableFiles({
     changedFiles,
   });
 
-  let changedPublishedFiles = await packlist({ path: tmpDir });
+  let arborist = new Arborist({ path: tmpDir });
+  let tree = await arborist.loadActual();
+  let changedPublishedFiles = await packlist(tree);
 
   let changedPublishedFilesOld = new Set(changedPublishedFiles);
 
