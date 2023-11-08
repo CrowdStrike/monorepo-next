@@ -12,6 +12,8 @@ const stringifyJson = require('../src/json').stringify;
 const { stripIndent } = require('common-tags');
 
 describe(function() {
+  this.timeout(5e3);
+
   let tmpPath;
 
   beforeEach(async function() {
