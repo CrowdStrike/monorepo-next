@@ -75,7 +75,7 @@
     "yargs": "^17.0.0"
   },
   "devDependencies": {
-    "@crowdstrike/commitlint": "^6.0.0",
+    "@crowdstrike/commitlint": "^7.0.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "common-tags": "^1.8.2",
