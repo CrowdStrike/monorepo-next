@@ -78,7 +78,7 @@ jobs:
         token: ${{ secrets.GitHubToken }}
     - uses: actions/setup-node@v4
 
-    - uses: kellyselden/ember-cli-update-action@v5
+    - uses: kellyselden/ember-cli-update-action@v6
       with:
         autofix_command: yarn lint:js --fix && yarn lint:md -o
         ignore_to: true
