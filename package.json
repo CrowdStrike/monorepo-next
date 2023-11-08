@@ -58,7 +58,7 @@
     "node": ">=18.12"
   },
   "dependencies": {
-    "conventional-changelog": "3.1.25",
+    "conventional-changelog": "5.1.0",
     "conventional-recommended-bump": "6.1.0",
     "debug": "^4.3.1",
     "execa": "^5.0.0",
