@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.0.5](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.4...v11.0.5) (2023-11-08)
+
+
+### Bug Fixes
+
+* update conventional-recommended-bump to v7 ([ba3b282](https://github.com/CrowdStrike/monorepo-next/commit/ba3b2828b76301b2fc08c42e8b24817430f9aaeb))
+
 ### [11.0.4](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.3...v11.0.4) (2023-11-08)
 
 
