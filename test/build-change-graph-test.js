@@ -216,6 +216,57 @@ describe(buildChangeGraph, function() {
     ]));
   });
 
+  it('handles changed filenames with space when changes are not commited', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'sample index.js': 'console.log()',
+        },
+      },
+    });
+
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+    expect(packagesWithChanges).to.match(this.match([
+      {
+        changedFiles: [
+          'packages/package-a/sample index.js',
+        ],
+        changedReleasableFiles: [
+          'packages/package-a/sample index.js',
+        ],
+        dag: this.match({
+          node: {
+            packageName: '@scope/package-a',
+          },
+        }),
+      },
+    ]));
+  });
+
   it('tracks workspace with a version', async function() {
     fixturify.writeSync(tmpPath, {
       'package.json': stringifyJson({
