@@ -35,6 +35,10 @@ async function getPackageChangedFiles({
 
   dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => line.substr(3));
 
+  // if filename has space like `sample index.js`, if its modified and uncommited, that file will have double quotes in git status
+  // example: '"packages/package-a/sample index.js"'. We need to strip `"` for that reason.
+  dirtyChanges = dirtyChanges.map(line => line.replace(/"/g, ''));
+
   let changedFiles = Array.from(new Set(committedChanges).union(dirtyChanges));
 
   return changedFiles;
