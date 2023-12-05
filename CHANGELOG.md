@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.0.8](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.7...v11.0.8) (2023-12-05)
+
+
+### Bug Fixes
+
+* handle filenames with spaces ([dbf9bee](https://github.com/CrowdStrike/monorepo-next/commit/dbf9bee8185cad1e079c8ed363cc6f494697451c))
+
 ### [11.0.7](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.6...v11.0.7) (2023-11-08)
 
 
