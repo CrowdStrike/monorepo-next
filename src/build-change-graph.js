@@ -38,7 +38,7 @@ async function getPackageChangedFiles({
 
     // if filename has space like `sample index.js`, if its modified and uncommited, that file will have double quotes in git status
     // example: '"packages/package-a/sample index.js"'. We need to strip `"` for that reason.
-    line = line.replace(/"/g, '');
+    line = line.replaceAll('"', '');
 
     return line;
   });
