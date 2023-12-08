@@ -501,4 +501,52 @@ describe(getChangelog, function() {
     expect(changelog).to.not.include('[1.0.1]');
     expect(changelog).to.not.include('* foo');
   });
+
+  it('works with repository config in package.json', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'package.json': stringifyJson({
+            'name': '@scope/my-app',
+            'version': '1.0.0',
+            'repository': {
+              'url': 'ssh://git@test.git.server:123/test-project/test-repo.git',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await fakeVersion({
+      packageDir: 'packages/my-app',
+      firstVersion: true,
+    });
+
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'my-app': {
+          'index.js': 'foo',
+        },
+      },
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+    process.chdir(path.join(tmpPath, 'packages/my-app'));
+
+    let changelog = await getChangelog({
+      cwd: path.join(tmpPath, 'packages/my-app'),
+    });
+
+    expect(changelog).to.include('[1.0.1](https://test.git.server:123/test-project/test-repo/compare/@scope/my-app@1.0.0...@scope/my-app@1.0.1)');
+    expect(changelog).to.include('* foo');
+    expect(changelog).to.not.include('[1.0.0]');
+  });
 });
