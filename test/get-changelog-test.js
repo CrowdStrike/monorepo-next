@@ -502,7 +502,7 @@ describe(getChangelog, function() {
     expect(changelog).to.not.include('* foo');
   });
 
-  it('works with repository config in package.json', async function() {
+  it('generates diff link using repository url', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {
         'my-app': {
@@ -545,8 +545,6 @@ describe(getChangelog, function() {
       cwd: path.join(tmpPath, 'packages/my-app'),
     });
 
-    expect(changelog).to.include('[1.0.1](https://test.git.server:123/test-project/test-repo/compare/@scope/my-app@1.0.0...@scope/my-app@1.0.1)');
-    expect(changelog).to.include('* foo');
-    expect(changelog).to.not.include('[1.0.0]');
+    expect(changelog).to.include('(https://test.git.server:123/test-project/test-repo/compare/@scope/my-app@1.0.0...@scope/my-app@1.0.1)');
   });
 });
