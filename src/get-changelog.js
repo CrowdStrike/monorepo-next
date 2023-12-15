@@ -103,7 +103,7 @@ async function _getChangelog({
       preset: require('standard-version/lib/preset-loader')(defaults),
       tagPrefix,
       releaseCount,
-      pkg: { path: cwd },
+      pkg: { path: path.join(cwd, 'package.json') },
       path: cwd,
     },
     context,
