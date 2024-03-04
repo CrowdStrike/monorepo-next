@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.0.11](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.10...v11.0.11) (2024-03-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tmp to v0.2.3 ([9da7b11](https://github.com/CrowdStrike/monorepo-next/commit/9da7b11f383403548d57b9a14104af5e4cefb2c3))
+
 ### [11.0.10](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.9...v11.0.10) (2023-12-15)
 
 
