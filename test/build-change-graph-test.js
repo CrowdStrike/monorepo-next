@@ -872,321 +872,323 @@ describe(buildChangeGraph, function() {
     ]));
   });
 
-  it('can cache the results', async function() {
-    let packagesWithChanges;
+  describe('cached', function () {
+    it('can cache the results', async function() {
+      let packagesWithChanges;
 
-    fixturify.writeSync(tmpPath, {
-      'packages': {
-        'package-a': {
-          'package.json': stringifyJson({
-            'name': '@scope/package-a',
-            'version': '1.0.0',
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+          'my-app-1': {
+            'package.json': stringifyJson({
+              'name': 'my-app-1',
+              'version': '1.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+      await execa('git', ['tag', 'my-app-1@1.0.0'], { cwd: tmpPath });
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'changed.txt': 'test',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let cachedPackagesWithChanges = await buildChangeGraph({
+        workspaceMeta,
+        cached: true,
+      });
+
+      expect(cachedPackagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/package-a/changed.txt',
+          ],
+          changedReleasableFiles: [
+            'packages/package-a/changed.txt',
+          ],
+          dag: this.match({
+            node: {
+              packageName: '@scope/package-a',
+            },
           }),
         },
-        'my-app-1': {
-          'package.json': stringifyJson({
-            'name': 'my-app-1',
-            'version': '1.0.0',
+      ]));
+
+      let commit = await getCurrentCommit(tmpPath);
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'my-app-1': {
+            'changed.txt': 'test',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+      packagesWithChanges = await buildChangeGraph({
+        workspaceMeta,
+        cached: true,
+      });
+
+      expect(packagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/package-a/changed.txt',
+          ],
+          changedReleasableFiles: [
+            'packages/package-a/changed.txt',
+          ],
+          dag: this.match({
+            node: {
+              packageName: '@scope/package-a',
+            },
           }),
         },
-      },
-      'package.json': stringifyJson({
-        'private': true,
-        'workspaces': [
-          'packages/*',
-        ],
-      }),
-    });
+      ]));
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
-    await execa('git', ['tag', 'my-app-1@1.0.0'], { cwd: tmpPath });
+      packagesWithChanges = await buildChangeGraph({
+        workspaceMeta,
+        fromCommit: commit,
+        cached: true,
+      });
 
-    fixturify.writeSync(tmpPath, {
-      'packages': {
-        'package-a': {
-          'changed.txt': 'test',
-        },
-      },
-    });
-
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-
-    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
-
-    let cachedPackagesWithChanges = await buildChangeGraph({
-      workspaceMeta,
-      cached: true,
-    });
-
-    expect(cachedPackagesWithChanges).to.match(this.match([
-      {
-        changedFiles: [
-          'packages/package-a/changed.txt',
-        ],
-        changedReleasableFiles: [
-          'packages/package-a/changed.txt',
-        ],
-        dag: this.match({
-          node: {
-            packageName: '@scope/package-a',
-          },
-        }),
-      },
-    ]));
-
-    let commit = await getCurrentCommit(tmpPath);
-
-    fixturify.writeSync(tmpPath, {
-      'packages': {
-        'my-app-1': {
-          'changed.txt': 'test',
-        },
-      },
-    });
-
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-
-    packagesWithChanges = await buildChangeGraph({
-      workspaceMeta,
-      cached: true,
-    });
-
-    expect(packagesWithChanges).to.match(this.match([
-      {
-        changedFiles: [
-          'packages/package-a/changed.txt',
-        ],
-        changedReleasableFiles: [
-          'packages/package-a/changed.txt',
-        ],
-        dag: this.match({
-          node: {
-            packageName: '@scope/package-a',
-          },
-        }),
-      },
-    ]));
-
-    packagesWithChanges = await buildChangeGraph({
-      workspaceMeta,
-      fromCommit: commit,
-      cached: true,
-    });
-
-    expect(packagesWithChanges).to.match(this.match([
-      {
-        changedFiles: [
-          'packages/my-app-1/changed.txt',
-        ],
-        changedReleasableFiles: [
-          'packages/my-app-1/changed.txt',
-        ],
-        dag: this.match({
-          node: {
-            packageName: 'my-app-1',
-          },
-        }),
-      },
-    ]));
-
-    packagesWithChanges = await buildChangeGraph({
-      workspaceMeta,
-    });
-
-    expect(packagesWithChanges).to.match(this.match([
-      {
-        changedFiles: [
-          'packages/my-app-1/changed.txt',
-        ],
-        changedReleasableFiles: [
-          'packages/my-app-1/changed.txt',
-        ],
-        dag: this.match({
-          node: {
-            packageName: 'my-app-1',
-          },
-        }),
-      },
-      {
-        changedFiles: [
-          'packages/package-a/changed.txt',
-        ],
-        changedReleasableFiles: [
-          'packages/package-a/changed.txt',
-        ],
-        dag: this.match({
-          node: {
-            packageName: '@scope/package-a',
-          },
-        }),
-      },
-    ]));
-  });
-
-  it('can cache by commit', async function() {
-    let packagesWithChanges;
-
-    fixturify.writeSync(tmpPath, {
-      'packages': {
-        'package-a': {
-          'package.json': stringifyJson({
-            'name': '@scope/package-a',
-            'version': '1.0.0',
+      expect(packagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/my-app-1/changed.txt',
+          ],
+          changedReleasableFiles: [
+            'packages/my-app-1/changed.txt',
+          ],
+          dag: this.match({
+            node: {
+              packageName: 'my-app-1',
+            },
           }),
         },
-        'my-app-1': {
-          'package.json': stringifyJson({
-            'name': 'my-app-1',
-            'version': '1.0.0',
+      ]));
+
+      packagesWithChanges = await buildChangeGraph({
+        workspaceMeta,
+      });
+
+      expect(packagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/my-app-1/changed.txt',
+          ],
+          changedReleasableFiles: [
+            'packages/my-app-1/changed.txt',
+          ],
+          dag: this.match({
+            node: {
+              packageName: 'my-app-1',
+            },
           }),
         },
-      },
-      'package.json': stringifyJson({
-        'private': true,
-        'workspaces': [
-          'packages/*',
-        ],
-      }),
-    });
-
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-
-    let firstCommit = await getCurrentCommit(tmpPath);
-
-    fixturify.writeSync(tmpPath, {
-      'packages': {
-        'package-a': {
-          'changed.txt': 'test',
+        {
+          changedFiles: [
+            'packages/package-a/changed.txt',
+          ],
+          changedReleasableFiles: [
+            'packages/package-a/changed.txt',
+          ],
+          dag: this.match({
+            node: {
+              packageName: '@scope/package-a',
+            },
+          }),
         },
-      },
+      ]));
     });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    it('can cache by commit', async function() {
+      let packagesWithChanges;
 
-    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
-
-    let cachedPackagesWithChanges = await buildChangeGraph({
-      workspaceMeta,
-      fromCommit: firstCommit,
-      cached: true,
-    });
-
-    expect(cachedPackagesWithChanges).to.match(this.match([
-      {
-        changedFiles: [
-          'packages/package-a/changed.txt',
-        ],
-        changedReleasableFiles: [
-          'packages/package-a/changed.txt',
-        ],
-        dag: this.match({
-          node: {
-            packageName: '@scope/package-a',
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
           },
-        }),
-      },
-    ]));
-
-    let secondCommit = await getCurrentCommit(tmpPath);
-
-    fixturify.writeSync(tmpPath, {
-      'packages': {
-        'my-app-1': {
-          'changed.txt': 'test',
+          'my-app-1': {
+            'package.json': stringifyJson({
+              'name': 'my-app-1',
+              'version': '1.0.0',
+            }),
+          },
         },
-      },
-    });
-
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-
-    packagesWithChanges = await buildChangeGraph({
-      workspaceMeta,
-      fromCommit: secondCommit,
-      cached: true,
-    });
-
-    expect(packagesWithChanges).to.match(this.match([
-      {
-        changedFiles: [
-          'packages/my-app-1/changed.txt',
-        ],
-        changedReleasableFiles: [
-          'packages/my-app-1/changed.txt',
-        ],
-        dag: this.match({
-          node: {
-            packageName: 'my-app-1',
-          },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
         }),
-      },
-    ]));
+      });
 
-    packagesWithChanges = await buildChangeGraph({
-      workspaceMeta,
-      fromCommit: firstCommit,
-      cached: true,
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+      let firstCommit = await getCurrentCommit(tmpPath);
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'changed.txt': 'test',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let cachedPackagesWithChanges = await buildChangeGraph({
+        workspaceMeta,
+        fromCommit: firstCommit,
+        cached: true,
+      });
+
+      expect(cachedPackagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/package-a/changed.txt',
+          ],
+          changedReleasableFiles: [
+            'packages/package-a/changed.txt',
+          ],
+          dag: this.match({
+            node: {
+              packageName: '@scope/package-a',
+            },
+          }),
+        },
+      ]));
+
+      let secondCommit = await getCurrentCommit(tmpPath);
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'my-app-1': {
+            'changed.txt': 'test',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+      packagesWithChanges = await buildChangeGraph({
+        workspaceMeta,
+        fromCommit: secondCommit,
+        cached: true,
+      });
+
+      expect(packagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/my-app-1/changed.txt',
+          ],
+          changedReleasableFiles: [
+            'packages/my-app-1/changed.txt',
+          ],
+          dag: this.match({
+            node: {
+              packageName: 'my-app-1',
+            },
+          }),
+        },
+      ]));
+
+      packagesWithChanges = await buildChangeGraph({
+        workspaceMeta,
+        fromCommit: firstCommit,
+        cached: true,
+      });
+
+      expect(packagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/package-a/changed.txt',
+          ],
+          changedReleasableFiles: [
+            'packages/package-a/changed.txt',
+          ],
+          dag: this.match({
+            node: {
+              packageName: '@scope/package-a',
+            },
+          }),
+        },
+      ]));
+
+      packagesWithChanges = await buildChangeGraph({
+        workspaceMeta,
+        cached: true,
+      });
+
+      expect(packagesWithChanges).to.match(this.match([
+        {
+          changedFiles: [
+            'packages/my-app-1/changed.txt',
+            'packages/my-app-1/package.json',
+          ],
+          changedReleasableFiles: [
+            'packages/my-app-1/changed.txt',
+            'packages/my-app-1/package.json',
+          ],
+          dag: this.match({
+            node: {
+              packageName: 'my-app-1',
+            },
+          }),
+        },
+        {
+          changedFiles: [
+            'packages/package-a/changed.txt',
+            'packages/package-a/package.json',
+          ],
+          changedReleasableFiles: [
+            'packages/package-a/changed.txt',
+            'packages/package-a/package.json',
+          ],
+          dag: this.match({
+            node: {
+              packageName: '@scope/package-a',
+            },
+          }),
+        },
+      ]));
     });
-
-    expect(packagesWithChanges).to.match(this.match([
-      {
-        changedFiles: [
-          'packages/package-a/changed.txt',
-        ],
-        changedReleasableFiles: [
-          'packages/package-a/changed.txt',
-        ],
-        dag: this.match({
-          node: {
-            packageName: '@scope/package-a',
-          },
-        }),
-      },
-    ]));
-
-    packagesWithChanges = await buildChangeGraph({
-      workspaceMeta,
-      cached: true,
-    });
-
-    expect(packagesWithChanges).to.match(this.match([
-      {
-        changedFiles: [
-          'packages/my-app-1/changed.txt',
-          'packages/my-app-1/package.json',
-        ],
-        changedReleasableFiles: [
-          'packages/my-app-1/changed.txt',
-          'packages/my-app-1/package.json',
-        ],
-        dag: this.match({
-          node: {
-            packageName: 'my-app-1',
-          },
-        }),
-      },
-      {
-        changedFiles: [
-          'packages/package-a/changed.txt',
-          'packages/package-a/package.json',
-        ],
-        changedReleasableFiles: [
-          'packages/package-a/changed.txt',
-          'packages/package-a/package.json',
-        ],
-        dag: this.match({
-          node: {
-            packageName: '@scope/package-a',
-          },
-        }),
-      },
-    ]));
   });
 
   it('ignores child package changes in root package', async function() {
