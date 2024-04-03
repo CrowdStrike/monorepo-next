@@ -91,7 +91,7 @@ async function getCommitSinceLastRelease(_package, options) {
   try {
     return await getCommitAtTag(tag, options);
   } catch (err) {
-    if (err.stderr.includes(`fatal: ambiguous argument '${tag}': unknown revision or path not in the working tree.`)) {
+    if (err.stderr?.includes(`fatal: ambiguous argument '${tag}': unknown revision or path not in the working tree.`)) {
       return await getFirstCommit(options);
     } else {
       throw err;
