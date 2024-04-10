@@ -241,84 +241,86 @@ describe(changed, function() {
     ]);
   });
 
-  it('can cache the results', async function() {
-    this.timeout(5e3);
+  describe('cached', function () {
+    it('can cache the results', async function() {
+      this.timeout(5e3);
 
-    let _changed;
+      let _changed;
 
-    fixturify.writeSync(tmpPath, {
-      'packages': {
-        'package-a': {
-          'changed.txt': 'test',
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'changed.txt': 'test',
+          },
         },
-      },
-      'changed': 'test',
-    });
+        'changed': 'test',
+      });
 
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
 
-    let cachedChanged = await changed({
-      cwd: tmpPath,
-      silent: true,
-      cached: true,
-    });
+      let cachedChanged = await changed({
+        cwd: tmpPath,
+        silent: true,
+        cached: true,
+      });
 
-    expect(cachedChanged).to.deep.equal([
-      '@scope/package-a',
-      'root',
-      'my-app-1',
-      '@scope/package-b',
-    ]);
+      expect(cachedChanged).to.deep.equal([
+        '@scope/package-a',
+        'root',
+        'my-app-1',
+        '@scope/package-b',
+      ]);
 
-    let commit = await getCurrentCommit(tmpPath);
+      let commit = await getCurrentCommit(tmpPath);
 
-    fixturify.writeSync(tmpPath, {
-      'packages': {
-        'my-app-2': {
-          'changed.txt': 'test',
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'my-app-2': {
+            'changed.txt': 'test',
+          },
         },
-      },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+      _changed = await changed({
+        cwd: tmpPath,
+        silent: true,
+        cached: true,
+      });
+
+      expect(_changed).to.deep.equal([
+        '@scope/package-a',
+        'root',
+        'my-app-1',
+        '@scope/package-b',
+      ]);
+
+      _changed = await changed({
+        cwd: tmpPath,
+        silent: true,
+        fromCommit: commit,
+        cached: true,
+      });
+
+      expect(_changed).to.deep.equal([
+        'my-app-2',
+      ]);
+
+      _changed = await changed({
+        cwd: tmpPath,
+        silent: true,
+      });
+
+      expect(_changed).to.deep.equal([
+        'my-app-2',
+        '@scope/package-a',
+        'root',
+        'my-app-1',
+        '@scope/package-b',
+      ]);
     });
-
-    await execa('git', ['add', '.'], { cwd: tmpPath });
-    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
-
-    _changed = await changed({
-      cwd: tmpPath,
-      silent: true,
-      cached: true,
-    });
-
-    expect(_changed).to.deep.equal([
-      '@scope/package-a',
-      'root',
-      'my-app-1',
-      '@scope/package-b',
-    ]);
-
-    _changed = await changed({
-      cwd: tmpPath,
-      silent: true,
-      fromCommit: commit,
-      cached: true,
-    });
-
-    expect(_changed).to.deep.equal([
-      'my-app-2',
-    ]);
-
-    _changed = await changed({
-      cwd: tmpPath,
-      silent: true,
-    });
-
-    expect(_changed).to.deep.equal([
-      'my-app-2',
-      '@scope/package-a',
-      'root',
-      'my-app-1',
-      '@scope/package-b',
-    ]);
   });
 });
