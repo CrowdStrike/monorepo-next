@@ -21,8 +21,12 @@ async function git(args, options) {
     cacheKey = getCacheKey(args, cwd);
 
     if (cacheKey in cache) {
+      debug('Git cache hit.');
+
       return cache[cacheKey];
     }
+
+    debug('Git cache miss.');
   }
 
   debug(args, options);
