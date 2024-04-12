@@ -15,25 +15,31 @@ async function git(args, options) {
     cached,
   } = options;
 
-  let stdout;
+  let cacheKey;
 
-  let cacheKey = getCacheKey(args, cwd);
+  if (cached) {
+    cacheKey = getCacheKey(args, cwd);
 
-  if (cached && cacheKey in cache) {
-    stdout = cache[cacheKey];
-  } else {
-    debug(args, options);
+    if (cacheKey in cache) {
+      debug('Git cache hit.');
 
-    stdout = (await execa('git', args, {
-      cwd,
-    })).stdout;
-
-    if (cached) {
-      cache[cacheKey] = stdout;
+      return cache[cacheKey];
     }
 
-    debug(stdout);
+    debug('Git cache miss.');
   }
+
+  debug(args, options);
+
+  let stdout = (await execa('git', args, {
+    cwd,
+  })).stdout;
+
+  if (cached) {
+    cache[cacheKey] = stdout;
+  }
+
+  debug(stdout);
 
   return stdout;
 }
