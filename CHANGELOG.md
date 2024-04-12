@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.2.0](https://github.com/CrowdStrike/monorepo-next/compare/v11.1.0...v11.2.0) (2024-04-12)
+
+
+### Features
+
+* add debug logging for git cache ([8e5ae55](https://github.com/CrowdStrike/monorepo-next/commit/8e5ae55578ae2c1965c40036cd27a6a1e4365622))
+
 ## [11.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.12...v11.1.0) (2024-04-12)
 
 
