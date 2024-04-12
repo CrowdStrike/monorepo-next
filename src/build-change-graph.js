@@ -19,6 +19,14 @@ async function getPackageChangedFiles({
   fromCommit,
   toCommit,
   packageCwd,
+
+  // I had a feeling it took more time to spawn git in a loop
+  // than the benefit you get by getting a git diff per-package,
+  // especially when you are using a `fromCommit` instead of version tags.
+  // In a test of mine, this brought `buildChangeGraph`
+  // down to 25 seconds from 39 seconds.
+  shouldRunPerPackage = true,
+
   options,
 }) {
   // Be careful you don't accidentally use `...` instead of `..`.
@@ -27,11 +35,11 @@ async function getPackageChangedFiles({
   //
   // I tried using ls-tree instead of diff when it is a new package (fromCommit is first commit in repo),
   // but it took the same amount of time.
-  let committedChanges = await git(['diff', '--name-only', `${fromCommit}..${toCommit}`, packageCwd], options);
+  let committedChanges = await git(['diff', '--name-only', `${fromCommit}..${toCommit}`, ...shouldRunPerPackage ? [packageCwd] : []], options);
 
   committedChanges = getLinesFromOutput(committedChanges);
 
-  let dirtyChanges = await git(['status', '--porcelain', '--untracked-files', packageCwd], options);
+  let dirtyChanges = await git(['status', '--porcelain', '--untracked-files', ...shouldRunPerPackage ? [packageCwd] : []], options);
 
   dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => {
     line = line.substr(3);
@@ -43,9 +51,25 @@ async function getPackageChangedFiles({
     return line;
   });
 
-  let changedFiles = Array.from(new Set(committedChanges).union(dirtyChanges));
+  let changedFiles = new Set(committedChanges).union(dirtyChanges);
 
-  return changedFiles;
+  if (!shouldRunPerPackage) {
+    let packageChangedFiles = new Set();
+
+    let relativePackageCwd = path.relative(options.cwd, packageCwd);
+
+    for (let changedFile of changedFiles) {
+      if (!changedFile.startsWith(relativePackageCwd)) {
+        continue;
+      }
+
+      packageChangedFiles.add(changedFile);
+    }
+
+    changedFiles = packageChangedFiles;
+  }
+
+  return Array.from(changedFiles);
 }
 
 function crawlDag(dag, packagesWithChanges) {
@@ -136,6 +160,7 @@ async function buildChangeGraph({
       fromCommit: _fromCommit,
       toCommit,
       packageCwd: _package.cwd,
+      shouldRunPerPackage: false,
       options: {
         cwd: workspaceMeta.cwd,
         cached,
