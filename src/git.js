@@ -2,11 +2,12 @@
 
 const execa = require('execa');
 const debug = require('./debug').extend('git');
+const sanitize = require('sanitize-filename');
 
 let cache = {};
 
 function getCacheKey(args, cwd) {
-  return [cwd, ...args].join();
+  return sanitize([cwd, ...args].join());
 }
 
 async function git(args, options) {

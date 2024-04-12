@@ -69,6 +69,7 @@
     "minimatch": "^9.0.0",
     "npm-packlist": "^8.0.0",
     "rfc6902": "^5.0.0",
+    "sanitize-filename": "^1.6.3",
     "semver": "^7.5.3",
     "standard-version": "9.5.0",
     "superset": "^2.0.1",
