@@ -3,6 +3,12 @@
 const execa = require('execa');
 const debug = require('./debug').extend('git');
 const sanitize = require('sanitize-filename');
+const path = require('path');
+const { safeReadFile, ensureDir, ensureWriteFile } = require('./fs');
+const { promisify } = require('util');
+const lockfile = require('lockfile');
+const lock = promisify(lockfile.lock);
+const unlock = promisify(lockfile.unlock);
 
 let cache = {};
 
@@ -17,6 +23,7 @@ async function git(args, options) {
   } = options;
 
   let cacheKey;
+  let lockFilePath;
 
   if (cached) {
     cacheKey = getCacheKey(args, cwd);
@@ -27,22 +34,64 @@ async function git(args, options) {
       return cache[cacheKey];
     }
 
-    debug('Git cache miss.');
+    if (cached !== true) {
+      lockFilePath = path.join(cached, `${cacheKey}.lock`);
+
+      await ensureDir(cached);
+
+      debug(`Waiting for git lock at ${lockFilePath}.`);
+
+      await lock(lockFilePath, { wait: 10 * 60e3 });
+
+      debug(`Acquired git lock at ${lockFilePath}.`);
+    }
   }
 
-  debug(args, options);
+  try {
+    let cachedFilePath;
 
-  let { stdout } = await execa('git', args, {
-    cwd,
-  });
+    if (cached) {
+      if (cached !== true) {
+        cachedFilePath = path.join(cached, cacheKey);
 
-  if (cached) {
-    cache[cacheKey] = stdout;
+        let _cache = await safeReadFile(cachedFilePath);
+
+        if (_cache !== null) {
+          debug('Git cache hit.');
+
+          cache[cacheKey] = _cache;
+
+          return _cache;
+        }
+      }
+
+      debug('Git cache miss.');
+    }
+
+    debug(args, options);
+
+    let { stdout } = await execa('git', args, {
+      cwd,
+    });
+
+    if (cached) {
+      cache[cacheKey] = stdout;
+
+      if (cached !== true) {
+        await ensureWriteFile(cachedFilePath, stdout);
+      }
+    }
+
+    debug(stdout);
+
+    return stdout;
+  } finally {
+    if (lockFilePath) {
+      await unlock(lockFilePath);
+
+      debug(`Released git lock at ${lockFilePath}.`);
+    }
   }
-
-  debug(stdout);
-
-  return stdout;
 }
 
 async function getCurrentBranch(cwd) {
