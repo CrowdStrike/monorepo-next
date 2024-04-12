@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.12...v11.1.0) (2024-04-12)
+
+
+### Features
+
+* add `shouldRunPerPackage` option ([77c8897](https://github.com/CrowdStrike/monorepo-next/commit/77c88978c51bf58d21d6ce5c6dbf82250ac56ef9))
+* enable `shouldRunPerPackage` ([8392b6b](https://github.com/CrowdStrike/monorepo-next/commit/8392b6bc40038f452167f4ed3e1fc2b21c6be259))
+
 ### [11.0.12](https://github.com/CrowdStrike/monorepo-next/compare/v11.0.11...v11.0.12) (2024-04-03)
 
 
