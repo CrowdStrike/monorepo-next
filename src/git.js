@@ -31,9 +31,9 @@ async function git(args, options) {
 
   debug(args, options);
 
-  let stdout = (await execa('git', args, {
+  let { stdout } = await execa('git', args, {
     cwd,
-  })).stdout;
+  });
 
   if (cached) {
     cache[cacheKey] = stdout;
