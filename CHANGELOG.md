@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.3.0](https://github.com/CrowdStrike/monorepo-next/compare/v11.2.0...v11.3.0) (2024-04-12)
+
+
+### Features
+
+* add new fs helpers ([8c02f52](https://github.com/CrowdStrike/monorepo-next/commit/8c02f52c66ebdb2ad0bc686a017733fdb635d34a))
+* cache git results in files ([7ea1ee8](https://github.com/CrowdStrike/monorepo-next/commit/7ea1ee8476cf906d0785e72b058b3051f605f3c9))
+* prepare cache keys to be file names ([0e97810](https://github.com/CrowdStrike/monorepo-next/commit/0e978102845dede42725b98557a6465e0d8d36d5))
+
 ## [11.2.0](https://github.com/CrowdStrike/monorepo-next/compare/v11.1.0...v11.2.0) (2024-04-12)
 
 
