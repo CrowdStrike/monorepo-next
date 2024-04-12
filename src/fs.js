@@ -2,6 +2,7 @@
 
 const fs = { ...require('fs'), ...require('fs').promises };
 const { EOL } = require('os');
+const { dirname } = require('path');
 
 async function replaceFile(path, callback) {
   let oldContents = await fs.readFile(path, 'utf8');
@@ -30,7 +31,42 @@ async function replaceJsonFile(path, callback) {
   });
 }
 
+/**
+ * @param {string} path
+ */
+async function safeReadFile(path) {
+  try {
+    return await fs.readFile(path, 'utf8');
+  } catch (err) {
+    if (err.code !== 'ENOENT') {
+      throw err;
+    }
+
+    return null;
+  }
+}
+
+/**
+ * @param {string} path
+ */
+async function ensureDir(path) {
+  await fs.mkdir(path, { recursive: true });
+}
+
+/**
+ * @param {string} path
+ * @param {string} data
+ */
+async function ensureWriteFile(path, data) {
+  await ensureDir(dirname(path));
+
+  await fs.writeFile(path, data);
+}
+
 module.exports = {
   replaceFile,
   replaceJsonFile,
+  safeReadFile,
+  ensureDir,
+  ensureWriteFile,
 };
