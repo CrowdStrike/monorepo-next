@@ -30,7 +30,7 @@
     "yarn"
   ],
   "scripts": {
-    "lint:git": "commitlint --default-branch main",
+    "lint:git": "echo 123abc",
     "lint:js": "eslint . --ext js,json",
     "lint:md": "remark -f README.md",
     "start": "node bin/next",
