@@ -40,10 +40,10 @@ async function getPackageChangedFiles({
   committedChanges = getLinesFromOutput(committedChanges).reduce((committedChanges, line) => {
     line = line.substr(2);
 
-    committedChanges.push(line);
+    committedChanges.add(line);
 
     return committedChanges;
-  }, []);
+  }, new Set());
 
   let dirtyChanges = await git(['status', '--porcelain', '--untracked-files', ...shouldRunPerPackage ? [packageCwd] : []], options);
 
@@ -54,12 +54,12 @@ async function getPackageChangedFiles({
     // example: '"packages/package-a/sample index.js"'. We need to strip `"` for that reason.
     line = line.replaceAll('"', '');
 
-    dirtyChanges.push(line);
+    dirtyChanges.add(line);
 
     return dirtyChanges;
-  }, []);
+  }, new Set());
 
-  let changedFiles = new Set(committedChanges).union(dirtyChanges);
+  let changedFiles = committedChanges.union(dirtyChanges);
 
   if (!shouldRunPerPackage) {
     let packageChangedFiles = new Set();
