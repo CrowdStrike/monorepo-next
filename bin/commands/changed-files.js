@@ -13,6 +13,7 @@ module.exports = {
     },
     'only-include-releasable': commonArgs['only-include-releasable'],
     'exclude-dev-changes': commonArgs['exclude-dev-changes'],
+    'exclude-deleted': commonArgs['exclude-deleted'],
   },
   async handler(argv) {
     const changedFiles = require('../../src/changed-files');
@@ -21,6 +22,7 @@ module.exports = {
       ...argv,
       shouldOnlyIncludeReleasable: argv['only-include-releasable'],
       shouldExcludeDevChanges: argv['exclude-dev-changes'],
+      shouldExcludeDeleted: argv['exclude-deleted'],
     });
 
     for (let file of _changedFiles) {

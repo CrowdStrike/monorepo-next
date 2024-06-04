@@ -13,6 +13,11 @@ module.exports = {
     type: 'boolean',
     default: false,
   },
+  'exclude-deleted': {
+    describe: 'Excluded deleted files from the changeset.',
+    type: 'boolean',
+    default: false,
+  },
   'silent': {
     describe: 'Don\'t print logs and errors',
     type: 'boolean',

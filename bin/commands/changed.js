@@ -9,6 +9,7 @@ module.exports = {
   builder: {
     'only-include-releasable': commonArgs['only-include-releasable'],
     'exclude-dev-changes': commonArgs['exclude-dev-changes'],
+    'exclude-deleted': commonArgs['exclude-deleted'],
   },
   async handler(argv) {
     const changed = require('../../src/changed');
@@ -17,6 +18,7 @@ module.exports = {
       ...argv,
       shouldOnlyIncludeReleasable: argv['only-include-releasable'],
       shouldExcludeDevChanges: argv['exclude-dev-changes'],
+      shouldExcludeDeleted: argv['exclude-deleted'],
     });
 
     for (let name of _changed) {

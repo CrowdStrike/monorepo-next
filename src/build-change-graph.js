@@ -27,6 +27,8 @@ async function getPackageChangedFiles({
   // down to 25 seconds from 39 seconds.
   shouldRunPerPackage = true,
 
+  shouldExcludeDeleted,
+
   options,
 }) {
   // Be careful you don't accidentally use `...` instead of `..`.
@@ -38,9 +40,14 @@ async function getPackageChangedFiles({
   let committedChanges = await git(['diff', '--name-status', `${fromCommit}..${toCommit}`, ...shouldRunPerPackage ? [packageCwd] : []], options);
 
   committedChanges = getLinesFromOutput(committedChanges).reduce((committedChanges, line) => {
-    line = line.substr(2);
+    let isDeleted = line[0] === 'D';
+    let shouldExclude = shouldExcludeDeleted && isDeleted;
 
-    committedChanges.add(line);
+    if (!shouldExclude) {
+      line = line.substr(2);
+
+      committedChanges.add(line);
+    }
 
     return committedChanges;
   }, new Set());
@@ -48,13 +55,20 @@ async function getPackageChangedFiles({
   let dirtyChanges = await git(['status', '--porcelain', '--untracked-files', ...shouldRunPerPackage ? [packageCwd] : []], options);
 
   dirtyChanges = getLinesFromOutput(dirtyChanges).reduce((dirtyChanges, line) => {
+    let isDeleted = line[1] === 'D';
+    let shouldExclude = shouldExcludeDeleted && isDeleted;
+
     line = line.substr(3);
 
     // if filename has space like `sample index.js`, if its modified and uncommited, that file will have double quotes in git status
     // example: '"packages/package-a/sample index.js"'. We need to strip `"` for that reason.
     line = line.replaceAll('"', '');
 
-    dirtyChanges.add(line);
+    if (shouldExclude) {
+      committedChanges.delete(line);
+    } else {
+      dirtyChanges.add(line);
+    }
 
     return dirtyChanges;
   }, new Set());
