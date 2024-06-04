@@ -37,23 +37,27 @@ async function getPackageChangedFiles({
   // but it took the same amount of time.
   let committedChanges = await git(['diff', '--name-status', `${fromCommit}..${toCommit}`, ...shouldRunPerPackage ? [packageCwd] : []], options);
 
-  committedChanges = getLinesFromOutput(committedChanges).map(line => {
+  committedChanges = getLinesFromOutput(committedChanges).reduce((committedChanges, line) => {
     line = line.substr(2);
 
-    return line;
-  });
+    committedChanges.push(line);
+
+    return committedChanges;
+  }, []);
 
   let dirtyChanges = await git(['status', '--porcelain', '--untracked-files', ...shouldRunPerPackage ? [packageCwd] : []], options);
 
-  dirtyChanges = getLinesFromOutput(dirtyChanges).map(line => {
+  dirtyChanges = getLinesFromOutput(dirtyChanges).reduce((dirtyChanges, line) => {
     line = line.substr(3);
 
     // if filename has space like `sample index.js`, if its modified and uncommited, that file will have double quotes in git status
     // example: '"packages/package-a/sample index.js"'. We need to strip `"` for that reason.
     line = line.replaceAll('"', '');
 
-    return line;
-  });
+    dirtyChanges.push(line);
+
+    return dirtyChanges;
+  }, []);
 
   let changedFiles = new Set(committedChanges).union(dirtyChanges);
 
@@ -98,6 +102,7 @@ async function buildChangeGraph({
   workspaceMeta,
   shouldOnlyIncludeReleasable,
   shouldExcludeDevChanges,
+  shouldExcludeDeleted,
   fromCommit,
   fromCommitIfNewer,
   toCommit = 'HEAD',
@@ -165,6 +170,7 @@ async function buildChangeGraph({
       toCommit,
       packageCwd: _package.cwd,
       shouldRunPerPackage: false,
+      shouldExcludeDeleted,
       options: {
         cwd: workspaceMeta.cwd,
         cached,
