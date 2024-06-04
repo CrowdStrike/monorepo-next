@@ -58,6 +58,8 @@ Options:
                              monorepo dev dep change or manually bumping an
                              external dev dep, don't count it towards a package
                              change.                  [boolean] [default: false]
+  --exclude-deleted          Excluded deleted files from the changeset.
+                                                      [boolean] [default: false]
 
 next changed
 
@@ -73,6 +75,8 @@ Options:
                              monorepo dev dep change or manually bumping an
                              external dev dep, don't count it towards a package
                              change.                  [boolean] [default: false]
+  --exclude-deleted          Excluded deleted files from the changeset.
+                                                      [boolean] [default: false]
 
 next cycles
 
@@ -158,6 +162,8 @@ Options:
                              monorepo dev dep change or manually bumping an
                              external dev dep, don't count it towards a package
                              change.                  [boolean] [default: false]
+  --exclude-deleted          Excluded deleted files from the changeset.
+                                                      [boolean] [default: false]
   --silent                   Don't print logs and errors
                                                       [boolean] [default: false]
 ```

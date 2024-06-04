@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.4.0](https://github.com/CrowdStrike/monorepo-next/compare/v11.3.0...v11.4.0) (2024-06-04)
+
+
+### Features
+
+* add `shouldExcludeDeleted` ([1ea25a9](https://github.com/CrowdStrike/monorepo-next/commit/1ea25a95ae4b33ad5a6500cff33107858c0df200))
+
 ## [11.3.0](https://github.com/CrowdStrike/monorepo-next/compare/v11.2.0...v11.3.0) (2024-04-12)
 
 
