@@ -81,6 +81,141 @@ describe(buildChangeGraph, function() {
     ]));
   });
 
+  describe('deleted', function() {
+    let workspaceMeta;
+
+    describe('committed', function () {
+      beforeEach(async function() {
+        fixturify.writeSync(tmpPath, {
+          'packages': {
+            'package-a': {
+              'package.json': stringifyJson({
+                'name': '@scope/package-a',
+                'version': '1.0.0',
+              }),
+              'index.js': 'console.log()',
+            },
+          },
+          'package.json': stringifyJson({
+            'private': true,
+            'workspaces': [
+              'packages/*',
+            ],
+          }),
+        });
+
+        await execa('git', ['add', '.'], { cwd: tmpPath });
+        await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+        await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+
+        await fs.unlink(path.join(tmpPath, 'packages/package-a/index.js'));
+
+        await execa('git', ['add', '.'], { cwd: tmpPath });
+        await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+        workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+      });
+
+      it('includes by default', async function() {
+        let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+        expect(packagesWithChanges).to.match(this.match([
+          {
+            changedFiles: [
+              'packages/package-a/index.js',
+            ],
+            changedReleasableFiles: [
+              'packages/package-a/index.js',
+            ],
+            dag: this.match({
+              node: {
+                packageName: '@scope/package-a',
+              },
+            }),
+          },
+        ]));
+      });
+
+      it('can exclude', async function() {
+        let packagesWithChanges = await buildChangeGraph({
+          workspaceMeta,
+          shouldExcludeDeleted: true,
+        });
+
+        expect(packagesWithChanges).to.deep.equal([]);
+      });
+    });
+
+    describe('uncommitted', function () {
+      beforeEach(async function() {
+        fixturify.writeSync(tmpPath, {
+          'packages': {
+            'package-a': {
+              'package.json': stringifyJson({
+                'name': '@scope/package-a',
+                'version': '1.0.0',
+              }),
+            },
+          },
+          'package.json': stringifyJson({
+            'private': true,
+            'workspaces': [
+              'packages/*',
+            ],
+          }),
+        });
+
+        await execa('git', ['add', '.'], { cwd: tmpPath });
+        await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+        await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+
+        fixturify.writeSync(tmpPath, {
+          'packages': {
+            'package-a': {
+              'index.js': 'console.log()',
+            },
+          },
+        });
+
+        await execa('git', ['add', '.'], { cwd: tmpPath });
+        await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+
+        await fs.unlink(path.join(tmpPath, 'packages/package-a/index.js'));
+
+        workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+      });
+
+      it('includes by default', async function() {
+        let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+        expect(packagesWithChanges).to.match(this.match([
+          {
+            changedFiles: [
+              'packages/package-a/index.js',
+            ],
+            changedReleasableFiles: [
+              'packages/package-a/index.js',
+            ],
+            dag: this.match({
+              node: {
+                packageName: '@scope/package-a',
+              },
+            }),
+          },
+        ]));
+      });
+
+      it('can exclude', async function() {
+        let packagesWithChanges = await buildChangeGraph({
+          workspaceMeta,
+          shouldExcludeDeleted: true,
+        });
+
+        expect(packagesWithChanges).to.deep.equal([]);
+      });
+    });
+  });
+
   it('ignores package without changes', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {

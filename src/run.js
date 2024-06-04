@@ -13,6 +13,7 @@ async function run({
   cwd = process.cwd(),
   shouldOnlyIncludeReleasable = builder['only-include-releasable'].default,
   shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
+  shouldExcludeDeleted = builder['exclude-deleted'].default,
   silent,
   args,
   cached,
@@ -25,6 +26,7 @@ async function run({
     workspaceMeta,
     shouldOnlyIncludeReleasable,
     shouldExcludeDevChanges,
+    shouldExcludeDeleted,
     cached,
   });
 

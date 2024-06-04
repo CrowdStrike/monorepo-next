@@ -8,6 +8,7 @@ module.exports = {
   builder: {
     'only-include-releasable': commonArgs['only-include-releasable'],
     'exclude-dev-changes': commonArgs['exclude-dev-changes'],
+    'exclude-deleted': commonArgs['exclude-deleted'],
     'silent': commonArgs['silent'],
   },
   async handler(argv) {
@@ -17,6 +18,7 @@ module.exports = {
       ...argv,
       shouldOnlyIncludeReleasable: argv['only-include-releasable'],
       shouldExcludeDevChanges: argv['exclude-dev-changes'],
+      shouldExcludeDeleted: argv['exclude-deleted'],
       args: process.argv.slice(3),
     });
   },
