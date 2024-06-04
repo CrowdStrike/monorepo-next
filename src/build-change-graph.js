@@ -35,9 +35,13 @@ async function getPackageChangedFiles({
   //
   // I tried using ls-tree instead of diff when it is a new package (fromCommit is first commit in repo),
   // but it took the same amount of time.
-  let committedChanges = await git(['diff', '--name-only', `${fromCommit}..${toCommit}`, ...shouldRunPerPackage ? [packageCwd] : []], options);
+  let committedChanges = await git(['diff', '--name-status', `${fromCommit}..${toCommit}`, ...shouldRunPerPackage ? [packageCwd] : []], options);
 
-  committedChanges = getLinesFromOutput(committedChanges);
+  committedChanges = getLinesFromOutput(committedChanges).map(line => {
+    line = line.substr(2);
+
+    return line;
+  });
 
   let dirtyChanges = await git(['status', '--porcelain', '--untracked-files', ...shouldRunPerPackage ? [packageCwd] : []], options);
 
