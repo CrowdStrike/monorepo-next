@@ -96,9 +96,11 @@ async function _getChangelog({
   releaseCount,
   from,
 }) {
+  const conventionalChangelog = require('conventional-changelog');
+
   let changelog = '';
   let context = { version };
-  let changelogStream = require('conventional-changelog')(
+  let changelogStream = conventionalChangelog(
     {
       preset: require('standard-version/lib/preset-loader')(defaults),
       tagPrefix,
