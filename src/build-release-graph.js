@@ -1,6 +1,5 @@
 'use strict';
 
-const conventionalRecommendedBump = require('conventional-recommended-bump');
 const path = require('path');
 const {
   read: readJson,
@@ -15,6 +14,11 @@ const { createSyncLogger, createAsyncLogger } = require('./log');
 const defaultReleaseType = 'patch';
 
 async function getReleaseType(packageName, cwd) {
+  const conventionalRecommendedBump = require('conventional-recommended-bump');
+
+  // let { preset } = require('standard-version/defaults');
+  let preset = require('standard-version/lib/preset-loader')({});
+
   let tagPrefix = `${packageName}@`;
 
   let originalCwd = process.cwd();
@@ -24,8 +28,7 @@ async function getReleaseType(packageName, cwd) {
     process.chdir(cwd);
 
     myReleaseType = (await conventionalRecommendedBump({
-      // preset: require('standard-version/defaults').preset,
-      preset: require('standard-version/lib/preset-loader')({}),
+      preset,
       path: cwd,
       tagPrefix,
     })).releaseType;
