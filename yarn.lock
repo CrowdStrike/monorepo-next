@@ -1403,10 +1403,10 @@ comma-separated-tokens@^2.0.0:
   resolved "https://registry.yarnpkg.com/comma-separated-tokens/-/comma-separated-tokens-2.0.3.tgz#4e89c9458acb61bc8fef19f4529973b2392839ee"
   integrity sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==
 
-commit-and-tag-version@9.6.0:
-  version "9.6.0"
-  resolved "https://registry.yarnpkg.com/commit-and-tag-version/-/commit-and-tag-version-9.6.0.tgz#ff2f26876ac3e4efeb474ebb63ad169ba7d2a9dd"
-  integrity sha512-5tuYV9lFqV9rYDMJhF+HDp46S11je7XwzD/tvGT8LJM2lzXv33eeEetqpZ8Z0e9OSo0nS/67+JIH0cKJXB1Dpw==
+commit-and-tag-version@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.npmjs.org/commit-and-tag-version/-/commit-and-tag-version-10.0.0.tgz#b2cb74efda86a7e29d5f172f62a4ffcfba8c8bc8"
+  integrity sha512-x5lKP5D5pL2Cz4f4VcJvLcHn6B4bvT2ay9EXG7hHYUUXi46O9opgfRtkdaCgZvfpsiJOf7y7TZU1huLmojLiag==
   dependencies:
     chalk "^2.4.2"
     conventional-changelog "3.1.25"
@@ -1421,7 +1421,7 @@ commit-and-tag-version@9.6.0:
     git-semver-tags "^4.0.0"
     semver "^7.1.1"
     stringify-package "^1.0.1"
-    yargs "^16.0.0"
+    yargs "^17.0.0"
 
 commitlint-format-junit@^1.1.4:
   version "1.1.4"
@@ -6733,7 +6733,7 @@ yargs-unparser@2.0.0:
     flat "^5.0.2"
     is-plain-obj "^2.1.0"
 
-yargs@16.2.0, yargs@^16.0.0:
+yargs@16.2.0:
   version "16.2.0"
   resolved "https://registry.npmjs.org/yargs/-/yargs-16.2.0.tgz#1c82bf0f6b6a66eafce7ef30e376f49a12477f66"
   integrity sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==
