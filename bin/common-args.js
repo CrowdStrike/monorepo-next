@@ -1,6 +1,6 @@
 'use strict';
 
-const defaults = require('standard-version/defaults');
+const defaults = require('commit-and-tag-version/defaults');
 
 module.exports = {
   'only-include-releasable': {

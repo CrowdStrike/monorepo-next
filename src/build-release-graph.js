@@ -16,8 +16,8 @@ const defaultReleaseType = 'patch';
 async function getReleaseType(packageName, cwd) {
   const conventionalRecommendedBump = require('conventional-recommended-bump');
 
-  // let { preset } = require('standard-version/defaults');
-  let preset = require('standard-version/lib/preset-loader')({});
+  // let { preset } = require('commit-and-tag-version/defaults');
+  let preset = require('commit-and-tag-version/lib/preset-loader')({});
 
   let tagPrefix = `${packageName}@`;
 

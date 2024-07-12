@@ -11,7 +11,7 @@ const {
 } = require('./git');
 const readJson = require('./json').read;
 
-const defaults = require('standard-version/defaults');
+const defaults = require('commit-and-tag-version/defaults');
 
 const { builder } = require('../bin/commands/release');
 
@@ -102,7 +102,7 @@ async function _getChangelog({
   let context = { version };
   let changelogStream = conventionalChangelog(
     {
-      preset: require('standard-version/lib/preset-loader')(defaults),
+      preset: require('commit-and-tag-version/lib/preset-loader')(defaults),
       tagPrefix,
       releaseCount,
       pkg: { path: path.join(cwd, 'package.json') },
