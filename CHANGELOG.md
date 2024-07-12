@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.4.2](https://github.com/CrowdStrike/monorepo-next/compare/v11.4.1...v11.4.2) (2024-07-12)
+
 ### [11.4.1](https://github.com/CrowdStrike/monorepo-next/compare/v11.4.0...v11.4.1) (2024-07-12)
 
 
