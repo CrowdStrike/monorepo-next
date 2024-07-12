@@ -1,6 +1,5 @@
 'use strict';
 
-const conventionalRecommendedBump = require('conventional-recommended-bump');
 const path = require('path');
 const {
   read: readJson,
@@ -15,6 +14,8 @@ const { createSyncLogger, createAsyncLogger } = require('./log');
 const defaultReleaseType = 'patch';
 
 async function getReleaseType(packageName, cwd) {
+  const conventionalRecommendedBump = require('conventional-recommended-bump');
+
   let tagPrefix = `${packageName}@`;
 
   let originalCwd = process.cwd();
