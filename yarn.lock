@@ -1403,10 +1403,10 @@ comma-separated-tokens@^2.0.0:
   resolved "https://registry.yarnpkg.com/comma-separated-tokens/-/comma-separated-tokens-2.0.3.tgz#4e89c9458acb61bc8fef19f4529973b2392839ee"
   integrity sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==
 
-commit-and-tag-version@11.2.2:
-  version "11.2.2"
-  resolved "https://registry.npmjs.org/commit-and-tag-version/-/commit-and-tag-version-11.2.2.tgz#5b2c806cb7e53f15f93de8a2e6e7ba5197aeb3d9"
-  integrity sha512-pqtTvRZFSqsGevhdcCvZVhzoSC56OeWZxhVzVDOWu97FfMJR4xUmpirRZcGqmTsDWCTxnm+UVl9/slN7OGO82A==
+commit-and-tag-version@11.3.0:
+  version "11.3.0"
+  resolved "https://registry.yarnpkg.com/commit-and-tag-version/-/commit-and-tag-version-11.3.0.tgz#c1b2959e1111f12544d77e3443582376e395a2da"
+  integrity sha512-hh3wV9pcuQRuUNdPZ3TfF29VjgbkWJxJ6sQKDls1k71hMZHTjbsdPFbr2gBTUUwW/ArGGZNxejWDTomPZtEq/g==
   dependencies:
     chalk "^2.4.2"
     conventional-changelog "3.1.25"
