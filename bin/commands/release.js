@@ -3,7 +3,7 @@
 const commonArgs = require('../common-args');
 const postRun = require('../../src/post-run');
 
-const defaults = require('standard-version/defaults');
+const defaults = require('commit-and-tag-version/defaults');
 
 module.exports = {
   command: 'release',

@@ -13,6 +13,7 @@
   "keywords": [
     "attach",
     "changed",
+    "commit-and-tag-version",
     "conventional-changelog",
     "conventional-commits",
     "dag",
@@ -34,10 +35,10 @@
     "lint:js": "eslint . --ext js,json",
     "lint:md": "remark -f README.md",
     "start": "node bin/next",
-    "release": "standard-version --commit-all",
+    "release": "commit-and-tag-version --commit-all",
     "test": "mocha"
   },
-  "standard-version": {
+  "commit-and-tag-version": {
     "scripts": {
       "prerelease": "yargs-help-output README.md --npm-script-name start",
       "precommit": "git add README.md",
@@ -59,6 +60,7 @@
   },
   "dependencies": {
     "@npmcli/arborist": "^7.0.0",
+    "commit-and-tag-version": "9.5.0",
     "conventional-changelog": "5.1.0",
     "conventional-recommended-bump": "9.0.0",
     "debug": "^4.3.1",
@@ -72,7 +74,6 @@
     "rfc6902": "^5.0.0",
     "sanitize-filename": "^1.6.3",
     "semver": "^7.5.3",
-    "standard-version": "9.5.0",
     "superset": "^2.0.1",
     "tmp": "0.2.3",
     "yargs": "^17.0.0"

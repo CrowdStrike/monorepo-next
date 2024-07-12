@@ -110,7 +110,7 @@ async function release({
 
     // eslint-disable-next-line no-inner-declarations
     async function originalVersion(options) {
-      await require('standard-version')({
+      await require('commit-and-tag-version')({
         path: cwd,
         skip: {
           commit: true,

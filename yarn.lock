@@ -1403,6 +1403,26 @@ comma-separated-tokens@^2.0.0:
   resolved "https://registry.yarnpkg.com/comma-separated-tokens/-/comma-separated-tokens-2.0.3.tgz#4e89c9458acb61bc8fef19f4529973b2392839ee"
   integrity sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==
 
+commit-and-tag-version@9.5.0:
+  version "9.5.0"
+  resolved "https://registry.npmjs.org/commit-and-tag-version/-/commit-and-tag-version-9.5.0.tgz#34e7f47c6bd6336c1931e2b3e87de382ab84afb3"
+  integrity sha512-XpYAhoa87HfrVY2B9Rle3XbxFNI8eVusMF66H49oom2UNYAU0u5JbLL6x5MuCJw8wfac4KKpoJmUWCYuLHDdUw==
+  dependencies:
+    chalk "^2.4.2"
+    conventional-changelog "3.1.25"
+    conventional-changelog-config-spec "2.1.0"
+    conventional-changelog-conventionalcommits "4.6.3"
+    conventional-recommended-bump "6.1.0"
+    detect-indent "^6.0.0"
+    detect-newline "^3.1.0"
+    dotgitignore "^2.1.0"
+    figures "^3.1.0"
+    find-up "^5.0.0"
+    git-semver-tags "^4.0.0"
+    semver "^7.1.1"
+    stringify-package "^1.0.1"
+    yargs "^16.0.0"
+
 commitlint-format-junit@^1.1.4:
   version "1.1.4"
   resolved "https://registry.npmjs.org/commitlint-format-junit/-/commitlint-format-junit-1.1.4.tgz#6e2cb692c1df6e7a189c7521c2de57335bd20a1c"
@@ -5827,26 +5847,6 @@ standard-node-template@6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/standard-node-template/-/standard-node-template-6.0.0.tgz#801740d68ecb42bb1cf075004700bae6405f642a"
   integrity sha512-Ii/Ucgkw8xajSGCCzFdcNTF8TJ6tX8feDVS8ANsX6JtItrZMcBYGAC5mX5tDDTGYrAv5JiCanJ6RFFE9bO7+Xw==
-
-standard-version@9.5.0:
-  version "9.5.0"
-  resolved "https://registry.yarnpkg.com/standard-version/-/standard-version-9.5.0.tgz#851d6dcddf5320d5079601832aeb185dbf497949"
-  integrity sha512-3zWJ/mmZQsOaO+fOlsa0+QK90pwhNd042qEcw6hKFNoLFs7peGyvPffpEBbK/DSGPbyOvli0mUIFv5A4qTjh2Q==
-  dependencies:
-    chalk "^2.4.2"
-    conventional-changelog "3.1.25"
-    conventional-changelog-config-spec "2.1.0"
-    conventional-changelog-conventionalcommits "4.6.3"
-    conventional-recommended-bump "6.1.0"
-    detect-indent "^6.0.0"
-    detect-newline "^3.1.0"
-    dotgitignore "^2.1.0"
-    figures "^3.1.0"
-    find-up "^5.0.0"
-    git-semver-tags "^4.0.0"
-    semver "^7.1.1"
-    stringify-package "^1.0.1"
-    yargs "^16.0.0"
 
 "string-width-cjs@npm:string-width@^4.2.0":
   version "4.2.3"
