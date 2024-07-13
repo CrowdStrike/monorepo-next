@@ -14,12 +14,12 @@ const { createSyncLogger, createAsyncLogger } = require('./log');
 const defaultReleaseType = 'patch';
 
 async function getReleaseType(packageName, cwd) {
-  const conventionalRecommendedBump = require('conventional-recommended-bump');
+  const { Bumper, packagePrefix } = await import('conventional-recommended-bump');
 
   // let { preset } = require('commit-and-tag-version/defaults');
   let preset = require('commit-and-tag-version/lib/preset-loader')({});
 
-  let tagPrefix = `${packageName}@`;
+  let tagPrefix = packagePrefix(packageName);
 
   let originalCwd = process.cwd();
 
@@ -27,11 +27,17 @@ async function getReleaseType(packageName, cwd) {
   try {
     process.chdir(cwd);
 
-    myReleaseType = (await conventionalRecommendedBump({
-      preset,
-      path: cwd,
-      tagPrefix,
-    })).releaseType;
+    let bumper = new Bumper(cwd);
+
+    bumper.loadPreset(preset);
+
+    myReleaseType = await bumper.bump();
+
+    // myReleaseType = (await conventionalRecommendedBump({
+    //   preset,
+    //   path: cwd,
+    //   tagPrefix,
+    // })).releaseType;
   } finally {
     process.chdir(originalCwd);
   }
