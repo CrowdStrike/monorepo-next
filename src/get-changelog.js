@@ -96,7 +96,7 @@ async function _getChangelog({
   releaseCount,
   from,
 }) {
-  const conventionalChangelog = require('conventional-changelog');
+  const { default: conventionalChangelog } = await import('conventional-changelog');
 
   let changelog = '';
   let context = { version };
