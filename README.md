@@ -124,6 +124,8 @@ Options:
   --push                          git push + tags when done
                                                        [boolean] [default: true]
   --publish                       npm publish when done[boolean] [default: true]
+  --dist-tag                      publish to a different NPM dist-tag
+                                                    [string] [default: "latest"]
   --bump-in-range-dependencies    If a dependency is still in range, and nothing
                                   changed in my package, still bump my version
                                   and the dependency version.
