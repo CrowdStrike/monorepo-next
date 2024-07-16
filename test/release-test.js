@@ -1525,6 +1525,7 @@ describe(_release, function() {
       expect(publishOverride).to.be.calledOnce;
       expect(publishOverride.args[0][0]?.cwd).to.equal(path.join(tmpPath, 'packages/package-a'));
       expect(publishOverride.args[0][0]?.originalPublish).to.be.a('function');
+      expect(publishOverride.args[0][0]?.distTag).to.equal('latest');
       expect(publishOverride.args[0][0]?.dryRun).to.equal(false);
     });
   });
@@ -1625,7 +1626,7 @@ describe(_release, function() {
         ['git', ['tag', '-a', 'root@1.0.1', '-m', 'root@1.0.1'], { cwd: tmpPath }],
         ['posttag test', { shell: true }],
         ['git', ['push', '--follow-tags', '--atomic', '--dry-run'], { cwd: tmpPath }],
-        ['npm', ['publish', '--dry-run'], { cwd: path.join(tmpPath, 'packages/package-a') }],
+        ['npm', ['publish', '--tag', 'latest', '--dry-run'], { cwd: path.join(tmpPath, 'packages/package-a') }],
       ]);
     });
 
@@ -1651,7 +1652,7 @@ describe(_release, function() {
         ['git', ['tag', '-a', '@scope/package-a@1.1.0', '-m', '@scope/package-a@1.1.0'], { cwd: tmpPath }],
         ['git', ['tag', '-a', 'root@1.0.1', '-m', 'root@1.0.1'], { cwd: tmpPath }],
         ['git', ['push', '--follow-tags', '--atomic', '--dry-run'], { cwd: tmpPath }],
-        ['npm', ['publish', '--dry-run'], { cwd: path.join(tmpPath, 'packages/package-a') }],
+        ['npm', ['publish', '--tag', 'latest', '--dry-run'], { cwd: path.join(tmpPath, 'packages/package-a') }],
       ]);
 
       expect(pushOverride.args).to.match([[this.match({ dryRun: true })]]);

@@ -26,6 +26,7 @@ async function release({
   dryRun = builder['dry-run'].default,
   shouldPush = builder['push'].default,
   shouldPublish = builder['publish'].default,
+  distTag = builder['dist-tag'].default,
   shouldBumpInRangeDependencies = builder['bump-in-range-dependencies'].default,
   shouldInheritGreaterReleaseType = builder['inherit-greater-release-type'].default,
   shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
@@ -228,7 +229,7 @@ async function release({
   }
 
   if (shouldPublish) {
-    await prePublishCallback({ dryRun });
+    await prePublishCallback({ distTag, dryRun });
   }
 
   // eslint-disable-next-line require-atomic-updates
@@ -236,13 +237,14 @@ async function release({
     if (shouldPublish && _shouldPublish) {
       // eslint-disable-next-line no-inner-declarations
       async function originalPublish() {
-        await publish({ cwd, silent, dryRun });
+        await publish({ cwd, silent, distTag, dryRun });
       }
 
       if (publishOverride) {
         await publishOverride({
           cwd,
           originalPublish,
+          distTag,
           dryRun,
         });
       } else {
@@ -294,10 +296,10 @@ async function push({ cwd, silent, dryRun }) {
   }
 }
 
-async function publish({ cwd, silent, dryRun }) {
+async function publish({ cwd, silent, distTag, dryRun }) {
   let dryRunArgs = dryRun ? ['--dry-run'] : [];
 
-  await execa('npm', ['publish', ...dryRunArgs], { cwd, silent });
+  await execa('npm', ['publish', '--tag', distTag, ...dryRunArgs], { cwd, silent });
 }
 
 module.exports = release;
