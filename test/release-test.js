@@ -1386,6 +1386,149 @@ describe(_release, function() {
     ]);
   });
 
+  describe('versionOverride', function () {
+    beforeEach(async function () {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '0.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+    });
+
+    it('can override version', async function() {
+      let versionOverride = this.stub().callsFake(async ({ cwd }) => {
+        await fs.promises.writeFile(path.join(cwd, 'test-version'), '');
+      });
+
+      await release({
+        versionOverride,
+      });
+
+      expect(versionOverride).to.be.calledOnce;
+      expect(versionOverride.args[0][0]?.cwd).to.equal(path.join(tmpPath, 'packages/package-a'));
+      expect(versionOverride.args[0][0]?.originalVersion).to.be.a('function');
+    });
+  });
+
+  describe('push', function () {
+    beforeEach(async function () {
+      await cloneRemote({
+        localPath: tmpPath,
+      });
+
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '0.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+    });
+
+    async function assertPush({ cwd, assertNotPushed = false }) {
+      let { stdout: branchName } = await execa('git', ['branch', '--show-current'], { cwd });
+      let { stdout: localHead } = await execa('git', ['rev-parse', branchName], { cwd });
+      let { stdout: remoteHead } = await execa('git', ['rev-parse', `origin/${branchName}`], { cwd });
+
+      if (assertNotPushed) {
+        expect(remoteHead).to.not.equal(localHead);
+      } else {
+        expect(remoteHead).to.equal(localHead);
+      }
+    }
+
+    it('can override push', async function() {
+      let pushOverride = this.spy();
+
+      await release({
+        shouldPush: true,
+        pushOverride,
+      });
+
+      expect(pushOverride).to.be.calledOnce;
+      expect(pushOverride.args[0][0]?.cwd).to.equal(tmpPath);
+      expect(pushOverride.args[0][0]?.originalPush).to.be.a('function');
+      expect(pushOverride.args[0][0]?.dryRun).to.equal(false);
+
+      assertPush({ cwd: tmpPath, assertNotPushed: true });
+    });
+
+    it('can call originalPush', async function() {
+      let pushOverride = this.stub().callsFake(({ originalPush }) => originalPush());
+
+      await release({
+        shouldPush: true,
+        pushOverride,
+      });
+
+      assertPush({ cwd: tmpPath });
+    });
+  });
+
+  describe('publish', function () {
+    beforeEach(async function () {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '0.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+    });
+
+    it('can override publish', async function() {
+      let publishOverride = this.spy();
+
+      await release({
+        shouldPublish: true,
+        publishOverride,
+      });
+
+      expect(publishOverride).to.be.calledOnce;
+      expect(publishOverride.args[0][0]?.cwd).to.equal(path.join(tmpPath, 'packages/package-a'));
+      expect(publishOverride.args[0][0]?.originalPublish).to.be.a('function');
+      expect(publishOverride.args[0][0]?.dryRun).to.equal(false);
+    });
+  });
+
   describe('dry run', function() {
     const dryRun = true;
 
