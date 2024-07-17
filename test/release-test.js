@@ -9,7 +9,7 @@ const execa = require('execa');
 const { gitInit, cloneRemote } = require('git-fixtures');
 const {
   getLastCommitMessage,
-  getTagsOnLastCommit,
+  getTagsOnCommit,
   getCurrentCommit,
   doesTagExist,
   isGitClean,
@@ -192,7 +192,7 @@ describe(_release, function() {
 
     expect(lastCommitMessage).to.equal('chore(release): my-app@1.0.1,@scope/package-a@2.0.0,@scope/package-b@3.0.0,@scope/package-c@3.0.1');
 
-    let tags = await getTagsOnLastCommit(tmpPath);
+    let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
     expect(tags).to.deep.equal([
       '@scope/package-a@2.0.0',
@@ -349,7 +349,7 @@ describe(_release, function() {
 
     expect(lastCommitMessage).to.equal('chore(release): my-app@0.0.1,@scope/package-a@2.0.0,@scope/package-b@3.0.0,@scope/package-c@3.0.1,root@1.0.0');
 
-    let tags = await getTagsOnLastCommit(tmpPath);
+    let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
     expect(tags).to.deep.equal([
       '@scope/package-a@2.0.0',
@@ -440,7 +440,7 @@ describe(_release, function() {
 
     expect(lastCommitMessage).to.equal('fix: foo');
 
-    let tags = await getTagsOnLastCommit(tmpPath);
+    let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
     expect(tags).to.deep.equal([
       '@scope/package-a@1.0.0',
@@ -504,7 +504,7 @@ describe(_release, function() {
 
     expect(lastCommitMessage).to.equal('fix: foo');
 
-    let tags = await getTagsOnLastCommit(tmpPath);
+    let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
     expect(tags).to.deep.equal([]);
   });
@@ -567,7 +567,7 @@ describe(_release, function() {
 
       expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.0.1,root@0.0.1');
 
-      let tags = await getTagsOnLastCommit(tmpPath);
+      let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
       expect(tags).to.deep.equal([
         '@scope/package-a@1.0.1',
@@ -630,7 +630,7 @@ describe(_release, function() {
 
       expect(lastCommitMessage).to.equal('fix: foo');
 
-      let tags = await getTagsOnLastCommit(tmpPath);
+      let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
       expect(tags).to.deep.equal([]);
     });
@@ -758,7 +758,7 @@ describe(_release, function() {
 
     expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0,@scope/package-b@1.0.1');
 
-    let tags = await getTagsOnLastCommit(tmpPath);
+    let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
     expect(tags).to.deep.equal([
       '@scope/package-a@1.1.0',
@@ -843,7 +843,7 @@ describe(_release, function() {
 
     expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0');
 
-    let tags = await getTagsOnLastCommit(tmpPath);
+    let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
     expect(tags).to.deep.equal([
       '@scope/package-a@1.1.0',
@@ -928,7 +928,7 @@ describe(_release, function() {
 
     expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0,@scope/package-b@1.1.0');
 
-    let tags = await getTagsOnLastCommit(tmpPath);
+    let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
     expect(tags).to.deep.equal([
       '@scope/package-a@1.1.0',
@@ -1014,7 +1014,7 @@ describe(_release, function() {
 
     expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0,@scope/package-b@1.0.1');
 
-    let tags = await getTagsOnLastCommit(tmpPath);
+    let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
     expect(tags).to.deep.equal([
       '@scope/package-a@1.1.0',
@@ -1100,7 +1100,7 @@ describe(_release, function() {
 
     expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0,@scope/package-b@1.1.0');
 
-    let tags = await getTagsOnLastCommit(tmpPath);
+    let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
     expect(tags).to.deep.equal([
       '@scope/package-a@1.1.0',
@@ -1213,7 +1213,7 @@ describe(_release, function() {
 
     expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0');
 
-    let tags = await getTagsOnLastCommit(tmpPath);
+    let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
     expect(tags).to.deep.equal([
       '@scope/package-a@1.1.0',
@@ -1270,7 +1270,7 @@ describe(_release, function() {
 
     expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@0.1.0');
 
-    let tags = await getTagsOnLastCommit(tmpPath);
+    let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
     expect(tags).to.deep.equal([
       '@scope/package-a@0.1.0',
@@ -1379,7 +1379,7 @@ describe(_release, function() {
 
     expect(lastCommitMessage).to.equal('chore(release): @scope/package-a@1.1.0');
 
-    let tags = await getTagsOnLastCommit(tmpPath);
+    let tags = await getTagsOnCommit(tmpPath, 'HEAD');
 
     expect(tags).to.deep.equal([
       '@scope/package-a@1.1.0',

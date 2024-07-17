@@ -163,6 +163,10 @@ async function getCurrentCommit(cwd) {
   return await git(['rev-parse', 'HEAD'], { cwd });
 }
 
+async function getTagsOnCommit(cwd, sha) {
+  return getLinesFromOutput(await git(['tag', '-l', '--points-at', sha], { cwd }));
+}
+
 module.exports = {
   git,
   getCurrentBranch,
@@ -173,4 +177,5 @@ module.exports = {
   getCommitSinceLastRelease,
   getFileAtCommit,
   getCurrentCommit,
+  getTagsOnCommit,
 };
