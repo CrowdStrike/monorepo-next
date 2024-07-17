@@ -1,18 +1,21 @@
 'use strict';
 
-const execa = require('execa');
+const {
+  git,
+  getLinesFromOutput,
+} = require('../../src/git');
 
 async function getLastCommitMessage(cwd) {
-  return (await execa('git', ['log', '-1', '--pretty=%B'], { cwd })).stdout.trim();
+  return (await git(['log', '-1', '--pretty=%B'], { cwd })).trim();
 }
 
 async function getTagsOnLastCommit(cwd) {
-  return (await execa('git', ['tag', '-l', '--points-at', 'HEAD'], { cwd })).stdout.split(/\r?\n/).filter(Boolean);
+  return getLinesFromOutput(await git(['tag', '-l', '--points-at', 'HEAD'], { cwd }));
 }
 
 async function doesTagExist(ref, cwd) {
   try {
-    await execa('git', ['rev-parse', ref], { cwd });
+    await git(['rev-parse', ref], { cwd });
   } catch (err) {
     if (err.stderr.includes('unknown revision or path not in the working tree')) {
       return false;
@@ -25,7 +28,7 @@ async function doesTagExist(ref, cwd) {
 }
 
 async function isGitClean(cwd) {
-  let { stdout } = await execa('git', ['status', '--porcelain'], { cwd });
+  let stdout = await git(['status', '--porcelain'], { cwd });
 
   return !stdout;
 }
