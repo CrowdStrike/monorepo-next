@@ -514,6 +514,8 @@ describe(_release, function() {
     let tags = await getTagsOnLastCommit(tmpPath);
 
     expect(tags).to.deep.equal([]);
+
+    expect(consoleLog).to.be.calledOnceWith(`branch mismatch. defaultBranch: ${defaultBranchName}, currentBranch: test-branch`);
   });
 
   describe('defaultBranch', function () {
