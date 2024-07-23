@@ -31,6 +31,7 @@ describe(_release, function() {
   setUpSinon();
 
   let tmpPath;
+  let consoleLog;
 
   beforeEach(async function() {
     tmpPath = await gitInit({
@@ -41,6 +42,8 @@ describe(_release, function() {
       // prepend /private in mac
       tmpPath = await getWorkspaceCwd(tmpPath);
     }
+
+    consoleLog = this.stub(console, 'log');
   });
 
   async function release(options) {
@@ -1535,7 +1538,6 @@ describe(_release, function() {
   describe('dry run', function() {
     const dryRun = true;
 
-    let consoleLog;
     let gitCopyPath;
 
     beforeEach(async function() {
@@ -1580,8 +1582,6 @@ describe(_release, function() {
 
       await execa('git', ['add', '.'], { cwd: tmpPath });
       await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
-
-      consoleLog = this.stub(console, 'log');
 
       gitCopyPath = await createTmpDir();
 
