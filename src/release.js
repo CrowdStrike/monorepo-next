@@ -48,6 +48,7 @@ async function release({
 
   let currentBranch = await getCurrentBranch(cwd);
   if (currentBranch !== defaultBranch) {
+    console.log(`branch mismatch. defaultBranch: ${defaultBranch}, currentBranch: ${currentBranch}`);
     return;
   }
 

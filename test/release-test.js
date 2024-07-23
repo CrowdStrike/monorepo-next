@@ -22,6 +22,8 @@ const path = require('path');
 const fs = require('fs-extra');
 const { createTmpDir } = require('../src/tmp');
 
+const defaultBranchName = builder['default-branch'].default;
+
 describe(_release, function() {
   this.timeout(10e3);
 
@@ -29,16 +31,19 @@ describe(_release, function() {
   setUpSinon();
 
   let tmpPath;
+  let consoleLog;
 
   beforeEach(async function() {
     tmpPath = await gitInit({
-      defaultBranchName: builder['default-branch'].default,
+      defaultBranchName,
     });
 
     if (process.platform === 'darwin') {
       // prepend /private in mac
       tmpPath = await getWorkspaceCwd(tmpPath);
     }
+
+    consoleLog = this.stub(console, 'log');
   });
 
   async function release(options) {
@@ -447,6 +452,8 @@ describe(_release, function() {
       'my-app@0.0.0',
       'root@0.0.0',
     ]);
+
+    expect(consoleLog).to.be.calledOnceWith('no releasable code');
   });
 
   it('prevents release on non-default branch', async function() {
@@ -507,6 +514,8 @@ describe(_release, function() {
     let tags = await getTagsOnLastCommit(tmpPath);
 
     expect(tags).to.deep.equal([]);
+
+    expect(consoleLog).to.be.calledOnceWith(`branch mismatch. defaultBranch: ${defaultBranchName}, currentBranch: test-branch`);
   });
 
   describe('defaultBranch', function () {
@@ -1533,7 +1542,6 @@ describe(_release, function() {
   describe('dry run', function() {
     const dryRun = true;
 
-    let consoleLog;
     let gitCopyPath;
 
     beforeEach(async function() {
@@ -1578,8 +1586,6 @@ describe(_release, function() {
 
       await execa('git', ['add', '.'], { cwd: tmpPath });
       await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
-
-      consoleLog = this.stub(console, 'log');
 
       gitCopyPath = await createTmpDir();
 
