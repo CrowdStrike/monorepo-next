@@ -22,6 +22,8 @@ const path = require('path');
 const fs = require('fs-extra');
 const { createTmpDir } = require('../src/tmp');
 
+const defaultBranchName = builder['default-branch'].default;
+
 describe(_release, function() {
   this.timeout(10e3);
 
@@ -32,7 +34,7 @@ describe(_release, function() {
 
   beforeEach(async function() {
     tmpPath = await gitInit({
-      defaultBranchName: builder['default-branch'].default,
+      defaultBranchName,
     });
 
     if (process.platform === 'darwin') {
