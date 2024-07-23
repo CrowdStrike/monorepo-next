@@ -452,6 +452,8 @@ describe(_release, function() {
       'my-app@0.0.0',
       'root@0.0.0',
     ]);
+
+    expect(consoleLog).to.be.calledOnceWith('no releasable code');
   });
 
   it('prevents release on non-default branch', async function() {
