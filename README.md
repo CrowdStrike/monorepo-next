@@ -115,33 +115,37 @@ next release
 release all packages as needed
 
 Options:
-  --help                          Show help                            [boolean]
-  --version                       Show version number                  [boolean]
-  --silent                        Don't print logs and errors
+  --help                            Show help                          [boolean]
+  --version                         Show version number                [boolean]
+  --silent                          Don't print logs and errors
                                                       [boolean] [default: false]
-  --dry-run                       log to console instead of modifying files
+  --dry-run                         log to console instead of modifying files
                                                       [boolean] [default: false]
-  --push                          git push + tags when done
+  --push                            git push + tags when done
                                                        [boolean] [default: true]
-  --publish                       npm publish when done[boolean] [default: true]
-  --dist-tag                      publish to a different NPM dist-tag
+  --publish                         npm publish when done
+                                                       [boolean] [default: true]
+  --dist-tag                        publish to a different NPM dist-tag
                                                     [string] [default: "latest"]
-  --bump-in-range-dependencies    If a dependency is still in range, and nothing
-                                  changed in my package, still bump my version
-                                  and the dependency version.
+  --bump-in-range-dependencies      If a dependency is still in range, and
+                                    nothing changed in my package, still bump my
+                                    version and the dependency version.
                                                        [boolean] [default: true]
-  --inherit-greater-release-type  If a dependency has a greater release type,
-                                  bump my package the with the same release
-                                  type.               [boolean] [default: false]
-  --exclude-dev-changes           If a change doesn't affect consumers, like a
-                                  monorepo dev dep change or manually bumping an
-                                  external dev dep, don't count it towards a
-                                  package change.     [boolean] [default: false]
-  --clean-up-after-failed-push    If there's already a new commit on the remote,
-                                  clean up the commit and tags that won't be
-                                  used                [boolean] [default: false]
-  --scripts                       Provide scripts to execute for lifecycle
-                                  events (prebump, precommit, etc.,)
+  --inherit-greater-release-type    If a dependency has a greater release type,
+                                    bump my package the with the same release
+                                    type.             [boolean] [default: false]
+  --exclude-dev-changes             If a change doesn't affect consumers, like a
+                                    monorepo dev dep change or manually bumping
+                                    an external dev dep, don't count it towards
+                                    a package change. [boolean] [default: false]
+  --validate-dependency-visibility  Prevent releasing public packages that
+                                    depend on private packages.
+                                                      [boolean] [default: false]
+  --clean-up-after-failed-push      If there's already a new commit on the
+                                    remote, clean up the commit and tags that
+                                    won't be used     [boolean] [default: false]
+  --scripts                         Provide scripts to execute for lifecycle
+                                    events (prebump, precommit, etc.,)
                                                                    [default: {}]
   --package-files
                 [array] [default: ["package.json","bower.json","manifest.json"]]

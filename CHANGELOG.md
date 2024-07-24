@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [12.2.0](https://github.com/CrowdStrike/monorepo-next/compare/v12.1.1...v12.2.0) (2024-07-24)
+
+
+### Features
+
+* add shouldValidateDependencyVisibility option ([43198ad](https://github.com/CrowdStrike/monorepo-next/commit/43198ad0334028d3ab4cd658bfcf6b3f51f6d705))
+
 ## [12.1.1](https://github.com/CrowdStrike/monorepo-next/compare/v12.1.0...v12.1.1) (2024-07-23)
 
 
