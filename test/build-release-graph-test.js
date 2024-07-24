@@ -1205,6 +1205,327 @@ describe(buildReleaseGraph, function() {
     });
   });
 
+  describe('shouldValidateDependencyVisibility', function() {
+    it('throws when a public package depends on a private package', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': 'package-a',
+              'version': '1.0.0',
+              'private': true,
+            }),
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': 'package-b',
+              'version': '1.0.0',
+              'dependencies': {
+                'package-a': '1.0.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+      let promise = buildReleaseGraph({
+        packagesWithChanges,
+        shouldValidateDependencyVisibility: true,
+      });
+
+      await expect(promise).to.eventually.be.rejectedWith('Public package "package-b" has a dependency on the private package "package-a".');
+    });
+
+    it('does not throw when it is a dev dep', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': 'package-a',
+              'version': '1.0.0',
+              'private': true,
+            }),
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': 'package-b',
+              'version': '1.0.0',
+              'devDependencies': {
+                'package-a': '1.0.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+
+      let releaseTrees = await buildReleaseGraph({
+        packagesWithChanges,
+        shouldValidateDependencyVisibility: true,
+      });
+
+      expect(releaseTrees).to.match(this.match([
+        {
+          name: 'package-a',
+          cwd: matchPath('/packages/package-a'),
+          oldVersion: '1.0.0',
+          releaseType: 'patch',
+          shouldBumpVersion: true,
+          shouldPublish: false,
+          dependencies: {},
+          devDependencies: {},
+          optionalDependencies: {},
+        },
+        {
+          name: 'package-b',
+          cwd: matchPath('/packages/package-b'),
+          oldVersion: '1.0.0',
+          releaseType: 'patch',
+          shouldBumpVersion: true,
+          shouldPublish: true,
+          dependencies: {},
+          devDependencies: {
+            'package-a': '1.0.1',
+          },
+          optionalDependencies: {},
+        },
+      ]));
+    });
+
+    it('does not throw if they are both private', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': 'package-a',
+              'version': '1.0.0',
+              'private': true,
+            }),
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': 'package-b',
+              'version': '1.0.0',
+              'private': true,
+              'dependencies': {
+                'package-a': '1.0.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+
+      let releaseTrees = await buildReleaseGraph({
+        packagesWithChanges,
+        shouldValidateDependencyVisibility: true,
+      });
+
+      expect(releaseTrees).to.match(this.match([
+        {
+          name: 'package-a',
+          cwd: matchPath('/packages/package-a'),
+          oldVersion: '1.0.0',
+          releaseType: 'patch',
+          shouldBumpVersion: true,
+          shouldPublish: false,
+          dependencies: {},
+          devDependencies: {},
+          optionalDependencies: {},
+        },
+        {
+          name: 'package-b',
+          cwd: matchPath('/packages/package-b'),
+          oldVersion: '1.0.0',
+          releaseType: 'patch',
+          shouldBumpVersion: true,
+          shouldPublish: false,
+          dependencies: {
+            'package-a': '1.0.1',
+          },
+          devDependencies: {},
+          optionalDependencies: {},
+        },
+      ]));
+    });
+
+    it('does not throw if they are both public', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': 'package-a',
+              'version': '1.0.0',
+            }),
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': 'package-b',
+              'version': '1.0.0',
+              'dependencies': {
+                'package-a': '1.0.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+
+      let releaseTrees = await buildReleaseGraph({
+        packagesWithChanges,
+        shouldValidateDependencyVisibility: true,
+      });
+
+      expect(releaseTrees).to.match(this.match([
+        {
+          name: 'package-a',
+          cwd: matchPath('/packages/package-a'),
+          oldVersion: '1.0.0',
+          releaseType: 'patch',
+          shouldBumpVersion: true,
+          shouldPublish: true,
+          dependencies: {},
+          devDependencies: {},
+          optionalDependencies: {},
+        },
+        {
+          name: 'package-b',
+          cwd: matchPath('/packages/package-b'),
+          oldVersion: '1.0.0',
+          releaseType: 'patch',
+          shouldBumpVersion: true,
+          shouldPublish: true,
+          dependencies: {
+            'package-a': '1.0.1',
+          },
+          devDependencies: {},
+          optionalDependencies: {},
+        },
+      ]));
+    });
+
+    it('does not throw if the consumer is private', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': 'package-a',
+              'version': '1.0.0',
+            }),
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': 'package-b',
+              'version': '1.0.0',
+              'private': true,
+              'dependencies': {
+                'package-a': '1.0.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+      let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+      let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+
+      let releaseTrees = await buildReleaseGraph({
+        packagesWithChanges,
+        shouldValidateDependencyVisibility: true,
+      });
+
+      expect(releaseTrees).to.match(this.match([
+        {
+          name: 'package-a',
+          cwd: matchPath('/packages/package-a'),
+          oldVersion: '1.0.0',
+          releaseType: 'patch',
+          shouldBumpVersion: true,
+          shouldPublish: true,
+          dependencies: {},
+          devDependencies: {},
+          optionalDependencies: {},
+        },
+        {
+          name: 'package-b',
+          cwd: matchPath('/packages/package-b'),
+          oldVersion: '1.0.0',
+          releaseType: 'patch',
+          shouldBumpVersion: true,
+          shouldPublish: false,
+          dependencies: {
+            'package-a': '1.0.1',
+          },
+          devDependencies: {},
+          optionalDependencies: {},
+        },
+      ]));
+    });
+  });
+
   it('ignores child package changes in root package', async function() {
     fixturify.writeSync(tmpPath, {
       'packages': {

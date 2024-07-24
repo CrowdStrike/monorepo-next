@@ -20,6 +20,7 @@ async function getChangelog({
   shouldBumpInRangeDependencies = builder['bump-in-range-dependencies'].default,
   shouldInheritGreaterReleaseType = builder['inherit-greater-release-type'].default,
   shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
+  shouldValidateDependencyVisibility = builder['validate-dependency-visibility'].default,
   releaseCount = 1,
   fromCommit,
   cached,
@@ -48,6 +49,7 @@ async function getChangelog({
     shouldBumpInRangeDependencies,
     shouldInheritGreaterReleaseType,
     shouldExcludeDevChanges,
+    shouldValidateDependencyVisibility,
   });
 
   let releaseTree = releaseTrees.find(releaseTree => releaseTree.name === name);
