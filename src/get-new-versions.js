@@ -15,6 +15,7 @@ async function getNewVersions({
   shouldBumpInRangeDependencies = builder['bump-in-range-dependencies'].default,
   shouldInheritGreaterReleaseType = builder['inherit-greater-release-type'].default,
   shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
+  shouldValidateDependencyVisibility = builder['validate-dependency-visibility'].default,
   fromCommit,
   sinceBranch,
   cached,
@@ -36,6 +37,7 @@ async function getNewVersions({
     shouldBumpInRangeDependencies,
     shouldInheritGreaterReleaseType,
     shouldExcludeDevChanges,
+    shouldValidateDependencyVisibility,
   });
 
   let newVersions = {};

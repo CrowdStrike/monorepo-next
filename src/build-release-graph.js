@@ -133,6 +133,7 @@ async function secondPass({
   shouldBumpInRangeDependencies,
   shouldInheritGreaterReleaseType,
   shouldExcludeDevChanges,
+  shouldValidateDependencyVisibility,
 }) {
   function shouldInit({
     dag,
@@ -198,6 +199,15 @@ async function secondPass({
       for (let group of dag.node.dependents) {
         if (group.isCycle) {
           continue;
+        }
+
+        if (
+          shouldValidateDependencyVisibility &&
+          !dag.node.isPackage &&
+          group.node.isPackage &&
+          group.dependencyType === 'dependencies'
+        ) {
+          throw new Error(`Public package "${group.node.packageName}" has a dependency on the private package "${dag.node.packageName}".`);
         }
 
         await crawlDag({
@@ -350,6 +360,7 @@ async function buildReleaseGraph({
   shouldBumpInRangeDependencies,
   shouldInheritGreaterReleaseType,
   shouldExcludeDevChanges,
+  shouldValidateDependencyVisibility,
 }) {
   let logSync = createSyncLogger(_debug);
   let logAsync = createAsyncLogger(_debug);
@@ -369,6 +380,7 @@ async function buildReleaseGraph({
     shouldBumpInRangeDependencies,
     shouldInheritGreaterReleaseType,
     shouldExcludeDevChanges,
+    shouldValidateDependencyVisibility,
   });
 
   // packages without changes, but need to be analyzed because of options

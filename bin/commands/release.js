@@ -37,6 +37,11 @@ module.exports = {
       default: false,
     },
     'exclude-dev-changes': commonArgs['exclude-dev-changes'],
+    'validate-dependency-visibility': {
+      describe: 'Prevent releasing public packages that depend on private packages.',
+      type: 'boolean',
+      default: false,
+    },
     'clean-up-after-failed-push': {
       describe: 'If there\'s already a new commit on the remote, clean up the commit and tags that won\'t be used',
       type: 'boolean',

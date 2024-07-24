@@ -30,6 +30,7 @@ async function release({
   shouldBumpInRangeDependencies = builder['bump-in-range-dependencies'].default,
   shouldInheritGreaterReleaseType = builder['inherit-greater-release-type'].default,
   shouldExcludeDevChanges = builder['exclude-dev-changes'].default,
+  shouldValidateDependencyVisibility = builder['validate-dependency-visibility'].default,
   shouldCleanUpAfterFailedPush = builder['clean-up-after-failed-push'].default,
   scripts = builder['scripts'].default,
   packageFiles = builder['package-files'].default,
@@ -77,6 +78,7 @@ async function release({
     shouldBumpInRangeDependencies,
     shouldInheritGreaterReleaseType,
     shouldExcludeDevChanges,
+    shouldValidateDependencyVisibility,
   });
 
   for (let releaseTree of releaseTrees) {
