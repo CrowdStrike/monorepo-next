@@ -21,11 +21,7 @@ module.exports = {
       type: 'boolean',
       default: true,
     },
-    'dist-tag': {
-      describe: 'publish to a different NPM dist-tag',
-      type: 'string',
-      default: 'latest',
-    },
+    'dist-tag': commonArgs['dist-tag'],
     'bump-in-range-dependencies': {
       describe: 'If a dependency is still in range, and nothing changed in my package, still bump my version and the dependency version.',
       type: 'boolean',
