@@ -81,7 +81,7 @@
   "devDependencies": {
     "@crowdstrike/commitlint": "^8.0.0",
     "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
+    "chai-as-promised": "^8.0.0",
     "chai-fs": "^2.0.0",
     "common-tags": "^1.8.2",
     "eslint": "^8.0.0",
