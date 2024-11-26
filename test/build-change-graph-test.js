@@ -402,6 +402,48 @@ describe(buildChangeGraph, function() {
     ]));
   });
 
+  it('tracks deleted packages', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    await execa('git', ['add', '.'], { cwd: tmpPath });
+    await execa('git', ['commit', '-m', 'test'], { cwd: tmpPath });
+    await execa('git', ['tag', '@scope/package-a@1.0.0'], { cwd: tmpPath });
+
+    await fs.rmdir(path.join(tmpPath, 'packages/package-a'), { recursive: true });
+
+    let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
+
+    let packagesWithChanges = await buildChangeGraph({ workspaceMeta });
+
+    expect(packagesWithChanges).to.match(this.match([
+      {
+        changedFiles: [
+          'packages/package-a/package.json',
+        ],
+        changedReleasableFiles: [
+          'packages/package-a/package.json',
+        ],
+        dag: this.match({
+          packageName: '@scope/package-a',
+        }),
+      },
+    ]));
+  });
+
   it('tracks workspace with a version', async function() {
     fixturify.writeSync(tmpPath, {
       'package.json': stringifyJson({
