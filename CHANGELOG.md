@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [12.4.0](https://github.com/CrowdStrike/monorepo-next/compare/v12.3.0...v12.4.0) (2025-02-20)
+
+
+### Features
+
+* support updating pnpm lockfile ([d561a0b](https://github.com/CrowdStrike/monorepo-next/commit/d561a0b71b8550b7cc5214fca38491681ecc90ee))
+
 ## [12.3.0](https://github.com/CrowdStrike/monorepo-next/compare/v12.2.1...v12.3.0) (2025-02-20)
 
 
