@@ -18,8 +18,14 @@ function trackNewVersion({
       // https://github.com/npm/node-semver/commit/bcab95a966413b978dc1e7bdbcb8f495b63303cd
       range.set[0][0].operator
     ) {
+      let hint = range.raw[0];
+
+      if (hint !== '^' && hint !== '~') {
+        hint = '~';
+      }
+
       // This behaviour can probably be removed in the next major.
-      newRange = `~${newVersion}`;
+      newRange = `${hint}${newVersion}`;
     } else if (
       // NOTE: wildcard range is empty string
       // SEE: https://github.com/npm/node-semver/blob/bcab95a966413b978dc1e7bdbcb8f495b63303cd/test/ranges/to-comparators.js#L10-L12
