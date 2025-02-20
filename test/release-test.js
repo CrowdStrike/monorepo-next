@@ -32,6 +32,7 @@ describe(_release, function() {
 
   let tmpPath;
   let consoleLog;
+  let updatePnpmLockfile;
 
   beforeEach(async function() {
     tmpPath = await gitInit({
@@ -44,6 +45,7 @@ describe(_release, function() {
     }
 
     consoleLog = this.stub(console, 'log');
+    updatePnpmLockfile = this.stub(_release, 'updatePnpmLockfile');
   });
 
   async function release(options) {
@@ -1663,6 +1665,61 @@ describe(_release, function() {
 
       expect(pushOverride.args).to.match([[this.match({ dryRun: true })]]);
       expect(publishOverride.args).to.match([[this.match({ dryRun: true })]]);
+    });
+  });
+
+  describe('pnpm', function() {
+    it('ignores if lockfile missing', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+      await release();
+
+      expect(updatePnpmLockfile).to.not.have.been.called;
+    });
+
+    it('updates lockfile if present', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+        'pnpm-lock.yaml': '',
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+      await release();
+
+      expect(updatePnpmLockfile).to.have.been.calledOnce;
     });
   });
 });

@@ -63,10 +63,28 @@ async function ensureWriteFile(path, data) {
   await fs.writeFile(path, data);
 }
 
+/**
+ * @param {string} path
+ */
+async function exists(path) {
+  try {
+    await fs.access(path, fs.constants.F_OK);
+
+    return true;
+  } catch (err) {
+    if (err.code !== 'ENOENT') {
+      throw err;
+    }
+
+    return false;
+  }
+}
+
 module.exports = {
   replaceFile,
   replaceJsonFile,
   safeReadFile,
   ensureDir,
   ensureWriteFile,
+  exists,
 };

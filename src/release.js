@@ -19,6 +19,9 @@ const semver = require('semver');
 const { builder } = require('../bin/commands/release');
 const debug = require('./debug');
 const { createAsyncLogger } = require('./log');
+const {
+  exists: fsExists,
+} = require('./fs');
 
 async function release({
   cwd = process.cwd(),
@@ -179,6 +182,10 @@ async function release({
 
   let commitMessage = `chore(release): ${tags.join()}`;
 
+  if (await fsExists(path.join(workspaceCwd, 'pnpm-lock.yaml'))) {
+    await module.exports.updatePnpmLockfile({ cwd: workspaceCwd, silent, dryRun });
+  }
+
   if (!dryRun) {
     await execa('git', ['add', '-A'], { cwd: workspaceCwd, silent: true });
   }
@@ -305,4 +312,11 @@ async function publish({ cwd, silent, distTag, dryRun }) {
   await execa('npm', ['publish', '--tag', distTag, ...dryRunArgs], { cwd, silent });
 }
 
+async function updatePnpmLockfile({ cwd, silent, dryRun }) {
+  await execa('pnpm', ['install', '--lockfile-only'], { cwd, silent, dryRun });
+}
+
 module.exports = release;
+module.exports = Object.assign(release, {
+  updatePnpmLockfile,
+});
