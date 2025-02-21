@@ -122,6 +122,37 @@ describe(function() {
       ]);
     });
 
+    it('works with changeTrackingFiles', async function() {
+      fixturify.writeSync(this.tmpPath, {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': 'package-a',
+            'version': '1.0.0',
+            'files': ['dist'],
+          }),
+          dist: '',
+          src: '',
+        },
+      });
+
+      let changedReleasableFiles = await getChangedReleasableFiles({
+        changedFiles: [
+          'package-a/dist',
+          'package-a/src',
+        ],
+        packageCwd: path.join(this.tmpPath, 'package-a'),
+        workspacesCwd: this.tmpPath,
+        nextConfig: {
+          changeTrackingFiles: ['src'],
+        },
+      });
+
+      expect(changedReleasableFiles).to.deep.equal([
+        'package-a/dist',
+        'package-a/src',
+      ]);
+    });
+
     it('injected and changed files are included', async function() {
       fixturify.writeSync(this.tmpPath, {
         'package-a': {
