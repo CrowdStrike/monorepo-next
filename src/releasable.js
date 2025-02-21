@@ -128,22 +128,10 @@ async function _getChangedReleasableFiles({
 
   let changedPublishedFilesOld = new Set(changedPublishedFiles);
 
-  let changedPublishedFilesNew = new Set();
-
-  for (let file of changedFiles) {
-    if (changedPublishedFilesOld.has(file)) {
-      changedPublishedFilesNew.add(file);
-    }
-
+  let changedPublishedFilesNew = changedPublishedFilesOld
     // these files may not show up in the bundle, but
     // contribute to what goes in the bundle, so we must preserve
     // the changed status to know if the package is invalidated or not
-    if (filesContributingToReleasability.has(file)) {
-      changedPublishedFilesNew.add(file);
-    }
-  }
-
-  changedPublishedFilesNew = changedPublishedFilesOld
     .union(filesContributingToReleasability)
     .intersect(changedFiles);
 
