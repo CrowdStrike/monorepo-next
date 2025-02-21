@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [12.5.0](https://github.com/CrowdStrike/monorepo-next/compare/v12.4.1...v12.5.0) (2025-02-21)
+
+
+### Features
+
+* add `changeTrackingFiles` option to monorepo-next.config.js ([516de7c](https://github.com/CrowdStrike/monorepo-next/commit/516de7c53b33430959cecb4c68a8e9d7fca8e8fd))
+
 ## [12.4.1](https://github.com/CrowdStrike/monorepo-next/compare/v12.4.0...v12.4.1) (2025-02-21)
 
 ## [12.4.0](https://github.com/CrowdStrike/monorepo-next/compare/v12.3.0...v12.4.0) (2025-02-20)
