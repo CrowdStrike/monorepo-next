@@ -10,6 +10,12 @@ Each package can have a `monorepo-next.config.js` with the following options:
 module.exports = {
   // Set this to false to opt-out of change detection and versioning.
   shouldBumpVersion: true,
+
+  // If your package has a build step, your package.json/files array
+  // will be a git-ignored dir, so we can't use that. Use this to
+  // allow us to still find changes to your package. This appends
+  // to your existing NPM tracked files.
+  changeTrackingFiles: ['src'],
 }
 ```
 

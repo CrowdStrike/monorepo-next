@@ -212,6 +212,7 @@ async function buildChangeGraph({
       workspacesCwd: workspaceMeta.cwd,
       shouldExcludeDevChanges,
       fromCommit: _fromCommit,
+      nextConfig,
     });
 
     if (shouldOnlyIncludeReleasable && !changedReleasableFiles.length) {

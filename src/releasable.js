@@ -111,7 +111,10 @@ async function prepareTmpPackage({
 async function _getChangedReleasableFiles({
   cwd,
   changedFiles,
+  nextConfig = {},
 }) {
+  const { minimatch } = await import('minimatch');
+
   let tmpDir = await createTmpDir();
 
   // This is all because `npm-packlist`/`ignore-walk`
@@ -127,6 +130,12 @@ async function _getChangedReleasableFiles({
   let changedPublishedFiles = await packlist(tree);
 
   let changedPublishedFilesOld = new Set(changedPublishedFiles);
+
+  for (let file of changedFiles) {
+    if (nextConfig.changeTrackingFiles?.some(glob => minimatch(file, glob, { dot: true }))) {
+      changedPublishedFilesOld.add(file);
+    }
+  }
 
   let changedPublishedFilesNew = changedPublishedFilesOld
     // these files may not show up in the bundle, but
@@ -164,6 +173,7 @@ async function getChangedReleasableFiles({
   workspacesCwd,
   shouldExcludeDevChanges,
   fromCommit,
+  nextConfig,
 }) {
   changedFiles = new Set(changedFiles);
 
@@ -176,6 +186,7 @@ async function getChangedReleasableFiles({
   let changedPublishedFiles = await _getChangedReleasableFiles({
     cwd: packageCwd,
     changedFiles: changedFiles.map(file => path.relative(packageCwd, path.join(workspacesCwd, file))),
+    nextConfig,
   });
 
   let relative = path.relative(workspacesCwd, packageCwd);
