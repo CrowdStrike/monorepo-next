@@ -294,4 +294,80 @@ describe(buildDAG, function() {
       },
     }));
   });
+
+  it('chains private packages', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': 'package-a',
+            'version': '1.0.0',
+            'private': true,
+          }),
+        },
+        'package-b': {
+          'package.json': stringifyJson({
+            'name': 'package-b',
+            'version': '1.0.0',
+            'private': true,
+            'dependencies': {
+              'package-a': '',
+            },
+          }),
+        },
+        'package-c': {
+          'package.json': stringifyJson({
+            'name': 'package-c',
+            'version': '1.0.0',
+            'private': true,
+            'dependencies': {
+              'package-b': '',
+            },
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    let dag = buildDAG(await buildDepGraph({ workspaceCwd: tmpPath }), 'package-a');
+
+    expect(dag).to.match(this.match({
+      node: {
+        packageName: 'package-a',
+        dependents: [
+          this.match({
+            parent: {
+              node: {
+                packageName: 'package-a',
+              },
+            },
+            dependencyType: 'dependencies',
+            dependencyRange: '',
+            node: {
+              packageName: 'package-b',
+              dependents: [
+                this.match({
+                  parent: {
+                    node: {
+                      packageName: 'package-b',
+                    },
+                  },
+                  dependencyType: 'dependencies',
+                  dependencyRange: '',
+                  node: {
+                    packageName: 'package-c',
+                  },
+                }),
+              ],
+            },
+          }),
+        ],
+      },
+    }));
+  });
 });

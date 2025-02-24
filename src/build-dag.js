@@ -67,14 +67,17 @@ function thirdPass({
 
       group.node.dependents.push(newGroup);
 
-      if (group.node.isPackage) {
-        thirdPass({
-          workspaceMeta,
-          group: newGroup,
-          branch: newBranch,
-          visitedNodes,
-        });
-      }
+      // We don't want to check if it's private here because
+      // you could have a chain of private packages, and you
+      // want to bump them all the way down.
+      // if (group.node.isPackage) {
+      thirdPass({
+        workspaceMeta,
+        group: newGroup,
+        branch: newBranch,
+        visitedNodes,
+      });
+      // }
     }
   }
 }
