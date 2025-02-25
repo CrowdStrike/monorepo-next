@@ -15,7 +15,7 @@ module.exports = {
   // will be a git-ignored dir, so we can't use that. Use this to
   // allow us to still find changes to your package. This appends
   // to your existing NPM tracked files.
-  changeTrackingFiles: ['src'],
+  changeTrackingFiles: ['src/**'],
 }
 ```
 
