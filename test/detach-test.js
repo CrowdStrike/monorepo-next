@@ -65,11 +65,11 @@ describe(detach, function() {
     prompt = this.stub(detach, 'inquirerPrompt');
 
     tmpPath = await gitInit();
-
-    fixturify.writeSync(tmpPath, defaultWorkspace);
   });
 
   it('package-a', async function() {
+    fixturify.writeSync(tmpPath, defaultWorkspace);
+
     let cwd = path.resolve(tmpPath, './packages/package-a');
 
     prompt.withArgs([this.match({
@@ -139,6 +139,8 @@ describe(detach, function() {
   });
 
   it('package-b', async function() {
+    fixturify.writeSync(tmpPath, defaultWorkspace);
+
     let cwd = path.resolve(tmpPath, './packages/package-b');
 
     prompt.withArgs([this.match({
@@ -207,6 +209,8 @@ describe(detach, function() {
   });
 
   it('package-c', async function() {
+    fixturify.writeSync(tmpPath, defaultWorkspace);
+
     let cwd = path.resolve(tmpPath, './packages/package-c');
 
     await detach({ cwd });
@@ -258,6 +262,52 @@ describe(detach, function() {
           '@scope/package-a': '^1.0.0',
           '@scope/package-b': '^1.0.0',
         },
+      }),
+    });
+  });
+
+  it('can\'t detach private packages', async function() {
+    fixturify.writeSync(tmpPath, {
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': 'package-a',
+            'version': '1.0.0',
+            'private': true,
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
+      }),
+    });
+
+    let cwd = path.resolve(tmpPath, './packages/package-a');
+
+    await detach({ cwd });
+
+    let workspace = fixturify.readSync(tmpPath, { ignore: ['.git'] });
+
+    expect(prompt).to.not.be.called;
+
+    expect(workspace).to.deep.equal({
+      'packages': {
+        'package-a': {
+          'package.json': stringifyJson({
+            'name': '@scope/package-a',
+            'version': '1.0.0',
+            'private': true,
+          }),
+        },
+      },
+      'package.json': stringifyJson({
+        'private': true,
+        'workspaces': [
+          'packages/*',
+        ],
       }),
     });
   });
