@@ -17,7 +17,7 @@ jobs:
         ref: ${{ github.event.pull_request.head.sha }}
     # grab default branch to calculate branch point to know when to stop linting
     - if: ${{ github.base_ref }}
-      run: git branch ${{ github.base_ref }} origin/${{ github.base_ref }}
+      run: git branch "${{ github.base_ref }}" "origin/${{ github.base_ref }}"
     - uses: actions/setup-node@v4
 
     - run: yarn install --frozen-lockfile --ignore-scripts
