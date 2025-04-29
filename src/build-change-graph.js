@@ -41,12 +41,22 @@ async function getPackageChangedFiles({
 
   committedChanges = getLinesFromOutput(committedChanges).reduce((committedChanges, line) => {
     let isDeleted = line[0] === 'D';
+    let isRename = line[0] === 'R';
     let shouldExclude = shouldExcludeDeleted && isDeleted;
 
     if (!shouldExclude) {
-      line = line.substr(2);
+      line = line.split('\t');
+      // renames are denoted by `R[01 - 100]  <old filename>  <new filename>` so we need to grab <new filename> as well`
+      if (isRename) {
+        // add both old and new filename
+        committedChanges.add(line[1]);
+        committedChanges.add(line[2]);
 
-      committedChanges.add(line);
+
+      } else {
+        // rely on tab char between change signifier char and changed filepath
+        committedChanges.add(line[1]);
+      }
     }
 
     return committedChanges;
