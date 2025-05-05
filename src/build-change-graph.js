@@ -46,21 +46,11 @@ async function getPackageChangedFiles({
     line = line.split('\t');
 
     if (!shouldExclude) {
+      committedChanges.add(line[1]);
+    }
+    if (isRename) {
       // renames are denoted by `R[01 - 100]  <old filename>  <new filename>` so we need to grab <new filename> as well`
-      if (isRename) {
-        // add both old and new filename
-        committedChanges.add(line[1]);
-        committedChanges.add(line[2]);
-      } else {
-        // rely on tab char between change signifier char and changed filepath
-        committedChanges.add(line[1]);
-      }
-    } else {
-      if (isRename) {
-        // with renames, we still exclude the old file name
-        // but the renamed file should be considered "new"
-        committedChanges.add(line[2]);
-      }
+      committedChanges.add(line[2]);
     }
 
     return committedChanges;

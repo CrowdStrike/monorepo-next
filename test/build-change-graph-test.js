@@ -438,7 +438,6 @@ describe(buildChangeGraph, function() {
     });
 
     it('with shouldExcludeDeleted = false', async function() {
-
       let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
       let packagesWithChanges = await buildChangeGraph({ workspaceMeta, shouldExcludeDeleted: false });
@@ -463,7 +462,6 @@ describe(buildChangeGraph, function() {
     });
 
     it('with shouldExcludeDeleted = true', async function() {
-
       let workspaceMeta = await buildDepGraph({ workspaceCwd: tmpPath });
 
       let packagesWithChanges = await buildChangeGraph({ workspaceMeta, shouldExcludeDeleted: true });
