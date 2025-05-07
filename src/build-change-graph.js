@@ -134,6 +134,8 @@ async function buildChangeGraph({
     return path.relative(workspaceMeta.cwd, cwd);
   });
 
+  let longestBranch;
+
   for (let _package of collectPackages(workspaceMeta)) {
     if (!_package.packageName || !_package.version) {
       continue;
@@ -183,17 +185,7 @@ async function buildChangeGraph({
       }
     }
 
-    let changedFiles = await getPackageChangedFiles({
-      fromCommit: _fromCommit,
-      toCommit,
-      packageCwd: _package.cwd,
-      shouldRunPerPackage: false,
-      shouldExcludeDeleted,
-      options: {
-        cwd: workspaceMeta.cwd,
-        cached,
-      },
-    });
+    let changedFiles = [];
 
     let newFiles = changedFiles;
 
@@ -207,23 +199,23 @@ async function buildChangeGraph({
     }
 
     if (!newFiles.length) {
-      continue;
+      // continue;
     }
 
-    let changedReleasableFiles = await getChangedReleasableFiles({
-      changedFiles: newFiles,
-      packageCwd: _package.cwd,
-      workspacesCwd: workspaceMeta.cwd,
-      shouldExcludeDevChanges,
-      fromCommit: _fromCommit,
-      nextConfig,
-    });
+    let changedReleasableFiles = [];
 
     if (shouldOnlyIncludeReleasable && !changedReleasableFiles.length) {
-      continue;
+      // continue;
     }
 
-    let dag = buildDAG(workspaceMeta, _package.packageName);
+    let {
+      dag,
+      longestBranch: _longestBranch,
+    } = buildDAG(workspaceMeta, _package.packageName);
+
+    if (_longestBranch.length > (longestBranch?.length ?? 0)) {
+      longestBranch = _longestBranch;
+    }
 
     packagesWithChanges[_package.packageName] = {
       changedFiles: newFiles,
