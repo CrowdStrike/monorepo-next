@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [13.0.0](https://github.com/CrowdStrike/monorepo-next/compare/v12.5.4...v13.0.0) (2025-07-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* use node 20
+* move precommit hook before `git add`
+* update yarn.lock after versioning
+* use correct cwd when running lifecycle scripts
+
+* ember-cli-update-action ([4e9c3f8](https://github.com/CrowdStrike/monorepo-next/commit/4e9c3f8bff23e4ad049639b174a2896df11a8a81))
+
+
+### Features
+
+* move precommit hook before `git add` ([0f77406](https://github.com/CrowdStrike/monorepo-next/commit/0f77406302981a391a5c964d25c230b1e61682c1))
+
+
+### Bug Fixes
+
+* **deps:** update dependency @npmcli/arborist to v9 ([9733e0e](https://github.com/CrowdStrike/monorepo-next/commit/9733e0eaa4286f45551bf329cb2d21d96291b515))
+* **deps:** update dependency inquirer to v12 ([f3e1c0d](https://github.com/CrowdStrike/monorepo-next/commit/f3e1c0d830d0f2d083f1a1a47c84faf3a5fb3e5f))
+* **deps:** update dependency minimatch to v10 ([0d52f5e](https://github.com/CrowdStrike/monorepo-next/commit/0d52f5ede50c5c0eca833a3f132a673de17ad2ba))
+* **deps:** update dependency npm-packlist to v10 ([868c8b1](https://github.com/CrowdStrike/monorepo-next/commit/868c8b195f9573c3456c16c479cb3971392721c6))
+* **deps:** update dependency yargs to v18 ([ee23676](https://github.com/CrowdStrike/monorepo-next/commit/ee23676719770131c8238a2b9b0de5e0a87308d7))
+* update yarn.lock after versioning ([1c933e4](https://github.com/CrowdStrike/monorepo-next/commit/1c933e4085e8bb1521825cb8e86f11113198ea8b))
+* use correct cwd when running lifecycle scripts ([d3e6a74](https://github.com/CrowdStrike/monorepo-next/commit/d3e6a742bd7b5af866f06ce19b22ef54c301cfb3))
+
 ## [12.5.4](https://github.com/CrowdStrike/monorepo-next/compare/v12.5.3...v12.5.4) (2025-07-13)
 
 
