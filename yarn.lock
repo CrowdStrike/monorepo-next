@@ -2417,27 +2417,27 @@ get-stream@^8.0.1:
   resolved "https://registry.npmjs.org/get-stream/-/get-stream-8.0.1.tgz#def9dfd71742cd7754a7761ed43749a27d02eca2"
   integrity sha512-VaUJspBffn/LMCJVoMvSAdmscJyS1auj5Zulnn5UoYcY531UWmdwhRWkcGKnGU93m5HSXP9LP2usOryrBtQowA==
 
-git-diff-apply@^6.0.0:
-  version "6.0.4"
-  resolved "https://registry.npmjs.org/git-diff-apply/-/git-diff-apply-6.0.4.tgz#6553dced727be26d55f63e30dad050bb591149fb"
-  integrity sha512-OMepPhqgKcA1YQfvvYqG5zOF0NWhuW2tjWGtNg7cOQAHWUZsoXBDbjj3k5z+w6YCzcX2A9nIMKilzqH2Hhcwjw==
+git-diff-apply@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/git-diff-apply/-/git-diff-apply-7.0.0.tgz#77dc57ee16fe586f11ceab0d156142032eb915af"
+  integrity sha512-/ekszYr0PG8AqvRqsg3r4Gi6p8pXoRdQr+WrPHcy9RQ2FN4LW3cd+xUdenO9RB+Y/x9YepF/khDoRjMid2dYRA==
   dependencies:
     debug "^4.0.0"
     fixturify "^3.0.0"
     fs-extra "^11.0.0"
     tmp "0.2.3"
-    uuid "^9.0.0"
+    uuid "^11.0.0"
     yargs "^17.0.0"
 
-git-fixtures@^8.0.0:
-  version "8.0.4"
-  resolved "https://registry.npmjs.org/git-fixtures/-/git-fixtures-8.0.4.tgz#f6f425020727643f17f5c148fcf4eb4a8f20e402"
-  integrity sha512-E6Xsl0E0jRVzvC4d3Gq7h+nMsrDXc6KHvBKX0G0Mr7ayVNfM4GcsWzF3usNf0w+c9dKwFcJhl9xSoKNMDkIHVw==
+git-fixtures@^9.0.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/git-fixtures/-/git-fixtures-9.1.0.tgz#268f8ae7fbe08fc65f97192be7ae833e1e013e77"
+  integrity sha512-jI2VPikadmUcqwaFzP4/bJ4lzGtofLoividQbwqTxl31wazUp/4/kqQrwukuAs88M+i/uXuLkE2xqrD4YWX/DA==
   dependencies:
     execa "^5.0.0"
     fixturify "^3.0.0"
     fs-extra "^11.0.0"
-    git-diff-apply "^6.0.0"
+    git-diff-apply "^7.0.0"
     tmp "0.2.3"
 
 git-hooks-list@1.0.3:
@@ -6148,10 +6148,10 @@ util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
-uuid@^9.0.0:
-  version "9.0.1"
-  resolved "https://registry.npmjs.org/uuid/-/uuid-9.0.1.tgz#e188d4c8853cc722220392c424cd637f32293f30"
-  integrity sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==
+uuid@^11.0.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-11.1.0.tgz#9549028be1753bb934fc96e2bca09bb4105ae912"
+  integrity sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==
 
 uvu@^0.5.0:
   version "0.5.6"
