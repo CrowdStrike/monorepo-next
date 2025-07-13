@@ -6,6 +6,7 @@ const sinon = require('sinon');
 chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 chai.use(require('chai-fs'));
+chai.use(require('chai-string'));
 
 // This should be replaced by Chai v5
 // https://github.com/chaijs/chai/issues/644

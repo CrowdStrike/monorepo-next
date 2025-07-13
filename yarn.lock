@@ -1186,6 +1186,11 @@ chai-fs@^2.0.0:
     bit-mask "^1.0.1"
     readdir-enhanced "^1.4.0"
 
+chai-string@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.npmjs.org/chai-string/-/chai-string-1.6.0.tgz#8365011c3b6d0543a73dd9e1aeecea82f44a79aa"
+  integrity sha512-sXV7whDmpax+8H++YaZelgin7aur1LGf9ZhjZa3ojETFJ0uPVuS4XEXuIagpZ/c8uVOtsSh4MwOjy5CBLjJSXA==
+
 chai@^4.2.0:
   version "4.4.1"
   resolved "https://registry.npmjs.org/chai/-/chai-4.4.1.tgz#3603fa6eba35425b0f2ac91a009fe924106e50d1"
