@@ -5467,10 +5467,10 @@ ssri@^10.0.0, ssri@^10.0.6:
   dependencies:
     minipass "^7.0.3"
 
-standard-node-template@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.npmjs.org/standard-node-template/-/standard-node-template-6.0.0.tgz#801740d68ecb42bb1cf075004700bae6405f642a"
-  integrity sha512-Ii/Ucgkw8xajSGCCzFdcNTF8TJ6tX8feDVS8ANsX6JtItrZMcBYGAC5mX5tDDTGYrAv5JiCanJ6RFFE9bO7+Xw==
+standard-node-template@6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/standard-node-template/-/standard-node-template-6.1.0.tgz#c40f0610172da60bb32e882de3016502de50874b"
+  integrity sha512-oI1dSFX2Iz8erjVc8qmHYGlthCKOF0QkbtVDzZ1f4Bp5G0I0Idty77CTZXS0bFBgqqo1Pxhk72lwH2KqNi/I9w==
 
 "string-width-cjs@npm:string-width@^4.2.0":
   version "4.2.3"
