@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [12.5.4](https://github.com/CrowdStrike/monorepo-next/compare/v12.5.3...v12.5.4) (2025-07-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency commit-and-tag-version to v12.5.1 ([c96390c](https://github.com/CrowdStrike/monorepo-next/commit/c96390c1ecf94ac8cfe84e885a5c8d2dedd84c57))
+
 ## [12.5.3](https://github.com/CrowdStrike/monorepo-next/compare/v12.5.2...v12.5.3) (2025-05-07)
 
 
