@@ -70,7 +70,7 @@
     "js-yaml": "^4.0.0",
     "lockfile": "^1.0.4",
     "minimatch": "^10.0.0",
-    "npm-packlist": "^8.0.0",
+    "npm-packlist": "^10.0.0",
     "rfc6902": "^5.0.0",
     "sanitize-filename": "^1.6.3",
     "semver": "^7.5.3",
