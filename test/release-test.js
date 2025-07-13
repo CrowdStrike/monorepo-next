@@ -33,6 +33,7 @@ describe(_release, function() {
   let tmpPath;
   let consoleLog;
   let updatePnpmLockfile;
+  let updateYarnLockfile;
 
   beforeEach(async function() {
     tmpPath = await gitInit({
@@ -46,6 +47,7 @@ describe(_release, function() {
 
     consoleLog = this.stub(console, 'log');
     updatePnpmLockfile = this.stub(_release, 'updatePnpmLockfile');
+    updateYarnLockfile = this.stub(_release, 'updateYarnLockfile');
   });
 
   async function release(options) {
@@ -1669,6 +1671,10 @@ describe(_release, function() {
   });
 
   describe('pnpm', function() {
+    afterEach(function() {
+      expect(updateYarnLockfile).to.not.have.been.called;
+    });
+
     it('ignores if lockfile missing', async function() {
       fixturify.writeSync(tmpPath, {
         'packages': {
@@ -1720,6 +1726,65 @@ describe(_release, function() {
       await release();
 
       expect(updatePnpmLockfile).to.have.been.calledOnce;
+    });
+  });
+
+  describe('yarn', function() {
+    afterEach(function() {
+      expect(updatePnpmLockfile).to.not.have.been.called;
+    });
+
+    it('ignores if lockfile missing', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+      await release();
+
+      expect(updateYarnLockfile).to.not.have.been.called;
+    });
+
+    it('updates lockfile if present', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+        'yarn.lock': '',
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'fix: foo'], { cwd: tmpPath });
+
+      await release();
+
+      expect(updateYarnLockfile).to.have.been.calledOnce;
     });
   });
 });
