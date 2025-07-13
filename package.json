@@ -76,7 +76,7 @@
     "semver": "^7.5.3",
     "superset": "^2.0.1",
     "tmp": "0.2.3",
-    "yargs": "^17.0.0"
+    "yargs": "^18.0.0"
   },
   "devDependencies": {
     "@crowdstrike/commitlint": "^8.0.0",
