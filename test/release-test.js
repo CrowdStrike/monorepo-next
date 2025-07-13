@@ -14,6 +14,7 @@ const {
   doesTagExist,
   isGitClean,
   getWorkspaceCwd,
+  git,
 } = require('./helpers/git');
 const { EOL } = require('os');
 const readWorkspaces = require('./helpers/read-workspaces');
@@ -1434,6 +1435,55 @@ describe(_release, function() {
       expect(versionOverride).to.be.calledOnce;
       expect(versionOverride.args[0][0]?.cwd).to.equal(path.join(tmpPath, 'packages/package-a'));
       expect(versionOverride.args[0][0]?.originalVersion).to.be.a('function');
+    });
+  });
+
+  describe('commit', function () {
+    beforeEach(async function () {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '0.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+    });
+
+    it('calls precommit before staging', async function() {
+      let gitStatusPercelain;
+
+      let preCommitCallback = this.stub().callsFake(async () => {
+        gitStatusPercelain = await git(['status', '--porcelain'], { cwd: tmpPath });
+      });
+
+      let spy = this.spy(execa, 'command');
+
+      let precommit = 'git status --porcelain';
+
+      await release({
+        preCommitCallback,
+        scripts: {
+          precommit,
+        },
+      });
+
+      expect(gitStatusPercelain).to.startWith(' M ');
+
+      let { stdout } = await spy.withArgs(precommit).firstCall.returnValue;
+
+      expect(stdout).to.startWith(' M ');
     });
   });
 

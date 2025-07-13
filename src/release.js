@@ -189,13 +189,13 @@ async function release({
     await module.exports.updateYarnLockfile({ cwd: workspaceCwd, silent, dryRun });
   }
 
-  if (!dryRun) {
-    await execa('git', ['add', '-A'], { cwd: workspaceCwd, silent: true });
-  }
-
   await preCommitCallback({ dryRun });
 
   await handleLifecycleScript('precommit');
+
+  if (!dryRun) {
+    await execa('git', ['add', '-A'], { cwd: workspaceCwd, silent: true });
+  }
 
   let previousCommit = await getCurrentCommit(workspaceCwd);
 
