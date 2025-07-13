@@ -185,6 +185,8 @@ async function release({
 
   if (await fsExists(path.join(workspaceCwd, 'pnpm-lock.yaml'))) {
     await module.exports.updatePnpmLockfile({ cwd: workspaceCwd, silent, dryRun });
+  } else if (await fsExists(path.join(workspaceCwd, 'yarn.lock'))) {
+    await module.exports.updateYarnLockfile({ cwd: workspaceCwd, silent, dryRun });
   }
 
   if (!dryRun) {
@@ -317,7 +319,20 @@ async function updatePnpmLockfile({ cwd, silent, dryRun }) {
   await execa('pnpm', ['install', '--lockfile-only'], { cwd, silent, dryRun });
 }
 
+/**
+ * You could have a case of using external packages which in turn,
+ * reach back into the current monorepo and use its packages.
+ * This could cause package version matches where it uses the local version,
+ * but then during version bumping, the version is now not matching,
+ * and it has to go to NPM to get the old version,
+ * and it needs to update the lockfile.
+ */
+async function updateYarnLockfile({ cwd, silent, dryRun }) {
+  await execa('yarn', ['install'], { cwd, silent, dryRun });
+}
+
 module.exports = release;
 module.exports = Object.assign(release, {
   updatePnpmLockfile,
+  updateYarnLockfile,
 });
