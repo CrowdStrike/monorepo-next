@@ -59,7 +59,7 @@
     "node": ">=20.9"
   },
   "dependencies": {
-    "@npmcli/arborist": "^7.0.0",
+    "@npmcli/arborist": "^9.0.0",
     "commit-and-tag-version": "12.5.1",
     "conventional-changelog": "5.1.0",
     "conventional-recommended-bump": "9.0.0",
