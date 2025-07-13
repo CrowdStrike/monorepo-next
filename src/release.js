@@ -172,6 +172,7 @@ async function release({
         shell: true,
         silent,
         dryRun,
+        cwd,
       });
     }
   }
