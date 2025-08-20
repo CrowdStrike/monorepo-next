@@ -111,14 +111,36 @@ describe(function() {
       expect(newRange).to.equal('');
     });
 
-    it('uses ~ on major version zero with ^', function() {
-      let oldRange = '^0.0.0';
-      let newRange = oldRange;
-      let newVersion = '0.0.1';
+    describe('0.0.0', function() {
+      it('preserves ~', function() {
+        let oldRange = '~0.0.0';
+        let newRange = oldRange;
+        let newVersion = '0.0.1';
 
-      newRange = trackNewVersion({ name, oldRange, newRange, newVersion });
+        newRange = trackNewVersion({ name, oldRange, newRange, newVersion });
 
-      expect(newRange).to.equal('~0.0.1');
+        expect(newRange).to.equal('~0.0.1');
+      });
+
+      it('preserves ^', function() {
+        let oldRange = '^0.0.0';
+        let newRange = oldRange;
+        let newVersion = '0.0.1';
+
+        newRange = trackNewVersion({ name, oldRange, newRange, newVersion });
+
+        expect(newRange).to.equal('^0.0.1');
+      });
+
+      it('defaults to ~ when unexpected range', function() {
+        let oldRange = '<0.0.1-0';
+        let newRange = oldRange;
+        let newVersion = '0.0.1';
+
+        newRange = trackNewVersion({ name, oldRange, newRange, newVersion });
+
+        expect(newRange).to.equal('~0.0.1');
+      });
     });
 
     it('warns with old range', function() {
