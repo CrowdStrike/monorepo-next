@@ -2,15 +2,10 @@
 
 const {
   git,
-  getLinesFromOutput,
 } = require('../../src/git');
 
 async function getLastCommitMessage(cwd) {
   return (await git(['log', '-1', '--pretty=%B'], { cwd })).trim();
-}
-
-async function getTagsOnLastCommit(cwd) {
-  return getLinesFromOutput(await git(['tag', '-l', '--points-at', 'HEAD'], { cwd }));
 }
 
 async function doesTagExist(ref, cwd) {
@@ -36,7 +31,6 @@ async function isGitClean(cwd) {
 module.exports = {
   ...require('../../src/git'),
   getLastCommitMessage,
-  getTagsOnLastCommit,
   doesTagExist,
   isGitClean,
 };

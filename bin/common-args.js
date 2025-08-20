@@ -28,4 +28,9 @@ module.exports = {
     type: 'boolean',
     default: false,
   },
+  'dist-tag': {
+    describe: 'publish to a different NPM dist-tag',
+    type: 'string',
+    default: 'latest',
+  },
 };
