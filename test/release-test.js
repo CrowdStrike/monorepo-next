@@ -1837,4 +1837,332 @@ describe(_release, function() {
       expect(updateYarnLockfile).to.have.been.calledOnce;
     });
   });
+
+  describe('workspace protocol dependencies', function() {
+    it('preserves workspace:* dependencies unchanged', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+          'devDependencies': {
+            '@scope/package-a': 'workspace:*',
+          },
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'init'], { cwd: tmpPath });
+
+      // Make changes to package-a to trigger a version bump
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+            'index.js': 'console.log("new feature");',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'feat: add new feature'], { cwd: tmpPath });
+
+      await release({
+        shouldBumpInRangeDependencies: true,
+      });
+
+      let workspaces = readWorkspaces(tmpPath);
+
+      expect(workspaces).to.deep.equal({
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.1.0',
+            }),
+            'index.js': 'console.log("new feature");',
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+          'devDependencies': {
+            '@scope/package-a': 'workspace:*',
+          },
+        }),
+      });
+    });
+
+    it('updates workspace protocol dependencies while preserving protocol', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-b',
+              'version': '1.0.0',
+              'dependencies': {
+                '@scope/package-a': 'workspace:^1.0.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+          'devDependencies': {
+            '@scope/package-a': 'workspace:~1.0.0',
+          },
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'init'], { cwd: tmpPath });
+
+      // Make changes to package-a to trigger a version bump
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+            'index.js': 'console.log("new feature");',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'feat: add new feature'], { cwd: tmpPath });
+
+      await release({
+        shouldBumpInRangeDependencies: true,
+      });
+
+      let workspaces = readWorkspaces(tmpPath);
+
+      expect(workspaces).to.deep.equal({
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.1.0',
+            }),
+            'index.js': 'console.log("new feature");',
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-b',
+              'version': '1.0.1',
+              'dependencies': {
+                '@scope/package-a': 'workspace:^1.1.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+          'devDependencies': {
+            '@scope/package-a': 'workspace:~1.1.0',
+          },
+        }),
+      });
+    });
+
+    it('updates workspace protocol dependencies when packages are bumped', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-b',
+              'version': '1.0.0',
+              'dependencies': {
+                '@scope/package-a': 'workspace:^1.0.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+          'devDependencies': {
+            '@scope/package-a': 'workspace:~1.0.0',
+          },
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'init'], { cwd: tmpPath });
+
+      // Make changes to package-a to trigger a version bump
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+            'index.js': 'console.log("new feature");',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'feat: add new feature'], { cwd: tmpPath });
+
+      await release({
+        shouldBumpInRangeDependencies: true,
+      });
+
+      let workspaces = readWorkspaces(tmpPath);
+
+      expect(workspaces).to.deep.equal({
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.1.0',
+            }),
+            'index.js': 'console.log("new feature");',
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-b',
+              'version': '1.0.1',
+              'dependencies': {
+                '@scope/package-a': 'workspace:^1.1.0',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+          'devDependencies': {
+            '@scope/package-a': 'workspace:~1.1.0',
+          },
+        }),
+      });
+    });
+
+    it('handles workspace protocol shortcuts correctly', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-b',
+              'version': '1.0.0',
+              'dependencies': {
+                '@scope/package-a': 'workspace:^',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+          'devDependencies': {
+            '@scope/package-a': 'workspace:~',
+          },
+        }),
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'init'], { cwd: tmpPath });
+
+      // Make changes to package-a to trigger a version bump
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.0.0',
+            }),
+            'index.js': 'console.log("new feature");',
+          },
+        },
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'feat: add new feature'], { cwd: tmpPath });
+
+      await release({
+        shouldBumpInRangeDependencies: true,
+      });
+
+      let workspaces = readWorkspaces(tmpPath);
+
+      expect(workspaces).to.deep.equal({
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '1.1.0',
+            }),
+            'index.js': 'console.log("new feature");',
+          },
+          'package-b': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-b',
+              'version': '1.0.1',
+              'dependencies': {
+                '@scope/package-a': 'workspace:^',
+              },
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+          'devDependencies': {
+            '@scope/package-a': 'workspace:~',
+          },
+        }),
+      });
+    });
+  });
 });
