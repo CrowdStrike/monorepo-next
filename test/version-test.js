@@ -134,5 +134,27 @@ describe(function() {
 
       expect(warn.withArgs(warning)).to.be.calledOnce;
     });
+
+    describe('workspace protocol support', function() {
+      it('preserves workspace protocol replacement version shortcuts', function() {
+        let oldRange = 'workspace:^';
+        let newRange = '^2.0.0';
+        let newVersion = '2.0.0';
+
+        let result = trackNewVersion({ name, oldRange, newRange, newVersion });
+
+        expect(result).to.equal('workspace:^');
+      });
+
+      it('tracks workspace protocol major versions with ^', function() {
+        let oldRange = 'workspace:^1.0.0';
+        let newRange = '^2.0.0';
+        let newVersion = '2.0.0';
+
+        let result = trackNewVersion({ name, oldRange, newRange, newVersion });
+
+        expect(result).to.equal('workspace:^2.0.0');
+      });
+    });
   });
 });
