@@ -1590,6 +1590,27 @@ describe(_release, function() {
       expect(publishOverride.args[0][0]?.originalPublish).to.be.a('function');
       expect(publishOverride.args[0][0]?.distTag).to.equal('latest');
       expect(publishOverride.args[0][0]?.dryRun).to.equal(false);
+      expect(publishOverride.args[0][0]?.isPnpm).to.equal(false);
+    });
+
+    it('passes isPnpm=true to publishOverride when pnpm-lock.yaml is present', async function() {
+      fixturify.writeSync(tmpPath, {
+        'pnpm-lock.yaml': '',
+      });
+
+      let publishOverride = this.spy();
+
+      await release({
+        shouldPublish: true,
+        publishOverride,
+      });
+
+      expect(publishOverride).to.be.calledOnce;
+      expect(publishOverride.args[0][0]?.cwd).to.equal(path.join(tmpPath, 'packages/package-a'));
+      expect(publishOverride.args[0][0]?.originalPublish).to.be.a('function');
+      expect(publishOverride.args[0][0]?.distTag).to.equal('latest');
+      expect(publishOverride.args[0][0]?.dryRun).to.equal(false);
+      expect(publishOverride.args[0][0]?.isPnpm).to.equal(true);
     });
   });
 
@@ -1718,6 +1739,54 @@ describe(_release, function() {
       expect(pushOverride.args).to.match([[this.match({ dryRun: true })]]);
       expect(publishOverride.args).to.match([[this.match({ dryRun: true })]]);
     });
+
+    it('uses pnpm publish when pnpm-lock.yaml is present', async function() {
+      fixturify.writeSync(tmpPath, {
+        'pnpm-lock.yaml': '',
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+      gitCopyPath = await createTmpDir();
+      await fs.copy(path.join(tmpPath, '.git'), gitCopyPath);
+
+      let preCommitCallback = this.spy();
+      let prePushCallback = this.spy();
+      let prePublishCallback = this.spy();
+
+      await release({
+        dryRun,
+        scripts: {
+          precommit: 'precommit test',
+          postcommit: 'postcommit test',
+          pretag: 'pretag test',
+          posttag: 'posttag test',
+        },
+        silent: false,
+        shouldPush: true,
+        shouldPublish: true,
+        preCommitCallback,
+        prePushCallback,
+        prePublishCallback,
+      });
+
+      await assertCleanGit();
+
+      expect(consoleLog.args).to.deep.equal([
+        ['Updating @scope/package-a from 1.0.0-detached to 1.0.0.'],
+        ['Updating root devDependencies @scope/package-a from 1.0.0 || 1.0.0-detached to 1.1.0.'],
+        ['precommit test', { cwd: tmpPath, shell: true }],
+        ['git', ['commit', '-m', "'chore(release): @scope/package-a@1.1.0,root@1.0.1'"], { cwd: tmpPath }],
+        ['postcommit test', { cwd: tmpPath, shell: true }],
+        ['pretag test', { cwd: tmpPath, shell: true }],
+        ['git', ['tag', '-a', '@scope/package-a@1.1.0', '-m', '@scope/package-a@1.1.0'], { cwd: tmpPath }],
+        ['git', ['tag', '-a', 'root@1.0.1', '-m', 'root@1.0.1'], { cwd: tmpPath }],
+        ['posttag test', { cwd: tmpPath, shell: true }],
+        ['git', ['push', '--follow-tags', '--atomic', '--dry-run'], { cwd: tmpPath }],
+        ['pnpm', ['publish', '--tag', 'latest', '--dry-run'], { cwd: path.join(tmpPath, 'packages/package-a') }],
+      ]);
+    });
   });
 
   describe('pnpm', function() {
@@ -1776,6 +1845,44 @@ describe(_release, function() {
       await release();
 
       expect(updatePnpmLockfile).to.have.been.calledOnce;
+    });
+
+    it('uses pnpm publish when pnpm-lock.yaml is present', async function() {
+      fixturify.writeSync(tmpPath, {
+        'packages': {
+          'package-a': {
+            'package.json': stringifyJson({
+              'name': '@scope/package-a',
+              'version': '0.0.0',
+            }),
+          },
+        },
+        'package.json': stringifyJson({
+          'private': true,
+          'workspaces': [
+            'packages/*',
+          ],
+        }),
+        'pnpm-lock.yaml': '',
+      });
+
+      await execa('git', ['add', '.'], { cwd: tmpPath });
+      await execa('git', ['commit', '-m', 'feat: foo'], { cwd: tmpPath });
+
+      let publishOverride = this.spy();
+
+      await release({
+        shouldPublish: true,
+        publishOverride,
+        silent: true,
+      });
+
+      expect(publishOverride).to.have.been.calledOnceWith(this.match({
+        isPnpm: true,
+        cwd: path.join(tmpPath, 'packages/package-a'),
+        dryRun: false,
+        distTag: 'latest',
+      }));
     });
   });
 
