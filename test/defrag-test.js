@@ -173,6 +173,83 @@ describe(function() {
       expect(rangeUpdates).to.deep.equal({});
     });
 
+    it('handles workspace protocol ranges', function() {
+      let allRanges = {
+        packageA: [
+          'workspace:^1.0.0',
+          'workspace:^1.0.1',
+        ],
+      };
+
+      let rangeUpdates = filterRangeUpdates(allRanges);
+
+      expect(rangeUpdates).to.deep.equal({
+        packageA: {
+          'workspace:^1.0.0': 'workspace:^1.0.1',
+        },
+      });
+    });
+
+    it('ignores workspace wildcard ranges', function() {
+      let allRanges = {
+        packageA: [
+          'workspace:*',
+          'workspace:^1.0.1',
+        ],
+      };
+
+      let rangeUpdates = filterRangeUpdates(allRanges);
+
+      expect(rangeUpdates).to.deep.equal({});
+    });
+
+    it('converts workspace protocols while preserving protocol type', function() {
+      let allRanges = {
+        packageA: [
+          'workspace:^1.0.0',
+          '^1.0.1',
+        ],
+      };
+
+      let rangeUpdates = filterRangeUpdates(allRanges);
+
+      expect(rangeUpdates).to.deep.equal({
+        packageA: {
+          'workspace:^1.0.0': 'workspace:^1.0.1',
+        },
+      });
+    });
+
+    it('updates regular semver based on workspace protocol versions', function() {
+      let allRanges = {
+        packageA: [
+          '^1.0.0',
+          'workspace:^1.0.1',
+        ],
+      };
+
+      let rangeUpdates = filterRangeUpdates(allRanges);
+
+      expect(rangeUpdates).to.deep.equal({
+        packageA: {
+          '^1.0.0': '^1.0.1',
+        },
+      });
+    });
+
+    it('ignores workspace protocol shortcuts', function() {
+      let allRanges = {
+        packageA: [
+          'workspace:^',
+          '^1.0.1',
+        ],
+      };
+
+      let rangeUpdates = filterRangeUpdates(allRanges);
+
+      expect(rangeUpdates).to.deep.equal({});
+    });
+
     it('can include out of range patches', function() {
       let allRanges = {
         packageA: [

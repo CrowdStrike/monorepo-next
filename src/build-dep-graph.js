@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-const semver = require('semver');
+const { satisfies } = require('./semver');
 const dependencyTypes = require('./dependency-types');
 const readJson = require('./json').read;
 const { getWorkspacesPaths } = require('./get-workspaces-paths');
@@ -46,7 +46,7 @@ function deleteOutOfRangePackages(_package, packages) {
   for (let dependencyType of dependencyTypes) {
     for (let packageName in _package[dependencyType]) {
       let versionRange = _package[dependencyType][packageName];
-      if (semver.satisfies(packages[packageName].version, versionRange)) {
+      if (satisfies(packages[packageName].version, versionRange)) {
         continue;
       }
 

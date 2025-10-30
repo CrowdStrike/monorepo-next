@@ -10,6 +10,7 @@ const dependencyTypes = require('./dependency-types');
 const { loadPackageConfig } = require('./config');
 const debug = require('./debug');
 const { createSyncLogger, createAsyncLogger } = require('./log');
+const { satisfies } = require('./semver');
 
 const defaultReleaseType = 'patch';
 
@@ -46,7 +47,7 @@ function isReleaseTypeLessThan(type1, type2) {
 }
 
 function isReleaseTypeInRange(version, type, range) {
-  return semver.satisfies(semver.inc(version, type), range);
+  return satisfies(semver.inc(version, type), range);
 }
 
 let shouldVersionBumpSymbol = Symbol('shouldVersionBump');
@@ -326,7 +327,7 @@ function fourthPass({
 
         let newVersion = semver.inc(parent.oldVersion, parent.releaseType);
 
-        if (shouldBumpInRangeDependencies || !semver.satisfies(newVersion, newRange)) {
+        if (shouldBumpInRangeDependencies || !satisfies(newVersion, newRange)) {
           newRange = trackNewVersion({
             name,
             oldRange,

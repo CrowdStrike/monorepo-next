@@ -9,7 +9,12 @@ const dependencyTypes = require('./dependency-types');
 const semverMinVersion = require('semver/ranges/min-version');
 const semverGt = require('semver/functions/gt');
 const semverSatisfies = require('semver/functions/satisfies');
-const semverValidRange = require('semver/ranges/valid');
+const {
+  isValidRange,
+  isWorkspaceProtocol,
+  extractRange,
+  isWorkspaceProtocolReplacementVersion,
+} = require('./semver');
 const semverMajor = require('semver/functions/major');
 const semverMinor = require('semver/functions/minor');
 const Range = require('semver/classes/range');
@@ -62,18 +67,25 @@ function filterRangeUpdates(allRanges, {
           continue;
         }
 
-        if (!semverValidRange(oldRange) || !semverValidRange(newRange)) {
+        if (!isValidRange(oldRange) || !isValidRange(newRange)) {
+          continue;
+        }
+
+        let oldSemverRange = extractRange(oldRange);
+        let newSemverRange = extractRange(newRange);
+
+        if (isWorkspaceProtocolReplacementVersion(oldSemverRange) || isWorkspaceProtocolReplacementVersion(newSemverRange)) {
           continue;
         }
 
         // Assume ranges like "*" are monorepo links
         // and should be ignored.
-        if (new Range(oldRange).range === '') {
+        if (new Range(oldSemverRange).range === '') {
           continue;
         }
 
-        let oldMinVersion = semverMinVersion(oldRange);
-        let newMinVersion = semverMinVersion(newRange);
+        let oldMinVersion = semverMinVersion(oldSemverRange);
+        let newMinVersion = semverMinVersion(newSemverRange);
 
         let oldMajor = semverMajor(oldMinVersion).toString();
         let oldMinor = semverMinor(oldMinVersion).toString();
@@ -82,7 +94,7 @@ function filterRangeUpdates(allRanges, {
 
         switch (outOfRange) {
           default:
-            isInRange = semverSatisfies(newMinVersion, oldRange);
+            isInRange = semverSatisfies(newMinVersion, oldSemverRange);
             break;
           case 'patch':
             isInRange = semverSatisfies(newMinVersion, `${oldMajor}.${oldMinor}`);
@@ -101,7 +113,17 @@ function filterRangeUpdates(allRanges, {
               rangeUpdates[packageName] = {};
             }
 
-            rangeUpdates[packageName][oldRange] = newRange;
+            let updatedRange = newRange;
+
+            if (isWorkspaceProtocol(oldRange) !== isWorkspaceProtocol(newRange)) {
+              if (isWorkspaceProtocol(newRange)) {
+                updatedRange = newSemverRange;
+              } else {
+                updatedRange = `workspace:${newRange}`;
+              }
+            }
+
+            rangeUpdates[packageName][oldRange] = updatedRange;
           }
         }
       }

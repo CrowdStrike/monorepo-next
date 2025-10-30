@@ -1,13 +1,31 @@
 'use strict';
 
 const semver = require('semver');
+const {
+  isWorkspaceProtocol,
+  isWorkspaceProtocolReplacementVersion,
+  extractRange,
+} = require('./semver');
 
 function trackNewVersion({
   name,
-  oldRange,
-  newRange,
+  oldRange: _oldRange,
+  newRange: _newRange,
   newVersion,
 }) {
+  let oldRange = _oldRange;
+  let newRange = _newRange;
+  let _isWorkspaceProtocol = isWorkspaceProtocol(_oldRange);
+
+  if (_isWorkspaceProtocol) {
+    oldRange = extractRange(_oldRange);
+    newRange = extractRange(_newRange);
+
+    if (isWorkspaceProtocolReplacementVersion(oldRange)) {
+      return _oldRange;
+    }
+  }
+
   let range = new semver.Range(newRange);
 
   if (range.set.length > 1) {
@@ -39,6 +57,10 @@ function trackNewVersion({
     } else {
       newRange = `~${newVersion}`;
     }
+  }
+
+  if (_isWorkspaceProtocol) {
+    newRange = `workspace:${newRange}`;
   }
 
   return newRange;

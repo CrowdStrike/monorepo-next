@@ -183,9 +183,18 @@ async function release({
 
   let commitMessage = `chore(release): ${tags.join()}`;
 
+  let isPnpm = false;
+  let isYarn = false;
+
   if (await fsExists(path.join(workspaceCwd, 'pnpm-lock.yaml'))) {
-    await module.exports.updatePnpmLockfile({ cwd: workspaceCwd, silent, dryRun });
+    isPnpm = true;
   } else if (await fsExists(path.join(workspaceCwd, 'yarn.lock'))) {
+    isYarn = true;
+  }
+
+  if (isPnpm) {
+    await module.exports.updatePnpmLockfile({ cwd: workspaceCwd, silent, dryRun });
+  } else if (isYarn) {
     await module.exports.updateYarnLockfile({ cwd: workspaceCwd, silent, dryRun });
   }
 
@@ -250,7 +259,7 @@ async function release({
     if (shouldPublish && _shouldPublish) {
       // eslint-disable-next-line no-inner-declarations
       async function originalPublish() {
-        await publish({ cwd, silent, distTag, dryRun });
+        await publish({ cwd, silent, distTag, dryRun, isPnpm });
       }
 
       if (publishOverride) {
@@ -259,6 +268,7 @@ async function release({
           originalPublish,
           distTag,
           dryRun,
+          isPnpm,
         });
       } else {
         await originalPublish();
@@ -309,10 +319,11 @@ async function push({ cwd, silent, dryRun }) {
   }
 }
 
-async function publish({ cwd, silent, distTag, dryRun }) {
+async function publish({ cwd, silent, distTag, dryRun, isPnpm }) {
+  let command = isPnpm ? 'pnpm' : 'npm';
   let dryRunArgs = dryRun ? ['--dry-run'] : [];
 
-  await execa('npm', ['publish', '--tag', distTag, ...dryRunArgs], { cwd, silent });
+  await execa(command, ['publish', '--tag', distTag, ...dryRunArgs], { cwd, silent });
 }
 
 async function updatePnpmLockfile({ cwd, silent, dryRun }) {
