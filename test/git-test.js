@@ -2,7 +2,7 @@
 
 const { describe, it, setUpTmpDir } = require('./helpers/mocha');
 const { expect } = require('./helpers/chai');
-const { git } = require('../src/git');
+const { git, getCacheKey } = require('../src/git');
 const execa = require('execa');
 const { gitInit } = require('git-fixtures');
 const path = require('path');
@@ -68,7 +68,7 @@ describe(function() {
 
           let [cachedFilePath] = await fs.promises.readdir(this.tmpPath);
 
-          expect(cachedFilePath).to.not.be.undefined;
+          expect(cachedFilePath).to.equal(getCacheKey(['rev-parse', 'HEAD'], cwd));
           expect(path.join(this.tmpPath, cachedFilePath)).to.be.a.file().with.content(oldSha);
         });
       });

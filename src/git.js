@@ -164,6 +164,7 @@ async function getCurrentCommit(cwd) {
 }
 
 module.exports = {
+  getCacheKey,
   git,
   getCurrentBranch,
   getWorkspaceCwd,
