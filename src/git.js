@@ -20,7 +20,16 @@ async function git(args, options) {
   let {
     cwd,
     cached,
+    shouldUseExitCode,
   } = options;
+
+  /**
+   * Git is inverted. A zero exit code is true.
+   * @param {number} exitCode
+   */
+  function toBool(exitCode) {
+    return exitCode === 0;
+  }
 
   let cacheKey;
   let lockFilePath;
@@ -59,9 +68,17 @@ async function git(args, options) {
         if (_cache !== null) {
           debug('Git cache hit.');
 
-          cache[cacheKey] = _cache;
+          let normalized = (() => {
+            if (shouldUseExitCode) {
+              return _cache === 'true';
+            }
 
-          return _cache;
+            return _cache;
+          })();
+
+          cache[cacheKey] = normalized;
+
+          return normalized;
         }
       }
 
@@ -73,21 +90,31 @@ async function git(args, options) {
     let {
       stdout,
       all,
+      exitCode,
     } = await execa('git', args, {
       cwd,
+      reject: !shouldUseExitCode,
     });
 
     debug(all);
 
+    let result = (() => {
+      if (shouldUseExitCode) {
+        return toBool(exitCode);
+      }
+
+      return stdout;
+    })();
+
     if (cached) {
-      cache[cacheKey] = stdout;
+      cache[cacheKey] = result;
 
       if (cached !== true) {
-        await ensureWriteFile(cachedFilePath, stdout);
+        await ensureWriteFile(cachedFilePath, result.toString());
       }
     }
 
-    return stdout;
+    return result;
   } finally {
     if (lockFilePath) {
       await unlock(lockFilePath);
@@ -120,16 +147,10 @@ function getLinesFromOutput(output) {
 }
 
 async function isCommitAncestorOf(ancestorCommit, descendantCommit, options) {
-  try {
-    await git(['merge-base', '--is-ancestor', ancestorCommit, descendantCommit], options);
-  } catch (err) {
-    let missingCommit = 128;
-    if (![1, missingCommit].includes(err.exitCode)) {
-      throw err;
-    }
-    return false;
-  }
-  return true;
+  return await git(['merge-base', '--is-ancestor', ancestorCommit, descendantCommit], {
+    shouldUseExitCode: true,
+    ...options,
+  });
 }
 
 async function getCommonAncestor(commit1, commit2, options) {
