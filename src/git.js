@@ -74,6 +74,8 @@ async function git(args, options) {
       cwd,
     });
 
+    debug(stdout);
+
     if (cached) {
       cache[cacheKey] = stdout;
 
@@ -81,8 +83,6 @@ async function git(args, options) {
         await ensureWriteFile(cachedFilePath, stdout);
       }
     }
-
-    debug(stdout);
 
     return stdout;
   } finally {
