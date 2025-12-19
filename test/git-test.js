@@ -9,10 +9,10 @@ const path = require('path');
 const fs = require('fs');
 
 describe(function() {
-  let tmpPath;
+  let cwd;
 
   beforeEach(async function() {
-    tmpPath = await gitInit({
+    cwd = await gitInit({
       defaultBranchName: 'master',
     });
   });
@@ -22,19 +22,19 @@ describe(function() {
       describe('in memory', function () {
         it('works', async function() {
           let oldSha = await git(['rev-parse', 'HEAD'], {
-            cwd: tmpPath,
+            cwd,
             cached: true,
           });
 
-          await execa('git', ['commit', '-m', 'test', '--allow-empty'], { cwd: tmpPath });
+          await execa('git', ['commit', '-m', 'test', '--allow-empty'], { cwd });
 
           let cachedSha = await git(['rev-parse', 'HEAD'], {
-            cwd: tmpPath,
+            cwd,
             cached: true,
           });
 
           let newSha = await execa('git', ['rev-parse', 'HEAD'], {
-            cwd: tmpPath,
+            cwd,
           });
 
           expect(cachedSha).to.equal(oldSha);
@@ -48,19 +48,19 @@ describe(function() {
 
         it('works', async function() {
           let oldSha = await git(['rev-parse', 'HEAD'], {
-            cwd: tmpPath,
+            cwd,
             cached: this.tmpPath,
           });
 
-          await execa('git', ['commit', '-m', 'test', '--allow-empty'], { cwd: tmpPath });
+          await execa('git', ['commit', '-m', 'test', '--allow-empty'], { cwd });
 
           let cachedSha = await git(['rev-parse', 'HEAD'], {
-            cwd: tmpPath,
+            cwd,
             cached: this.tmpPath,
           });
 
           let newSha = await execa('git', ['rev-parse', 'HEAD'], {
-            cwd: tmpPath,
+            cwd,
           });
 
           expect(cachedSha).to.equal(oldSha);
