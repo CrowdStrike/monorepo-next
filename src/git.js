@@ -70,11 +70,14 @@ async function git(args, options) {
 
     debug(args, options);
 
-    let { stdout } = await execa('git', args, {
+    let {
+      stdout,
+      all,
+    } = await execa('git', args, {
       cwd,
     });
 
-    debug(stdout);
+    debug(all);
 
     if (cached) {
       cache[cacheKey] = stdout;
